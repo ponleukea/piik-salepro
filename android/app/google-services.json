@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "264423022274",
+    "firebase_url": "https://piik-seller-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "piik-seller",
+    "storage_bucket": "piik-seller.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:264423022274:android:49501726bb97e7929c255b",
+        "android_client_info": {
+          "package_name": "com.piikmall.pos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "264423022274-5qsuovll16prftul43e3i8jk3jrqg0ph.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSFHZWx7Fm_O5RJlGZJGRUMl9ro2ZGLMg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "264423022274-5qsuovll16prftul43e3i8jk3jrqg0ph.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
