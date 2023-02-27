@@ -7,6 +7,7 @@ import 'package:mobile_pos/GlobalComponents/generate_pdf.dart';
 import 'package:mobile_pos/Provider/print_purchase_provider.dart';
 import 'package:mobile_pos/Provider/transactions_provider.dart';
 import 'package:mobile_pos/Screens/Purchase%20List/purchase_list_edit_screen.dart';
+import 'package:mobile_pos/helper.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../Provider/profile_provider.dart';
@@ -115,14 +116,14 @@ class _PurchaseReportState extends State<PurchaseListScreen> {
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      'Paid : \$ ${reTransaction[index].totalAmount!.toDouble() - reTransaction[index].dueAmount!.toDouble()}',
+                                      'Paid : \$ ${TypesHelper.roundNum(reTransaction[index].totalAmount!.toDouble() - reTransaction[index].dueAmount!.toDouble())}',
                                       style: const TextStyle(color: Colors.grey),
                                     ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'Due: \$ ${reTransaction[index].dueAmount.toString()}',
+                                          'Due: \$ ${TypesHelper.roundNum(reTransaction[index].dueAmount)}',
                                           style: const TextStyle(fontSize: 16),
                                         ).visible(reTransaction[index].dueAmount!.toInt() != 0),
                                         personalData.when(data: (data) {

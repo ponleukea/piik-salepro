@@ -1,4 +1,3 @@
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -20,7 +19,7 @@ class AddUnits extends StatefulWidget {
 
 class _AddUnitsState extends State<AddUnits> {
   bool showProgress = false;
-  late String unitsName;
+  String unitsName = '';
 
   @override
   Widget build(BuildContext context) {
@@ -78,19 +77,30 @@ class _AddUnitsState extends State<AddUnits> {
                 onPressed: () async {
                   bool isAlreadyAdded = false;
                   allUnits.value?.forEach((element) {
-                    if (element.unitName.toLowerCase().removeAllWhiteSpace() == unitsName.toLowerCase().removeAllWhiteSpace()) {
+                    if (element.unitName.toLowerCase().removeAllWhiteSpace() ==
+                        unitsName.toLowerCase().removeAllWhiteSpace()) {
                       isAlreadyAdded = true;
                     }
                   });
                   setState(() {
                     showProgress = true;
                   });
-                  final DatabaseReference unitInformationRef = FirebaseDatabase.instance.ref().child(constUserId).child('Units');
+                  final DatabaseReference unitInformationRef = FirebaseDatabase
+                      .instance
+                      .ref()
+                      .child(constUserId)
+                      .child('Units');
                   UnitModel unitModel = UnitModel(unitsName);
-                  isAlreadyAdded ? EasyLoading.showError('Already Added') : await unitInformationRef.push().set(unitModel.toJson());
+                  isAlreadyAdded
+                      ? EasyLoading.showError('Already Added')
+                      : await unitInformationRef.push().set(unitModel.toJson());
                   setState(() {
                     showProgress = false;
-                    isAlreadyAdded ? null : ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Data Saved Successfully")));
+                    isAlreadyAdded
+                        ? null
+                        : ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Data Saved Successfully")));
                   });
 
                   // ignore: use_build_context_synchronously

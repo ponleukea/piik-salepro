@@ -6,6 +6,7 @@ import 'package:mobile_pos/Provider/customer_provider.dart';
 import 'package:mobile_pos/Screens/Customers/add_customer.dart';
 import 'package:mobile_pos/Screens/Customers/customer_details.dart';
 import 'package:mobile_pos/constant.dart';
+import 'package:mobile_pos/helper.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class CustomerList extends StatefulWidget {
@@ -25,7 +26,7 @@ class _CustomerListState extends State<CustomerList> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
-          'Parties List',
+          'People List',
           style: GoogleFonts.poppins(
             color: Colors.black,
           ),
@@ -46,8 +47,8 @@ class _CustomerListState extends State<CustomerList> {
                     itemBuilder: (_, index) {
                       customer[index].type == 'Retailer' ? color = const Color(0xFF56da87) : Colors.white;
                       customer[index].type == 'Wholesaler' ? color = const Color(0xFF25a9e0) : Colors.white;
-                      customer[index].type == 'Dealer' ? color = const Color(0xFFff5f00) : Colors.white;
-                      customer[index].type == 'Supplier' ? color = const Color(0xFFA569BD) : Colors.white;
+                      customer[index].type == 'Customer' ? color = const Color(0xFFff5f00) : Colors.white;
+                      customer[index].type == 'Dealer' ? color = const Color(0xFFA569BD) : Colors.white;
 
                       return GestureDetector(
                         onTap: () {
@@ -103,7 +104,7 @@ class _CustomerListState extends State<CustomerList> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    '\$ ${customer[index].dueAmount}',
+                                    '\$ ${TypesHelper.roundNum(double.parse(customer[index].dueAmount))}',
                                     style: GoogleFonts.poppins(
                                       color: Colors.black,
                                       fontSize: 15.0,

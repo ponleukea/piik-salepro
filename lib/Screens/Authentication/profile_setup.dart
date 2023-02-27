@@ -347,9 +347,10 @@ class _ProfileSetupState extends State<ProfileSetup> {
                         hintText: 'Enter Phone Number',
                         border: const OutlineInputBorder(),
                         prefix: CountryCodePicker(
+                          enabled:false,
                           padding: EdgeInsets.zero,
                           onChanged: print,
-                          initialSelection: 'BD',
+                          initialSelection: 'KH',
                           showFlag: false,
                           showDropDownButton: true,
                           alignLeft: false,

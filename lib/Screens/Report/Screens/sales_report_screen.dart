@@ -11,6 +11,7 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../../GlobalComponents/generate_pdf.dart';
 import '../../../Provider/profile_provider.dart';
 import '../../../constant.dart';
+import '../../../helper.dart';
 import '../../Home/home.dart';
 import '../../invoice_details/sales_invoice_details_screen.dart';
 
@@ -106,7 +107,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      'Total : \$ ${reTransaction[index].totalAmount.toString()}',
+                                      'Total : \$ ${TypesHelper.roundNum(reTransaction[index].totalAmount!)}',
                                       style: const TextStyle(color: Colors.grey),
                                     ),
                                     const SizedBox(height: 10),
@@ -118,7 +119,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'Due: \$ ${reTransaction[index].dueAmount.toString()}',
+                                          'Due: \$ ${TypesHelper.roundNum(reTransaction[index].dueAmount!)}',
                                           style: const TextStyle(fontSize: 16),
                                         ).visible(reTransaction[index].dueAmount!.toInt() != 0),
                                         personalData.when(data: (data) {

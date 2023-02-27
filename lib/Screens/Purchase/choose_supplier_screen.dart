@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_pos/Screens/Customers/add_customer.dart';
 import 'package:mobile_pos/Screens/Purchase/add_purchase.dart';
+import 'package:mobile_pos/helper.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../Provider/add_to_cart_purchase.dart';
@@ -68,9 +69,9 @@ class _PurchaseContactsState extends State<PurchaseContacts> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: customer.length,
                     itemBuilder: (_, index) {
-                      customer[index].type == 'Supplier' ? color = const Color(0xFFA569BD) : Colors.white;
+                      customer[index].type == 'Customer' ? color = const Color(0xFFA569BD) : Colors.white;
                       return customer[index].customerName.contains(searchCustomer) &&
-                              customer[index].type.contains('Supplier')
+                              customer[index].type.contains('Customer')
                           ? GestureDetector(
                               onTap: () {
                                 AddPurchaseScreen(customerModel: customer[index]).launch(context);
@@ -124,7 +125,7 @@ class _PurchaseContactsState extends State<PurchaseContacts> {
                                       crossAxisAlignment: CrossAxisAlignment.end,
                                       children: [
                                         Text(
-                                          '\$ ${customer[index].dueAmount}',
+                                          '\$ ${TypesHelper.roundNum(double.parse(customer[index].dueAmount))}',
                                           style: GoogleFonts.poppins(
                                             color: Colors.black,
                                             fontSize: 15.0,

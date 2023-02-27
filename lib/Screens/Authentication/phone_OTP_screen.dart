@@ -46,7 +46,7 @@ class _OTPVerifyState extends State<OTPVerify> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('images/logoandname.png'),
+              Image.asset('images/logoandname.png',width: 120,height: 120,),
               const SizedBox(height: 25),
               const Text(
                 "OTP Verification",
@@ -105,21 +105,21 @@ class _OTPVerifyState extends State<OTPVerify> {
                     },
                     child: const Text("Verify now")),
               ),
-              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      'phone',
-                      (route) => false,
-                    );
-                  },
-                  child: const Text(
-                    "Edit Phone Number ?",
-                    style: TextStyle(color: primaryColor),
-                  ),
-                )
-              ])
+              // Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              //   TextButton(
+              //     onPressed: () {
+              //       Navigator.pushNamedAndRemoveUntil(
+              //         context,
+              //         'phone',
+              //         (route) => false,
+              //       );
+              //     },
+              //     child: const Text(
+              //       "Edit Phone Number ?",
+              //       style: TextStyle(color: primaryColor),
+              //     ),
+              //   )
+              // ])
             ],
           ),
         ),

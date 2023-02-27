@@ -23,7 +23,7 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   String dropdownLangValue = 'English';
-  String initialCountry = 'Bangladesh';
+  String initialCountry = 'Phnom Penh, Cambodia';
   String dropdownValue = 'Fashion Store';
   String companyName = 'nodata', phoneNumber = 'nodata';
   double progress = 0.0;

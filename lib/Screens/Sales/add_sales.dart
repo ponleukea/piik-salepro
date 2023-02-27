@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -19,6 +18,7 @@ import '../../Provider/printer_provider.dart';
 import '../../Provider/product_provider.dart';
 import '../../Provider/seles_report_provider.dart';
 import '../../constant.dart';
+import '../../helper.dart';
 import '../../model/print_transaction_model.dart';
 import '../Customers/Model/customer_model.dart';
 import '../Home/home.dart';
@@ -233,7 +233,7 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                                       .cartItemList[index].productName
                                       .toString()),
                                   subtitle: Text(
-                                      '${providerData.cartItemList[index].quantity} X ${providerData.cartItemList[index].subTotal} = ${double.parse(providerData.cartItemList[index].subTotal) * providerData.cartItemList[index].quantity}'),
+                                      '${providerData.cartItemList[index].quantity} X ${providerData.cartItemList[index].subTotal} = ${TypesHelper.roundNum(double.parse(providerData.cartItemList[index].subTotal) * providerData.cartItemList[index].quantity)}'),
                                   trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -249,13 +249,14 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                                                     .quantityDecrease(index);
                                               },
                                               child: Container(
-                                                height: 20,
-                                                width: 20,
+                                                height: 25,
+                                                width: 25,
                                                 decoration: const BoxDecoration(
                                                   color: kMainColor,
                                                   borderRadius:
                                                       BorderRadius.all(
-                                                          Radius.circular(10)),
+                                                          Radius.circular(
+                                                              12.5)),
                                                 ),
                                                 child: const Center(
                                                   child: Text(
@@ -282,13 +283,14 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                                                     .quantityIncrease(index);
                                               },
                                               child: Container(
-                                                height: 20,
-                                                width: 20,
+                                                height: 25,
+                                                width: 25,
                                                 decoration: const BoxDecoration(
                                                   color: kMainColor,
                                                   borderRadius:
                                                       BorderRadius.all(
-                                                          Radius.circular(10)),
+                                                          Radius.circular(
+                                                              12.5)),
                                                 ),
                                                 child: const Center(
                                                     child: Text(
@@ -375,7 +377,11 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                                 style: TextStyle(fontSize: 16),
                               ),
                               Text(
-                                providerData.getTotalAmount().toString(),
+                                providerData.getTotalAmount() == 0
+                                    ? '\$0.00'
+                                    : '\$' +
+                                        TypesHelper.roundNum(
+                                            providerData.getTotalAmount()),
                                 style: const TextStyle(fontSize: 16),
                               ),
                             ],
@@ -393,6 +399,7 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                               SizedBox(
                                 width: context.width() / 4,
                                 child: TextField(
+                                  maxLength: 7,
                                   controller: paidText,
                                   onChanged: (value) {
                                     if (value == '') {
@@ -417,7 +424,7 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                                   },
                                   textAlign: TextAlign.right,
                                   decoration: const InputDecoration(
-                                    hintText: '0',
+                                    hintText: '\$0.00',
                                   ),
                                   keyboardType: TextInputType.number,
                                 ),
@@ -435,9 +442,12 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                                 style: TextStyle(fontSize: 16),
                               ),
                               Text(
-                                calculateSubtotal(
-                                        total: providerData.getTotalAmount())
-                                    .toString(),
+                                providerData.getTotalAmount() == 0
+                                    ? '\$0.00'
+                                    : '\$' +
+                                        TypesHelper.roundNum(calculateSubtotal(
+                                            total:
+                                                providerData.getTotalAmount())),
                                 style: const TextStyle(fontSize: 16),
                               ),
                             ],
@@ -455,6 +465,7 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                               SizedBox(
                                 width: context.width() / 4,
                                 child: TextField(
+                                  maxLength: 7,
                                   keyboardType: TextInputType.number,
                                   onChanged: (value) {
                                     if (value == '') {
@@ -469,7 +480,7 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                                   },
                                   textAlign: TextAlign.right,
                                   decoration:
-                                      const InputDecoration(hintText: '0'),
+                                      const InputDecoration(hintText: '\$0.00'),
                                 ),
                               ),
                             ],
@@ -485,9 +496,11 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                                 style: TextStyle(fontSize: 16),
                               ),
                               Text(
-                                calculateReturnAmount(total: subTotal)
-                                    .abs()
-                                    .toString(),
+                                subTotal == 0
+                                    ? '\$0.00'
+                                    : TypesHelper.roundNum(
+                                        calculateReturnAmount(total: subTotal)
+                                            .abs()),
                                 style: const TextStyle(fontSize: 16),
                               ),
                             ],
@@ -503,7 +516,11 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                                 style: TextStyle(fontSize: 16),
                               ),
                               Text(
-                                calculateDueAmount(total: subTotal).toString(),
+                                subTotal == 0
+                                    ? '\$0.00'
+                                    : '\$' +
+                                        TypesHelper.roundNum(calculateDueAmount(
+                                            total: subTotal)),
                                 style: const TextStyle(fontSize: 16),
                               ),
                             ],
@@ -878,15 +895,15 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                         child: Container(
                           height: 60,
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
-                                border: Border.all(width: 0.5)
-                          ),
+                              color: Colors.white,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                              border: Border.all(width: 0.5)),
                           child: const Center(
                             child: Text(
                               'Save & New',
-                              style: TextStyle(fontSize: 18,color: Colors.grey),
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.grey),
                             ),
                           ),
                         ),

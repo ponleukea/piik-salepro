@@ -6,6 +6,7 @@ import 'package:nb_utils/nb_utils.dart';
 
 import '../../Provider/customer_provider.dart';
 import '../../constant.dart';
+import '../../helper.dart';
 
 class DueCalculationContactScreen extends StatefulWidget {
   const DueCalculationContactScreen({Key? key}) : super(key: key);
@@ -103,7 +104,7 @@ class _DueCalculationContactScreenState extends State<DueCalculationContactScree
                                         crossAxisAlignment: CrossAxisAlignment.end,
                                         children: [
                                           Text(
-                                            '\$ ${customer[index].dueAmount}',
+                                            '\$ ${TypesHelper.roundNum(double.parse(customer[index].dueAmount))}',
                                             style: GoogleFonts.poppins(
                                               color: Colors.black,
                                               fontSize: 15.0,

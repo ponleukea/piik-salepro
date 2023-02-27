@@ -12,6 +12,7 @@ const kDarkWhite = Color(0xFFF1F7F7);
 const kPremiumPlanColor = Color(0xFF8752EE);
 const kPremiumPlanColor2 = Color(0xFFFF5F00);
 const primaryColor = Color(0xFF2980B9);
+const greyColor = Color(0xFFEEEEEE);
 bool connected = false;
 bool isPrintEnable = true;
 List<String> paymentsTypeList = ['Cash','Due'];

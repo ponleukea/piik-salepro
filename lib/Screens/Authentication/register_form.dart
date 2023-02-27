@@ -50,7 +50,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset('images/logoandname.png'),
+                  Image.asset('images/logoandname.png',width: 120,height: 129,),
                   const SizedBox(
                     height: 30.0,
                   ),
@@ -110,7 +110,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               }
                               return null;
                             },
-                            onSaved: (value) {
+                            onSaved: (value) { 
                               auth.password = value!;
                             },
                           ),

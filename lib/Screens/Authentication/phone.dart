@@ -65,16 +65,16 @@ class _PhoneAuthState extends State<PhoneAuth> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('images/logoandname.png'),
+              Image.asset('images/logoandname.png',width: 120,height: 120),
               const SizedBox(height: 25),
               const Text(
                 "Phone number log in",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               const Text(
                 "We need to register your phone without getting started!",
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 14),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 30),
@@ -158,16 +158,16 @@ class _PhoneAuthState extends State<PhoneAuth> {
                     child: const Text("Send the code")),
               ),
               const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                      onPressed: () {
-                        const LoginForm(isEmailLogin: true).launch(context);
-                      },
-                      child: const Text('Login With Email')),
-                ],
-              )
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.end,
+              //   children: [
+              //     TextButton(
+              //         onPressed: () {
+              //           const LoginForm(isEmailLogin: true).launch(context);
+              //         },
+              //         child: const Text('Login With Email')),
+              //   ],
+              // )
             ],
           ),
         ),

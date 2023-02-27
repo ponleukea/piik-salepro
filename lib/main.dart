@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_pos/Screens/Authentication/forgot_password.dart';
@@ -38,12 +39,10 @@ void main() async {
   await Firebase.initializeApp(
     name: 'Piik SalePro',
     options: DefaultFirebaseOptions.android,
-  
   );
   runApp(
     const ProviderScope(
       child: MyApp(),
-      
     ),
   );
 }
@@ -52,6 +51,8 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarColor: Colors.white));
     return MaterialApp(
       title: 'Piik SalesPro',
       initialRoute: '/',
@@ -60,7 +61,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const SplashScreen(),
         // '/': (context) => const ProPackagesScreen(),
-       // '/onBoard': (context) => const OnBoard(),
+        // '/onBoard': (context) => const OnBoard(),
         '/signIn': (context) => const SignInScreen(),
         '/loginForm': (context) => const LoginForm(isEmailLogin: true),
         '/signup': (context) => const RegisterScreen(),
@@ -83,8 +84,8 @@ class MyApp extends StatelessWidget {
         '/salesCustomer': (context) => SalesContact(),
         '/addPromoCode': (context) => const AddPromoCode(),
         '/addDiscount': (context) => const AddDiscount(),
-        '/Sales': (context) => const SalesContact(),
-        '/Customer': (context) => const CustomerList(),
+        '/Sale': (context) => const SalesContact(),
+        '/People': (context) => const CustomerList(),
         '/Expense': (context) => const ExpenseList(),
         '/Stock': (context) => const StockList(),
         '/Purchase': (context) => const PurchaseContacts(),
@@ -99,4 +100,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

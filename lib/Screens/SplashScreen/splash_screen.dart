@@ -24,7 +24,8 @@ class _SplashScreenState extends State<SplashScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   void showSnack(String text) {
     if (_scaffoldKey.currentContext != null) {
-      ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(SnackBar(content: Text(text)));
+      ScaffoldMessenger.of(_scaffoldKey.currentContext!)
+          .showSnackBar(SnackBar(content: Text(text)));
     }
   }
 
@@ -60,7 +61,8 @@ class _SplashScreenState extends State<SplashScreen> {
     isPrintEnable = prefs.getBool('isPrintEnable') ?? true;
     final String? skipVersion = prefs.getString('skipVersion');
     await Future.delayed(const Duration(seconds: 2), () {
-      if (isUpdateAvailable && (skipVersion == null || skipVersion != newUpdateVersion)) {
+      if (isUpdateAvailable &&
+          (skipVersion == null || skipVersion != newUpdateVersion)) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -103,7 +105,8 @@ class _SplashScreenState extends State<SplashScreen> {
                                   height: 50,
                                   decoration: const BoxDecoration(
                                     color: kMainColor,
-                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
                                   ),
                                   child: const Center(
                                       child: Text(
@@ -118,7 +121,8 @@ class _SplashScreenState extends State<SplashScreen> {
                               child: GestureDetector(
                                 onTap: () async {
                                   await prefs.setBool('isSkipUpdate', false);
-                                  await prefs.setString('skipVersion', newUpdateVersion);
+                                  await prefs.setString(
+                                      'skipVersion', newUpdateVersion);
 
                                   if (currentUser != null) {
                                     // ignore: use_build_context_synchronously
@@ -132,7 +136,8 @@ class _SplashScreenState extends State<SplashScreen> {
                                   height: 50,
                                   decoration: const BoxDecoration(
                                     color: kMainColor,
-                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
                                   ),
                                   child: const Center(
                                       child: Text(
@@ -156,7 +161,8 @@ class _SplashScreenState extends State<SplashScreen> {
                                   height: 50,
                                   decoration: const BoxDecoration(
                                     color: kMainColor,
-                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
                                   ),
                                   child: const Center(
                                       child: Text(
@@ -180,9 +186,10 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         if (currentUser != null) {
           const Home().launch(context);
+          // Navigator.pushNamed(context, '/home');
         } else {
-          ///const OnBoard().launch(context);
-           const PhoneAuth().launch(context);
+          const PhoneAuth().launch(context);
+          // Navigator.pushNamed(context, '');
         }
       }
     });
@@ -204,6 +211,8 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             const Image(
               image: AssetImage('images/logoandname.png'),
+              width: 120,
+              height: 120,
             ),
             const Spacer(),
             Column(
@@ -211,13 +220,19 @@ class _SplashScreenState extends State<SplashScreen> {
                 Center(
                   child: Text(
                     'PIIK Mall Cambodia',
-                    style: GoogleFonts.poppins(color: primaryColor, fontWeight: FontWeight.normal, fontSize: 20.0),
+                    style: GoogleFonts.poppins(
+                        color: primaryColor,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 20.0),
                   ),
                 ),
                 Center(
                   child: Text(
                     'V $appVersion',
-                    style: GoogleFonts.poppins(color: primaryColor, fontWeight: FontWeight.normal, fontSize: 15.0),
+                    style: GoogleFonts.poppins(
+                        color: primaryColor,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 15.0),
                   ),
                 ),
                 const SizedBox(height: 10),

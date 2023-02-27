@@ -179,26 +179,26 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                       ],
                     ),
                   ),
-                  ButtonGlobal(
-                    iconWidget: Icons.arrow_forward,
-                    buttontext: 'Change Password',
-                    iconColor: Colors.white,
-                    buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
-                    onPressed: () async {
-                      try {
-                        EasyLoading.show(status: 'Sending Email', dismissOnTap: false);
-                        await FirebaseAuth.instance.sendPasswordResetEmail(
-                          email: FirebaseAuth.instance.currentUser!.email.toString(),
-                        );
-                        EasyLoading.showSuccess('Email Sent! Check your Inbox');
-                        // ignore: use_build_context_synchronously
-                        const LoginForm(isEmailLogin: true,).launch(context);
-                        FirebaseAuth.instance.signOut();
-                      } catch (e) {
-                        EasyLoading.showError(e.toString());
-                      }
-                    },
-                  ),
+                  // ButtonGlobal(
+                  //   iconWidget: Icons.arrow_forward,
+                  //   buttontext: 'Change Password',
+                  //   iconColor: Colors.white,
+                  //   buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
+                  //   onPressed: () async {
+                  //     try {
+                  //       EasyLoading.show(status: 'Sending Email', dismissOnTap: false);
+                  //       await FirebaseAuth.instance.sendPasswordResetEmail(
+                  //         email: FirebaseAuth.instance.currentUser!.email.toString(),
+                  //       );
+                  //       EasyLoading.showSuccess('Email Sent! Check your Inbox');
+                  //       // ignore: use_build_context_synchronously
+                  //       const LoginForm(isEmailLogin: true,).launch(context);
+                  //       FirebaseAuth.instance.signOut();
+                  //     } catch (e) {
+                  //       EasyLoading.showError(e.toString());
+                  //     }
+                  //   },
+                  // ),
                 ],
               );
             }, error: (e, stack) {

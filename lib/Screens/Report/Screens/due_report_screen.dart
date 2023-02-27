@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_pos/GlobalComponents/generate_pdf.dart';
+import 'package:mobile_pos/helper.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../Provider/due_transaction_provider.dart';
@@ -120,7 +121,7 @@ class _DueReportScreenState extends State<DueReportScreen> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'Due: \$ ${reTransaction[index].dueAmountAfterPay.toString()}',
+                                          'Due: \$ ${TypesHelper.roundNum(reTransaction[index].dueAmountAfterPay!)}',
                                           style: const TextStyle(fontSize: 16),
                                         ).visible(reTransaction[index].dueAmountAfterPay!.toInt() != 0),
                                         personalData.when(data: (data) {

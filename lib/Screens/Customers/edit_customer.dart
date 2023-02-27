@@ -41,9 +41,18 @@ class _EditCustomerState extends State<EditCustomer> {
   File imageFile = File('No File');
   String imagePath = 'No Data';
   late String customerKey;
+
+  bool phoneValid = false;
+  bool nameValid = false;
+
   void getCustomerKey(String phoneNumber) async {
     final userId = constUserId;
-    await FirebaseDatabase.instance.ref(userId).child('Customers').orderByKey().get().then((value) {
+    await FirebaseDatabase.instance
+        .ref(userId)
+        .child('Customers')
+        .orderByKey()
+        .get()
+        .then((value) {
       for (var element in value.children) {
         var data = jsonDecode(jsonEncode(element.value));
         if (data['phoneNumber'].toString() == phoneNumber) {
@@ -60,14 +69,17 @@ class _EditCustomerState extends State<EditCustomer> {
         status: 'Uploading... ',
         dismissOnTap: false,
       );
-      var snapshot = await FirebaseStorage.instance.ref('Customer Picture/${DateTime.now().millisecondsSinceEpoch}').putFile(file);
+      var snapshot = await FirebaseStorage.instance
+          .ref('Customer Picture/${DateTime.now().millisecondsSinceEpoch}')
+          .putFile(file);
       var url = await snapshot.ref.getDownloadURL();
       setState(() {
         updatedCustomerModel.profilePicture = url.toString();
       });
     } on firebase_core.FirebaseException catch (e) {
       EasyLoading.dismiss();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.code.toString())));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.code.toString())));
     }
   }
 
@@ -111,10 +123,22 @@ class _EditCustomerState extends State<EditCustomer> {
                       initialValue: widget.customerModel.phoneNumber,
                       readOnly: true,
                       textFieldType: TextFieldType.PHONE,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
+                        fillColor: greyColor,
+                        filled: true,
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelText: 'Phone Number',
                         border: OutlineInputBorder(),
+                        label: Container(
+                          width: 120,
+                          child: Row(
+                            children: [
+                              Text("Phone Number"),
+                              const Text('*',
+                                  style: TextStyle(
+                                      color: Colors.red, fontSize: 22))
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -128,104 +152,115 @@ class _EditCustomerState extends State<EditCustomer> {
                           updatedCustomerModel.customerName = value;
                         });
                       },
-                      decoration: const InputDecoration(
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelText: 'Name',
-                        hintText: 'John Doe',
-                        border: OutlineInputBorder(),
-                      ),
+                      decoration: InputDecoration(
+                          label: Container(
+                            width: 60,
+                            child: Row(
+                              children: [
+                                Text("Name"),
+                                const Text('*',
+                                    style: TextStyle(
+                                        color: Colors.red, fontSize: 22))
+                              ],
+                            ),
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          hintText: 'Enter full name',
+                          border: OutlineInputBorder(),
+                          errorText:
+                              nameValid ? 'Please enter full name!' : null),
                     ),
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: RadioListTile(
-                          contentPadding: EdgeInsets.zero,
-                          groupValue: groupValue,
-                          title: Text(
-                            'Retailer',
-                            maxLines: 1,
-                            style: GoogleFonts.poppins(
-                              fontSize: 12.0,
-                            ),
-                          ),
-                          value: 'Retailer',
-                          onChanged: (value) {
-                            setState(() {
-                              groupValue = value.toString();
-                              updatedCustomerModel.type = value.toString();
-                            });
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        child: RadioListTile(
-                          contentPadding: EdgeInsets.zero,
-                          groupValue: groupValue,
-                          title: Text(
-                            'Dealer',
-                            maxLines: 1,
-                            style: GoogleFonts.poppins(
-                              fontSize: 12.0,
-                            ),
-                          ),
-                          value: 'Dealer',
-                          onChanged: (value) {
-                            setState(() {
-                              groupValue = value.toString();
-                              updatedCustomerModel.type = value.toString();
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: RadioListTile(
-                          contentPadding: EdgeInsets.zero,
-                          activeColor: kMainColor,
-                          groupValue: groupValue,
-                          title: Text(
-                            'Wholesaler',
-                            maxLines: 1,
-                            style: GoogleFonts.poppins(
-                              fontSize: 12.0,
-                            ),
-                          ),
-                          value: 'Wholesaler',
-                          onChanged: (value) {
-                            setState(() {
-                              groupValue = value.toString();
-                              updatedCustomerModel.type = value.toString();
-                            });
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        child: RadioListTile(
-                          contentPadding: EdgeInsets.zero,
-                          activeColor: kMainColor,
-                          groupValue: groupValue,
-                          title: Text(
-                            'Supplier',
-                            maxLines: 1,
-                            style: GoogleFonts.poppins(
-                              fontSize: 12.0,
-                            ),
-                          ),
-                          value: 'Supplier',
-                          onChanged: (value) {
-                            setState(() {
-                              groupValue = value.toString();
-                              updatedCustomerModel.type = value.toString();
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   children: [
+                  //     Expanded(
+                  //       child: RadioListTile(
+                  //         contentPadding: EdgeInsets.zero,
+                  //         groupValue: groupValue,
+                  //         title: Text(
+                  //           'Retailer',
+                  //           maxLines: 1,
+                  //           style: GoogleFonts.poppins(
+                  //             fontSize: 12.0,
+                  //           ),
+                  //         ),
+                  //         value: 'Retailer',
+                  //         onChanged: (value) {
+                  //           setState(() {
+                  //             groupValue = value.toString();
+                  //             updatedCustomerModel.type = value.toString();
+                  //           });
+                  //         },
+                  //       ),
+                  //     ),
+                  //     Expanded(
+                  //       child: RadioListTile(
+                  //         contentPadding: EdgeInsets.zero,
+                  //         groupValue: groupValue,
+                  //         title: Text(
+                  //           'Dealer',
+                  //           maxLines: 1,
+                  //           style: GoogleFonts.poppins(
+                  //             fontSize: 12.0,
+                  //           ),
+                  //         ),
+                  //         value: 'Dealer',
+                  //         onChanged: (value) {
+                  //           setState(() {
+                  //             groupValue = value.toString();
+                  //             updatedCustomerModel.type = value.toString();
+                  //           });
+                  //         },
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // Row(
+                  //   children: [
+                  //     Expanded(
+                  //       child: RadioListTile(
+                  //         contentPadding: EdgeInsets.zero,
+                  //         activeColor: kMainColor,
+                  //         groupValue: groupValue,
+                  //         title: Text(
+                  //           'Wholesaler',
+                  //           maxLines: 1,
+                  //           style: GoogleFonts.poppins(
+                  //             fontSize: 12.0,
+                  //           ),
+                  //         ),
+                  //         value: 'Wholesaler',
+                  //         onChanged: (value) {
+                  //           setState(() {
+                  //             groupValue = value.toString();
+                  //             updatedCustomerModel.type = value.toString();
+                  //           });
+                  //         },
+                  //       ),
+                  //     ),
+                  //     Expanded(
+                  //       child: RadioListTile(
+                  //         contentPadding: EdgeInsets.zero,
+                  //         activeColor: kMainColor,
+                  //         groupValue: groupValue,
+                  //         title: Text(
+                  //           'Supplier',
+                  //           maxLines: 1,
+                  //           style: GoogleFonts.poppins(
+                  //             fontSize: 12.0,
+                  //           ),
+                  //         ),
+                  //         value: 'Supplier',
+                  //         onChanged: (value) {
+                  //           setState(() {
+                  //             groupValue = value.toString();
+                  //             updatedCustomerModel.type = value.toString();
+                  //           });
+                  //         },
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                   Visibility(
                     visible: showProgress,
                     child: const CircularProgressIndicator(
@@ -233,238 +268,256 @@ class _EditCustomerState extends State<EditCustomer> {
                       strokeWidth: 5.0,
                     ),
                   ),
-                  ExpansionPanelList(
-                    expansionCallback: (int index, bool isExpanded) {},
-                    animationDuration: const Duration(seconds: 1),
-                    elevation: 0,
-                    dividerColor: Colors.white,
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (BuildContext context, bool isExpanded) {
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              TextButton(
-                                child: Text(
-                                  'More Info',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 20.0,
-                                    color: kMainColor,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    expanded == false ? expanded = true : expanded = false;
-                                  });
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                        body: Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return Dialog(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(12.0),
-                                        ),
-                                        // ignore: sized_box_for_whitespace
-                                        child: Container(
-                                          height: 200.0,
-                                          width: MediaQuery.of(context).size.width - 80,
-                                          child: Center(
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: () async {
-                                                    pickedImage = await _picker.pickImage(source: ImageSource.gallery);
-                                                    setState(() {
-                                                      imageFile = File(pickedImage!.path);
-                                                      imagePath = pickedImage!.path;
-                                                    });
-                                                    Future.delayed(const Duration(milliseconds: 100), () {
-                                                      Navigator.pop(context);
-                                                    });
-                                                  },
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: [
-                                                      const Icon(
-                                                        Icons.photo_library_rounded,
-                                                        size: 60.0,
-                                                        color: kMainColor,
-                                                      ),
-                                                      Text(
-                                                        'Gallery',
-                                                        style: GoogleFonts.poppins(
-                                                          fontSize: 20.0,
-                                                          color: kMainColor,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 40.0,
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () async {
-                                                    pickedImage = await _picker.pickImage(source: ImageSource.camera);
-                                                    setState(() {
-                                                      imageFile = File(pickedImage!.path);
-                                                      imagePath = pickedImage!.path;
-                                                    });
-                                                    Future.delayed(const Duration(milliseconds: 100), () {
-                                                      Navigator.pop(context);
-                                                    });
-                                                  },
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: [
-                                                      const Icon(
-                                                        Icons.camera,
-                                                        size: 60.0,
-                                                        color: kGreyTextColor,
-                                                      ),
-                                                      Text(
-                                                        'Camera',
-                                                        style: GoogleFonts.poppins(
-                                                          fontSize: 20.0,
-                                                          color: kGreyTextColor,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    });
-                              },
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    height: 120,
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.black54, width: 1),
-                                      borderRadius: const BorderRadius.all(Radius.circular(120)),
-                                      image: imagePath == 'No Data'
-                                          ? DecorationImage(
-                                              image: NetworkImage(updatedCustomerModel.profilePicture),
-                                              fit: BoxFit.cover,
-                                            )
-                                          : DecorationImage(
-                                              image: FileImage(imageFile),
-                                              fit: BoxFit.cover,
-                                            ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 0,
-                                    right: 0,
-                                    child: Container(
-                                      height: 35,
-                                      width: 35,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.white, width: 2),
-                                        borderRadius: const BorderRadius.all(Radius.circular(120)),
-                                        color: kMainColor,
-                                      ),
-                                      child: const Icon(
-                                        Icons.camera_alt_outlined,
-                                        size: 20,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: AppTextField(
-                                initialValue: widget.customerModel.emailAddress,
-                                textFieldType: TextFieldType.EMAIL,
-                                onChanged: (value) {
-                                  setState(() {
-                                    updatedCustomerModel.emailAddress = value;
-                                  });
-                                },
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                                  labelText: 'Email Address',
-                                  hintText: 'example@example.com',
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: AppTextField(
-                                initialValue: widget.customerModel.customerAddress,
-                                textFieldType: TextFieldType.NAME,
-                                maxLines: 2,
-                                onChanged: (value) {
-                                  setState(() {
-                                    updatedCustomerModel.customerAddress = value;
-                                  });
-                                },
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                                    labelText: 'Address',
-                                    hintText: 'Placentia, California(CA), 92870'),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: AppTextField(
-                                readOnly: true,
-                                initialValue: widget.customerModel.dueAmount,
-                                textFieldType: TextFieldType.NAME,
-                                maxLines: 2,
-                                decoration: const InputDecoration(border: OutlineInputBorder(), floatingLabelBehavior: FloatingLabelBehavior.always, labelText: 'Previous Due'),
-                              ),
-                            ),
-                          ],
-                        ),
-                        isExpanded: expanded,
-                      ),
-                    ],
-                  ),
+                  // ExpansionPanelList(
+                  //   expansionCallback: (int index, bool isExpanded) {},
+                  //   animationDuration: const Duration(seconds: 1),
+                  //   elevation: 0,
+                  //   dividerColor: Colors.white,
+                  //   children: [
+                  //     ExpansionPanel(
+                  //       headerBuilder: (BuildContext context, bool isExpanded) {
+                  //         return Column(
+                  //           mainAxisSize: MainAxisSize.min,
+                  //           children: [
+                  //             TextButton(
+                  //               child: Text(
+                  //                 'More Info',
+                  //                 style: GoogleFonts.poppins(
+                  //                   fontSize: 20.0,
+                  //                   color: kMainColor,
+                  //                 ),
+                  //               ),
+                  //               onPressed: () {
+                  //                 setState(() {
+                  //                   expanded == false ? expanded = true : expanded = false;
+                  //                 });
+                  //               },
+                  //             ),
+                  //           ],
+                  //         );
+                  //       },
+                  //       body: Column(
+                  //         children: [
+                  //           GestureDetector(
+                  //             onTap: () {
+                  //               showDialog(
+                  //                   context: context,
+                  //                   builder: (BuildContext context) {
+                  //                     return Dialog(
+                  //                       shape: RoundedRectangleBorder(
+                  //                         borderRadius: BorderRadius.circular(12.0),
+                  //                       ),
+                  //                       // ignore: sized_box_for_whitespace
+                  //                       child: Container(
+                  //                         height: 200.0,
+                  //                         width: MediaQuery.of(context).size.width - 80,
+                  //                         child: Center(
+                  //                           child: Row(
+                  //                             mainAxisAlignment: MainAxisAlignment.center,
+                  //                             children: [
+                  //                               GestureDetector(
+                  //                                 onTap: () async {
+                  //                                   pickedImage = await _picker.pickImage(source: ImageSource.gallery);
+                  //                                   setState(() {
+                  //                                     imageFile = File(pickedImage!.path);
+                  //                                     imagePath = pickedImage!.path;
+                  //                                   });
+                  //                                   Future.delayed(const Duration(milliseconds: 100), () {
+                  //                                     Navigator.pop(context);
+                  //                                   });
+                  //                                 },
+                  //                                 child: Column(
+                  //                                   mainAxisAlignment: MainAxisAlignment.center,
+                  //                                   children: [
+                  //                                     const Icon(
+                  //                                       Icons.photo_library_rounded,
+                  //                                       size: 60.0,
+                  //                                       color: kMainColor,
+                  //                                     ),
+                  //                                     Text(
+                  //                                       'Gallery',
+                  //                                       style: GoogleFonts.poppins(
+                  //                                         fontSize: 20.0,
+                  //                                         color: kMainColor,
+                  //                                       ),
+                  //                                     ),
+                  //                                   ],
+                  //                                 ),
+                  //                               ),
+                  //                               const SizedBox(
+                  //                                 width: 40.0,
+                  //                               ),
+                  //                               GestureDetector(
+                  //                                 onTap: () async {
+                  //                                   pickedImage = await _picker.pickImage(source: ImageSource.camera);
+                  //                                   setState(() {
+                  //                                     imageFile = File(pickedImage!.path);
+                  //                                     imagePath = pickedImage!.path;
+                  //                                   });
+                  //                                   Future.delayed(const Duration(milliseconds: 100), () {
+                  //                                     Navigator.pop(context);
+                  //                                   });
+                  //                                 },
+                  //                                 child: Column(
+                  //                                   mainAxisAlignment: MainAxisAlignment.center,
+                  //                                   children: [
+                  //                                     const Icon(
+                  //                                       Icons.camera,
+                  //                                       size: 60.0,
+                  //                                       color: kGreyTextColor,
+                  //                                     ),
+                  //                                     Text(
+                  //                                       'Camera',
+                  //                                       style: GoogleFonts.poppins(
+                  //                                         fontSize: 20.0,
+                  //                                         color: kGreyTextColor,
+                  //                                       ),
+                  //                                     ),
+                  //                                   ],
+                  //                                 ),
+                  //                               ),
+                  //                             ],
+                  //                           ),
+                  //                         ),
+                  //                       ),
+                  //                     );
+                  //                   });
+                  //             },
+                  //             child: Stack(
+                  //               children: [
+                  //                 Container(
+                  //                   height: 120,
+                  //                   width: 120,
+                  //                   decoration: BoxDecoration(
+                  //                     border: Border.all(color: Colors.black54, width: 1),
+                  //                     borderRadius: const BorderRadius.all(Radius.circular(120)),
+                  //                     image: imagePath == 'No Data'
+                  //                         ? DecorationImage(
+                  //                             image: NetworkImage(updatedCustomerModel.profilePicture),
+                  //                             fit: BoxFit.cover,
+                  //                           )
+                  //                         : DecorationImage(
+                  //                             image: FileImage(imageFile),
+                  //                             fit: BoxFit.cover,
+                  //                           ),
+                  //                   ),
+                  //                 ),
+                  //                 Positioned(
+                  //                   bottom: 0,
+                  //                   right: 0,
+                  //                   child: Container(
+                  //                     height: 35,
+                  //                     width: 35,
+                  //                     decoration: BoxDecoration(
+                  //                       border: Border.all(color: Colors.white, width: 2),
+                  //                       borderRadius: const BorderRadius.all(Radius.circular(120)),
+                  //                       color: kMainColor,
+                  //                     ),
+                  //                     child: const Icon(
+                  //                       Icons.camera_alt_outlined,
+                  //                       size: 20,
+                  //                       color: Colors.white,
+                  //                     ),
+                  //                   ),
+                  //                 )
+                  //               ],
+                  //             ),
+                  //           ),
+                  //           const SizedBox(height: 10),
+                  //           Padding(
+                  //             padding: const EdgeInsets.all(8.0),
+                  //             child: AppTextField(
+                  //               initialValue: widget.customerModel.emailAddress,
+                  //               textFieldType: TextFieldType.EMAIL,
+                  //               onChanged: (value) {
+                  //                 setState(() {
+                  //                   updatedCustomerModel.emailAddress = value;
+                  //                 });
+                  //               },
+                  //               decoration: const InputDecoration(
+                  //                 border: OutlineInputBorder(),
+                  //                 floatingLabelBehavior: FloatingLabelBehavior.always,
+                  //                 labelText: 'Email Address',
+                  //                 hintText: 'example@example.com',
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           Padding(
+                  //             padding: const EdgeInsets.all(8.0),
+                  //             child: AppTextField(
+                  //               initialValue: widget.customerModel.customerAddress,
+                  //               textFieldType: TextFieldType.NAME,
+                  //               maxLines: 2,
+                  //               onChanged: (value) {
+                  //                 setState(() {
+                  //                   updatedCustomerModel.customerAddress = value;
+                  //                 });
+                  //               },
+                  //               decoration: const InputDecoration(
+                  //                   border: OutlineInputBorder(),
+                  //                   floatingLabelBehavior: FloatingLabelBehavior.always,
+                  //                   labelText: 'Address',
+                  //                   hintText: 'Placentia, California(CA), 92870'),
+                  //             ),
+                  //           ),
+                  //           Padding(
+                  //             padding: const EdgeInsets.all(8.0),
+                  //             child: AppTextField(
+                  //               readOnly: true,
+                  //               initialValue: widget.customerModel.dueAmount,
+                  //               textFieldType: TextFieldType.NAME,
+                  //               maxLines: 2,
+                  //               decoration: const InputDecoration(border: OutlineInputBorder(), floatingLabelBehavior: FloatingLabelBehavior.always, labelText: 'Previous Due'),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       isExpanded: expanded,
+                  //     ),
+                  //   ],
+                  // ),
+                  const SizedBox(height: 30),
                   ButtonGlobalWithoutIcon(
                       buttontext: 'Update',
-                      buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
+                      buttonDecoration:
+                          kButtonDecoration.copyWith(color: kMainColor),
                       onPressed: () async {
-                        try {
-                          EasyLoading.show(status: 'Loading...', dismissOnTap: false);
-                          imagePath == 'No Data' ? null : await uploadFile(imagePath);
-                          DatabaseReference ref = FirebaseDatabase.instance.ref("$constUserId/Customers/$customerKey");
-                          await ref.update({
-                            'customerName': updatedCustomerModel.customerName,
-                            'type': updatedCustomerModel.type,
-                            'profilePicture': updatedCustomerModel.profilePicture,
-                            'emailAddress': updatedCustomerModel.emailAddress,
-                            'customerAddress': updatedCustomerModel.customerAddress,
+                        if (updatedCustomerModel.customerName == '') {
+                          setState(() {
+                            nameValid = true;
                           });
-                          EasyLoading.showSuccess('Added Successfully', duration: const Duration(milliseconds: 500));
-                          //ref.refresh(productProvider);
-                          Future.delayed(const Duration(milliseconds: 100), () {
-                            cRef.refresh(customerProvider);
-                            const CustomerList().launch(context, isNewTask: true);
-                          });
-                        } catch (e) {
-                          EasyLoading.dismiss();
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                        } else {
+                          try {
+                            EasyLoading.show(
+                                status: 'Loading...', dismissOnTap: false);
+                            imagePath == 'No Data'
+                                ? null
+                                : await uploadFile(imagePath);
+                            DatabaseReference ref = FirebaseDatabase.instance
+                                .ref("$constUserId/Customers/$customerKey");
+                            await ref.update({
+                              'customerName': updatedCustomerModel.customerName,
+                              'type': updatedCustomerModel.type,
+                              'profilePicture':
+                                  updatedCustomerModel.profilePicture,
+                              'emailAddress': updatedCustomerModel.emailAddress,
+                              'customerAddress':
+                                  updatedCustomerModel.customerAddress,
+                            });
+                            EasyLoading.showSuccess('Added Successfully',
+                                duration: const Duration(milliseconds: 500));
+                            //ref.refresh(productProvider);
+                            Future.delayed(const Duration(milliseconds: 100),
+                                () {
+                              cRef.refresh(customerProvider);
+                              const CustomerList()
+                                  .launch(context, isNewTask: true);
+                            });
+                          } catch (e) {
+                            EasyLoading.dismiss();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(e.toString())));
+                          }
                         }
                       },
                       buttonTextColor: Colors.white),

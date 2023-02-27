@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nb_utils/nb_utils.dart';
 import '../constant.dart';
+import '../helper.dart';
 import '../model/print_transaction_model.dart';
 
-final printerDueProviderNotifier = ChangeNotifierProvider((ref) => PrinterDue());
+final printerDueProviderNotifier =
+    ChangeNotifierProvider((ref) => PrinterDue());
 
 class PrinterDue extends ChangeNotifier {
   List availableBluetoothDevices = [];
@@ -27,11 +29,13 @@ class PrinterDue extends ChangeNotifier {
     return status;
   }
 
-  Future<bool> printTicket({required PrintDueTransactionModel printDueTransactionModel}) async {
+  Future<bool> printTicket(
+      {required PrintDueTransactionModel printDueTransactionModel}) async {
     bool isPrinted = false;
     String? isConnected = await BluetoothThermalPrinter.connectionStatus;
     if (isConnected == "true") {
-      List<int> bytes = await getTicket(printDueTransactionModel: printDueTransactionModel);
+      List<int> bytes =
+          await getTicket(printDueTransactionModel: printDueTransactionModel);
       await BluetoothThermalPrinter.writeBytes(bytes);
 
       isPrinted = true;
@@ -42,7 +46,8 @@ class PrinterDue extends ChangeNotifier {
     return isPrinted;
   }
 
-  Future<List<int>> getTicket({required PrintDueTransactionModel printDueTransactionModel}) async {
+  Future<List<int>> getTicket(
+      {required PrintDueTransactionModel printDueTransactionModel}) async {
     List<int> bytes = [];
     CapabilityProfile profile = await CapabilityProfile.load();
     final generator = Generator(PaperSize.mm58, profile);
@@ -50,7 +55,8 @@ class PrinterDue extends ChangeNotifier {
     // final Uint8List imageBytes = data.buffer.asUint8List();
     // final Image? imagez = decodeImage(imageBytes);
     // bytes += generator.image(imagez!);
-    bytes += generator.text(printDueTransactionModel.personalInformationModel.companyName ?? '',
+    bytes += generator.text(
+        printDueTransactionModel.personalInformationModel.companyName ?? '',
         styles: const PosStyles(
           align: PosAlign.center,
           height: PosTextSize.size2,
@@ -59,17 +65,35 @@ class PrinterDue extends ChangeNotifier {
         linesAfter: 1);
 
     printDueTransactionModel.dueTransactionModel!.sellerName.isEmptyOrNull
-        ? bytes += generator.text('Seller : Admin', styles: const PosStyles(align: PosAlign.center))
-        : bytes += generator.text('Seller :${printDueTransactionModel.dueTransactionModel!.sellerName}', styles: const PosStyles(align: PosAlign.center));
+        ? bytes += generator.text('Seller : Admin',
+            styles: const PosStyles(align: PosAlign.center))
+        : bytes += generator.text(
+            'Seller :${printDueTransactionModel.dueTransactionModel!.sellerName}',
+            styles: const PosStyles(align: PosAlign.center));
 
-    bytes += generator.text(printDueTransactionModel.personalInformationModel.countryName ?? '', styles: const PosStyles(align: PosAlign.center));
-    bytes += generator.text(printDueTransactionModel.personalInformationModel.phoneNumber, styles: const PosStyles(align: PosAlign.center), linesAfter: 1);
-    bytes += generator.text('Received From: ${printDueTransactionModel.dueTransactionModel!.customerName} ', styles: const PosStyles(align: PosAlign.left));
-    bytes += generator.text('mobile: ${printDueTransactionModel.dueTransactionModel!.customerPhone}', styles: const PosStyles(align: PosAlign.left));
+    bytes += generator.text(
+        printDueTransactionModel.personalInformationModel.countryName ?? '',
+        styles: const PosStyles(align: PosAlign.center));
+    bytes += generator.text(
+        printDueTransactionModel.personalInformationModel.phoneNumber,
+        styles: const PosStyles(align: PosAlign.center),
+        linesAfter: 1);
+    bytes += generator.text(
+        'Received From: ${printDueTransactionModel.dueTransactionModel!.customerName} ',
+        styles: const PosStyles(align: PosAlign.left));
+    bytes += generator.text(
+        'mobile: ${printDueTransactionModel.dueTransactionModel!.customerPhone}',
+        styles: const PosStyles(align: PosAlign.left));
     bytes += generator.hr();
     bytes += generator.row([
-      PosColumn(text: 'Invoice', width: 8, styles: const PosStyles(align: PosAlign.left, bold: true)),
-      PosColumn(text: 'Due', width: 4, styles: const PosStyles(align: PosAlign.center, bold: true)),
+      PosColumn(
+          text: 'Invoice',
+          width: 8,
+          styles: const PosStyles(align: PosAlign.left, bold: true)),
+      PosColumn(
+          text: 'Due',
+          width: 4,
+          styles: const PosStyles(align: PosAlign.center, bold: true)),
     ]);
     bytes += generator.hr();
     bytes += generator.row([
@@ -80,7 +104,8 @@ class PrinterDue extends ChangeNotifier {
             align: PosAlign.left,
           )),
       PosColumn(
-          text: printDueTransactionModel.dueTransactionModel!.totalDue.toString(),
+          text:'\$${TypesHelper.roundNum(printDueTransactionModel.dueTransactionModel!.totalDue!)}'
+             ,
           width: 4,
           styles: const PosStyles(
             align: PosAlign.center,
@@ -97,7 +122,8 @@ class PrinterDue extends ChangeNotifier {
             align: PosAlign.left,
           )),
       PosColumn(
-          text: printDueTransactionModel.dueTransactionModel!.paymentType.toString(),
+          text: printDueTransactionModel.dueTransactionModel!.paymentType
+              .toString(),
           width: 4,
           styles: const PosStyles(
             align: PosAlign.right,
@@ -111,7 +137,8 @@ class PrinterDue extends ChangeNotifier {
             align: PosAlign.left,
           )),
       PosColumn(
-          text: printDueTransactionModel.dueTransactionModel!.payDueAmount.toString(),
+          text: '\$${TypesHelper.roundNum(
+                  printDueTransactionModel.dueTransactionModel!.payDueAmount!)}',
           width: 4,
           styles: const PosStyles(
             align: PosAlign.right,
@@ -125,7 +152,9 @@ class PrinterDue extends ChangeNotifier {
             align: PosAlign.left,
           )),
       PosColumn(
-          text: printDueTransactionModel.dueTransactionModel!.dueAmountAfterPay.toString(),
+          text:
+              '\$${TypesHelper.roundNum(printDueTransactionModel.dueTransactionModel!.dueAmountAfterPay!)}',
+          // text: TypesHelper.roundNum('35344533.3783783'),
           width: 4,
           styles: const PosStyles(
             align: PosAlign.right,
@@ -134,12 +163,18 @@ class PrinterDue extends ChangeNotifier {
     bytes += generator.hr(ch: '=', linesAfter: 1);
 
     // ticket.feed(2);
-    bytes += generator.text('Thank you!', styles: const PosStyles(align: PosAlign.center, bold: true));
+    bytes += generator.text('Thank you!',
+        styles: const PosStyles(align: PosAlign.center, bold: true));
 
-    bytes += generator.text(printDueTransactionModel.dueTransactionModel!.purchaseDate, styles: const PosStyles(align: PosAlign.center), linesAfter: 1);
+    bytes += generator.text(
+        printDueTransactionModel.dueTransactionModel!.purchaseDate
+            .substring(0, 19),
+        styles: const PosStyles(align: PosAlign.center),
+        linesAfter: 1);
 
-    bytes += generator.qrcode('https://maantechnology.com', size: QRSize.Size4);
-    bytes += generator.text('Developed By: Maan Technology', styles: const PosStyles(align: PosAlign.center), linesAfter: 1);
+    bytes += generator.qrcode('https://piikmall.com/mall/', size: QRSize.Size4);
+    bytes += generator.text('PIIK MALL Cambodia',
+        styles: const PosStyles(align: PosAlign.center), linesAfter: 1);
     bytes += generator.cut();
     return bytes;
   }

@@ -10,6 +10,7 @@ import 'package:mobile_pos/Provider/print_purchase_provider.dart';
 import 'package:mobile_pos/Provider/transactions_provider.dart';
 import 'package:mobile_pos/Screens/Customers/edit_customer.dart';
 import 'package:mobile_pos/constant.dart';
+import 'package:mobile_pos/helper.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -65,7 +66,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: Text(
-            'Customer Details',
+            'People Details',
             style: GoogleFonts.poppins(
               color: Colors.black,
             ),
@@ -308,7 +309,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                             ),
                                             const SizedBox(height: 10),
                                             Text(
-                                              'Total : \$ ${reTransaction[index].totalAmount.toString()}',
+                                              'Total : \$ ${ TypesHelper.roundNum(reTransaction[index].totalAmount!)}',
                                               style: const TextStyle(color: Colors.grey),
                                             ),
                                             personalData.when(data: (data) {
@@ -316,7 +317,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
                                                   Text(
-                                                    'Due: \$ ${reTransaction[index].dueAmount.toString()}',
+                                                    'Due: \$ ${ TypesHelper.roundNum(reTransaction[index].dueAmount!) }',
                                                     style: const TextStyle(fontSize: 16),
                                                   ),
                                                   Row(
@@ -464,14 +465,14 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                                             ),
                                             const SizedBox(height: 10),
                                             Text(
-                                              'Total : \$ ${reTransaction[index].totalAmount.toString()}',
+                                              'Total : \$ ${ TypesHelper.roundNum(reTransaction[index].totalAmount) }',
                                               style: const TextStyle(color: Colors.grey),
                                             ),
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Text(
-                                                  'Due: \$ ${reTransaction[index].dueAmount.toString()}',
+                                                  'Due: \$ ${TypesHelper.roundNum(reTransaction[index].dueAmount)}',
                                                   style: const TextStyle(fontSize: 16),
                                                 ),
                                                 personalData.when(data: (data) {

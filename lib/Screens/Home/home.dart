@@ -10,7 +10,7 @@ import 'package:mobile_pos/Screens/Home/home_screen.dart';
 import 'package:mobile_pos/Screens/Report/reports.dart';
 import 'package:mobile_pos/Screens/Settings/settings_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:restart_app/restart_app.dart';
+import 'package:restart_app/restart_app.dart'; 
 
 import '../../constant.dart';
 import '../Sales/sales_contact.dart';
@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
       Future.delayed(const Duration(milliseconds: 5000), () async {
         EasyLoading.showError('User is deleted');
       });
-      Future.delayed(const Duration(milliseconds: 1000), () async {
+      Future.delayed(const Duration(milliseconds: 1000), () async { 
         Restart.restartApp();
       });
     }
@@ -69,7 +69,7 @@ class _HomeState extends State<Home> {
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
     if (!isDeviceConnected) {
       showDialogBox();
-      setState(() => isAlertSet = true);
+      setState(() => isAlertSet = true); 
     }
   }
 
@@ -84,7 +84,7 @@ class _HomeState extends State<Home> {
         },
       );
   @override
-  void dispose() {
+  void dispose() { 
     subscription.cancel();
     super.dispose();
   }

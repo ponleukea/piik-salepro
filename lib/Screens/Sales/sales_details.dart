@@ -1,4 +1,3 @@
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cart/flutter_cart.dart';
@@ -10,6 +9,7 @@ import 'package:mobile_pos/Provider/product_provider.dart';
 import 'package:mobile_pos/Screens/Payment/payment_options.dart';
 import 'package:mobile_pos/Screens/Sales/Model/sales_report.dart';
 import 'package:mobile_pos/Screens/Sales/add_discount.dart';
+import 'package:mobile_pos/helper.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../Provider/add_to_cart.dart';
@@ -30,7 +30,9 @@ class _SalesDetailsState extends State<SalesDetails> {
   String customer = '';
   @override
   void initState() {
-    widget.customerName == null ? customer = 'Unknown' : customer = widget.customerName;
+    widget.customerName == null
+        ? customer = 'Unknown'
+        : customer = widget.customerName;
     super.initState();
   }
 
@@ -54,9 +56,12 @@ class _SalesDetailsState extends State<SalesDetails> {
           actions: [
             PopupMenuButton(
               itemBuilder: (BuildContext bc) => [
-                const PopupMenuItem(value: "/addDiscount", child: Text('Add Discount')),
-                const PopupMenuItem(value: "clear", child: Text('Cancel All Product')),
-                const PopupMenuItem(value: "/settings", child: Text('Vat Doesn\'t Apply')),
+                const PopupMenuItem(
+                    value: "/addDiscount", child: Text('Add Discount')),
+                const PopupMenuItem(
+                    value: "clear", child: Text('Cancel All Product')),
+                const PopupMenuItem(
+                    value: "/settings", child: Text('Vat Doesn\'t Apply')),
               ],
               onSelected: (value) {
                 Navigator.pushNamed(context, '$value');
@@ -73,7 +78,8 @@ class _SalesDetailsState extends State<SalesDetails> {
               child: ListView.builder(
                 itemCount: providerData.cartItemList.length,
                 itemBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 10.0),
+                  padding: const EdgeInsets.only(
+                      left: 25.0, right: 25.0, bottom: 10.0),
                   child: Stack(
                     children: [
                       Text(
@@ -99,12 +105,14 @@ class _SalesDetailsState extends State<SalesDetails> {
                                   width: 20,
                                   decoration: const BoxDecoration(
                                     color: kMainColor,
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
                                   ),
                                   child: const Center(
                                       child: Text(
                                     '-',
-                                    style: TextStyle(fontSize: 14, color: Colors.white),
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.white),
                                   )),
                                 ),
                               ),
@@ -126,12 +134,14 @@ class _SalesDetailsState extends State<SalesDetails> {
                                   width: 20,
                                   decoration: const BoxDecoration(
                                     color: kMainColor,
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
                                   ),
                                   child: const Center(
                                       child: Text(
                                     '+',
-                                    style: TextStyle(fontSize: 14, color: Colors.white),
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.white),
                                   )),
                                 ),
                               ),
@@ -142,7 +152,7 @@ class _SalesDetailsState extends State<SalesDetails> {
                       Positioned(
                         right: 0,
                         child: Text(
-                          '\$${providerData.cartItemList[index].subTotal.toString()}',
+                          '\$${TypesHelper.roundNum(providerData.cartItemList[index].subTotal)}',
                           style: GoogleFonts.poppins(
                             color: kGreyTextColor,
                             fontSize: 15.0,
@@ -160,7 +170,8 @@ class _SalesDetailsState extends State<SalesDetails> {
               thickness: 0.5,
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 10.0),
+              padding:
+                  const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 10.0),
               child: Row(
                 children: [
                   Text(
@@ -186,7 +197,8 @@ class _SalesDetailsState extends State<SalesDetails> {
                 const AddDiscount().launch(context);
               },
               child: Padding(
-                padding: const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 10.0),
+                padding: const EdgeInsets.only(
+                    left: 25.0, right: 25.0, bottom: 10.0),
                 child: Row(
                   children: [
                     Text(
@@ -215,7 +227,8 @@ class _SalesDetailsState extends State<SalesDetails> {
               width: MediaQuery.of(context).size.width,
               color: kDarkWhite,
               child: Padding(
-                padding: const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 10.0),
+                padding: const EdgeInsets.only(
+                    left: 25.0, right: 25.0, bottom: 10.0),
                 child: Row(
                   children: [
                     Text(
@@ -227,7 +240,7 @@ class _SalesDetailsState extends State<SalesDetails> {
                     ),
                     const Spacer(),
                     Text(
-                      providerData.getTotalAmount().toString(),
+                      TypesHelper.roundNum(providerData.getTotalAmount()),
                       style: GoogleFonts.poppins(
                         color: Colors.black,
                         fontSize: 20.0,
@@ -245,16 +258,18 @@ class _SalesDetailsState extends State<SalesDetails> {
               onPressed: () async {
                 try {
                   EasyLoading.show(status: 'Loading...', dismissOnTap: false);
-                  final DatabaseReference salesReportRef = FirebaseDatabase.instance
-                      // ignore: deprecated_member_use
-                      .reference()
-                      .child(constUserId)
-                      .child('Sales Report');
+                  final DatabaseReference salesReportRef =
+                      FirebaseDatabase.instance
+                          // ignore: deprecated_member_use
+                          .reference()
+                          .child(constUserId)
+                          .child('Sales Report');
                   SalesReport salesReport = SalesReport(
-                      customer, providerData.getTotalAmount().toString(), providerData.cartItemList.length.toString());
+                      customer,
+                      providerData.getTotalAmount().toString(),
+                      providerData.cartItemList.length.toString());
                   await salesReportRef.push().set(salesReport.toJson());
                   EasyLoading.dismiss();
-
 
                   Future.delayed(const Duration(milliseconds: 500), () {
                     ref.refresh(productProvider);
@@ -262,7 +277,8 @@ class _SalesDetailsState extends State<SalesDetails> {
                   });
                 } catch (e) {
                   EasyLoading.dismiss();
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(e.toString())));
                 }
               },
             ),
@@ -271,6 +287,4 @@ class _SalesDetailsState extends State<SalesDetails> {
       );
     });
   }
-
-
 }

@@ -480,16 +480,16 @@ class _AddPurchaseScreenState extends State<AddPurchaseScreen> {
                     children: [
                       Row(
                         children: const [
+                          Icon(
+                            Icons.wallet,
+                            color: kMainColor,
+                          ),
                           Text(
                             'Payment Type',
                             style: TextStyle(fontSize: 16, color: Colors.black54),
                           ),
                           SizedBox(
                             width: 5,
-                          ),
-                          Icon(
-                            Icons.wallet,
-                            color: Colors.green,
                           )
                         ],
                       ),

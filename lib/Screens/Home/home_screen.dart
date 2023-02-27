@@ -299,13 +299,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   }),
                 ),
                 Container(
-                  padding: const EdgeInsets.all(1.0),
+                  padding: const EdgeInsets.all(1.3),
                   child: GridView.count(
-                    physics: const NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(), 
                     shrinkWrap: true,
-                    childAspectRatio: 0.9,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
+                    childAspectRatio: 1.1,
+                    crossAxisSpacing: 4,
+                    mainAxisSpacing: 4,
                     crossAxisCount: 3,
                     children: List.generate(
                       freeIcons.length,
@@ -317,105 +317,119 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Container(
-                //   height: 1,
-                //   width: double.infinity,
-                //   color: Colors.grey.shade300,
-                // ),
-                // const SizedBox(height: 10),
-
-                // homePageImageProvider.when(data: (images) {
-                //   if (images.isNotEmpty) {
-                //     return SizedBox(
-                //       width: double.infinity,
-                //       child: Column(
-                //         crossAxisAlignment: CrossAxisAlignment.center,
-                //         children: [
-                //           Text(
-                //             'What\'s New',
-                //             style: GoogleFonts.poppins(
-                //               color: Colors.black,
-                //               fontWeight: FontWeight.bold,
-                //               fontSize: 20.0,
-                //             ),
-                //           ),
-                //           Row(
-                //             mainAxisAlignment: MainAxisAlignment.spaceAround,
-                //             children: [
-                //               GestureDetector(
-                //                 child: const Icon(Icons.keyboard_arrow_left),
-                //                 onTap: () {
-                //                   pageController.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.linear);
-                //                 },
-                //               ),
-                //               Container(
-                //                 padding: const EdgeInsets.all(10),
-                //                 height: 180,
-                //                 width: 320,
-                //                 child: PageView.builder(
-                //                   pageSnapping: true,
-                //                   itemCount: images.length,
-                //                   controller: pageController,
-                //                   itemBuilder: (_, index) {
-                //                     if (images[index].imageUrl.contains('https://firebasestorage.googleapis.com')) {
-                //                       return GestureDetector(
-                //                         onTap: () {
-                //                           const PackageScreen().launch(context);
-                //                         },
-                //                         child: Image(
-                //                           image: NetworkImage(
-                //                             images[index].imageUrl,
-                //                           ),
-                //                           fit: BoxFit.cover,
-                //                         ),
-                //                       );
-                //                     } else {
-                //                       YoutubePlayerController videoController = YoutubePlayerController(
-                //                         flags: const YoutubePlayerFlags(
-                //                           autoPlay: false,
-                //                           mute: false,
-                //                         ),
-                //                         initialVideoId: images[index].imageUrl,
-                //                       );
-                //                       return YoutubePlayer(
-                //                         controller: videoController,
-                //                         showVideoProgressIndicator: true,
-                //                         onReady: () {},
-                //                       );
-                //                     }
-                //                   },
-                //                 ),
-                //               ),
-                //               GestureDetector(
-                //                 child: const Icon(Icons.keyboard_arrow_right),
-                //                 onTap: () {
-                //                   pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.linear);
-                //                 },
-                //               ),
-                //             ],
-                //           ),
-                //           const SizedBox(height: 30),
-                //         ],
-                //       ),
-                //     );
-                //   } else {
-                //     return Container(
-                //       padding: const EdgeInsets.all(10),
-                //       height: 180,
-                //       width: 320,
-                //       decoration: const BoxDecoration(image: DecorationImage(image: AssetImage('images/banner1.png'))),
-                //     );
-                //   }
-                // }, error: (e, stack) {
-                //   return Container(
-                //     padding: const EdgeInsets.all(10),
-                //     height: 180,
-                //     width: 320,
-                //     decoration: const BoxDecoration(image: DecorationImage(image: AssetImage('images/banner1.png'))),
-                //   );
-                // }, loading: () {
-                //   return const CircularProgressIndicator();
-                // }),
+                Container(
+                  height: 1,
+                  width: double.infinity,
+                  color: Colors.grey.shade300,
+                ),
+                const SizedBox(height: 10),
+                homePageImageProvider.when(data: (images) {
+                  if (images.isNotEmpty) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'What\'s New',
+                            style: GoogleFonts.poppins(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.0,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              GestureDetector(
+                                child: const Icon(Icons.keyboard_arrow_left),
+                                onTap: () {
+                                  pageController.previousPage(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      curve: Curves.linear);
+                                },
+                              ),
+                              Container(
+                                
+                                padding: const EdgeInsets.all(10),
+                                height: 180,
+                                width: MediaQuery.of(context).size.width-50,
+                                child: PageView.builder(
+                                  pageSnapping: true,
+                                  itemCount: images.length,
+                                  controller: pageController,
+                                  itemBuilder: (_, index) {
+                
+                                    if (images[index].imageUrl.contains(
+                                        'https://firebasestorage.googleapis.com')) {
+                                      return GestureDetector(  
+                                        onTap: () {
+                                          const PackageScreen().launch(context);
+                                        },
+                                        child: Image(
+                                          
+                                          image: NetworkImage(
+                                            images[index].imageUrl,
+                                          ),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      );
+                                    } else {
+                                      YoutubePlayerController videoController =
+                                          YoutubePlayerController(
+                                        flags: const YoutubePlayerFlags(
+                                          autoPlay: false,
+                                          mute: false,
+                                        ),
+                                        initialVideoId: images[index].imageUrl,
+                                      );
+                                      return YoutubePlayer(
+                                        controller: videoController,
+                                        showVideoProgressIndicator: true,
+                                        onReady: () {},
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                              GestureDetector(
+                                child: const Icon(Icons.keyboard_arrow_right),
+                                onTap: () {
+                                  pageController.nextPage(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      curve: Curves.linear);
+                                },
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 30),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return Container(
+                      padding: const EdgeInsets.all(10),
+                      height: 180,
+                      width: 320,
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('images/banner1.png'))),
+                    );
+                  }
+                }, error: (e, stack) {
+                  return Container(
+                    padding: const EdgeInsets.all(10),
+                    height: 180,
+                    width: 320,
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('images/banner1.png'))),
+                  );
+                }, loading: () {
+                  return const CircularProgressIndicator();
+                }),
               ],
             ),
           ),
@@ -512,6 +526,7 @@ class _HomeGridCardsState extends State<HomeGridCards> {
         elevation: 2,
         color: Colors.white,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextButton(
               onPressed: () async {
@@ -528,8 +543,8 @@ class _HomeGridCardsState extends State<HomeGridCards> {
                 //         : EasyLoading.showError('Update your plan first,\nyour limit is over.');
               },
               child: Image(
-                height: 60,
-                width: 60,
+                height: 50,
+                width: 50,
                 image: AssetImage(
                   widget.gridItems.icon.toString(),
                 ),

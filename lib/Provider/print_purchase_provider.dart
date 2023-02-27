@@ -2,12 +2,14 @@ import 'package:bluetooth_thermal_printer/bluetooth_thermal_printer.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mobile_pos/helper.dart';
 import 'package:mobile_pos/model/product_model.dart';
 import 'package:nb_utils/nb_utils.dart';
 import '../constant.dart';
 import '../model/print_transaction_model.dart';
 
-final printerPurchaseProviderNotifier = ChangeNotifierProvider((ref) => PrinterPurchase());
+final printerPurchaseProviderNotifier =
+    ChangeNotifierProvider((ref) => PrinterPurchase());
 
 class PrinterPurchase extends ChangeNotifier {
   List availableBluetoothDevices = [];
@@ -28,11 +30,15 @@ class PrinterPurchase extends ChangeNotifier {
     return status;
   }
 
-  Future<bool> printTicket({required PrintPurchaseTransactionModel printTransactionModel, required List<ProductModel>? productList}) async {
+  Future<bool> printTicket(
+      {required PrintPurchaseTransactionModel printTransactionModel,
+      required List<ProductModel>? productList}) async {
     bool isPrinted = false;
     String? isConnected = await BluetoothThermalPrinter.connectionStatus;
     if (isConnected == "true") {
-      List<int> bytes = await getTicket(printTransactionModel: printTransactionModel, productList: productList);
+      List<int> bytes = await getTicket(
+          printTransactionModel: printTransactionModel,
+          productList: productList);
       if (productList!.isNotEmpty) {
         await BluetoothThermalPrinter.writeBytes(bytes);
       } else {
@@ -47,7 +53,9 @@ class PrinterPurchase extends ChangeNotifier {
     return isPrinted;
   }
 
-  Future<List<int>> getTicket({required PrintPurchaseTransactionModel printTransactionModel, required List<ProductModel>? productList}) async {
+  Future<List<int>> getTicket(
+      {required PrintPurchaseTransactionModel printTransactionModel,
+      required List<ProductModel>? productList}) async {
     List<int> bytes = [];
     CapabilityProfile profile = await CapabilityProfile.load();
     final generator = Generator(PaperSize.mm58, profile);
@@ -55,7 +63,8 @@ class PrinterPurchase extends ChangeNotifier {
     // final Uint8List imageBytes = data.buffer.asUint8List();
     // final images.Image? imagez = decodeImage(imageBytes);
     // bytes += generator.image(imagez!);
-    bytes += generator.text(printTransactionModel.personalInformationModel.companyName ?? '',
+    bytes += generator.text(
+        printTransactionModel.personalInformationModel.companyName ?? '',
         styles: const PosStyles(
           align: PosAlign.center,
           height: PosTextSize.size2,
@@ -64,39 +73,71 @@ class PrinterPurchase extends ChangeNotifier {
         linesAfter: 1);
 
     printTransactionModel.purchaseTransitionModel!.sellerName.isEmptyOrNull
-        ? bytes += generator.text('Seller : Admin', styles: const PosStyles(align: PosAlign.center))
-        : bytes += generator.text('Seller :${printTransactionModel.purchaseTransitionModel!.sellerName}', styles: const PosStyles(align: PosAlign.center));
+        ? bytes += generator.text('Seller : Admin',
+            styles: const PosStyles(align: PosAlign.center))
+        : bytes += generator.text(
+            'Seller :${printTransactionModel.purchaseTransitionModel!.sellerName}',
+            styles: const PosStyles(align: PosAlign.center));
 
-    bytes += generator.text(printTransactionModel.personalInformationModel.countryName ?? '', styles: const PosStyles(align: PosAlign.center));
-    bytes += generator.text('Tel: ${printTransactionModel.personalInformationModel.phoneNumber ?? ''}', styles: const PosStyles(align: PosAlign.center), linesAfter: 1);
-    bytes += generator.text('Name: ${printTransactionModel.purchaseTransitionModel?.customerName ?? 'Guest'}', styles: const PosStyles(align: PosAlign.left));
-    bytes +=
-        generator.text('mobile: ${printTransactionModel.purchaseTransitionModel?.customerPhone ?? 'Not Provided'}', styles: const PosStyles(align: PosAlign.left), linesAfter: 1);
+    bytes += generator.text(
+        printTransactionModel.personalInformationModel.countryName ?? '',
+        styles: const PosStyles(align: PosAlign.center));
+    bytes += generator.text(
+        'Tel: ${printTransactionModel.personalInformationModel.phoneNumber ?? ''}',
+        styles: const PosStyles(align: PosAlign.center),
+        linesAfter: 1);
+    bytes += generator.text(
+        'Name: ${printTransactionModel.purchaseTransitionModel?.customerName ?? 'Guest'}',
+        styles: const PosStyles(align: PosAlign.left));
+    bytes += generator.text(
+        'mobile: ${printTransactionModel.purchaseTransitionModel?.customerPhone ?? 'Not Provided'}',
+        styles: const PosStyles(align: PosAlign.left),
+        linesAfter: 1);
     bytes += generator.hr();
     bytes += generator.row([
-      PosColumn(text: 'Item', width: 5, styles: const PosStyles(align: PosAlign.left, bold: true)),
-      PosColumn(text: 'Price', width: 2, styles: const PosStyles(align: PosAlign.center, bold: true)),
-      PosColumn(text: 'Qty', width: 2, styles: const PosStyles(align: PosAlign.center, bold: true)),
-      PosColumn(text: 'Total', width: 3, styles: const PosStyles(align: PosAlign.right, bold: true)),
+      PosColumn(
+          text: 'Item',
+          width: 4,
+          styles: const PosStyles(align: PosAlign.left, bold: true)),
+      PosColumn(
+          text: 'Price',
+          width: 3,
+          styles: const PosStyles(align: PosAlign.center, bold: true)),
+      PosColumn(
+          text: 'Qty',
+          width: 2,
+          styles: const PosStyles(align: PosAlign.center, bold: true)),
+      PosColumn(
+          text: 'Total',
+          width: 3,
+          styles: const PosStyles(align: PosAlign.right, bold: true)),
     ]);
     bytes += generator.hr();
     List.generate(productList?.length ?? 1, (index) {
       return bytes += generator.row([
         PosColumn(
-            text: productList?[index].productName ?? 'Not Defined',
-            width: 5,
+            text: '${productList?[index].productName}' ??
+                'Not Defined',
+            width: 4,
+            containsChinese: true,
             styles: const PosStyles(
               align: PosAlign.left,
             )),
         PosColumn(
-            text: productList?[index].productPurchasePrice ?? 'Not Defined',
-            width: 2,
+            text:
+                '${TypesHelper.roundNum(double.parse(productList![index].productPurchasePrice))}' ??
+                    'Not Defined',
+            width: 3,
             styles: const PosStyles(
               align: PosAlign.center,
             )),
-        PosColumn(text: productList?[index].productStock.toString() ?? 'Not Defined', width: 2, styles: const PosStyles(align: PosAlign.center)),
         PosColumn(
-            text: "${double.parse(productList?[index].productPurchasePrice ?? '') * productList![index].productStock.toInt()}",
+            text: productList?[index].productStock.toString() ?? 'Not Defined',
+            width: 2,
+            styles: const PosStyles(align: PosAlign.center)),
+        PosColumn(
+            text:
+                "${TypesHelper.roundNum(double.parse(productList?[index].productPurchasePrice ?? '') * productList[index].productStock.toInt())}",
             width: 3,
             styles: const PosStyles(align: PosAlign.right)),
       ]);
@@ -155,13 +196,14 @@ class PrinterPurchase extends ChangeNotifier {
     bytes += generator.hr();
     bytes += generator.row([
       PosColumn(
-          text: 'Subtotal',
+          text: 'Sub Total',
           width: 8,
           styles: const PosStyles(
             align: PosAlign.left,
           )),
       PosColumn(
-          text: '${printTransactionModel.purchaseTransitionModel!.totalAmount!.toDouble() + printTransactionModel.purchaseTransitionModel!.discountAmount!.toDouble()}',
+          text:
+              '\$${TypesHelper.roundNum(printTransactionModel.purchaseTransitionModel!.totalAmount!.toDouble() + printTransactionModel.purchaseTransitionModel!.discountAmount!.toDouble())}',
           width: 4,
           styles: const PosStyles(
             align: PosAlign.right,
@@ -175,7 +217,9 @@ class PrinterPurchase extends ChangeNotifier {
             align: PosAlign.left,
           )),
       PosColumn(
-          text: printTransactionModel.purchaseTransitionModel?.discountAmount.toString() ?? '',
+          text:
+              '\$${TypesHelper.roundNum(printTransactionModel.purchaseTransitionModel!.discountAmount!)}' ??
+                  '',
           width: 4,
           styles: const PosStyles(
             align: PosAlign.right,
@@ -183,8 +227,16 @@ class PrinterPurchase extends ChangeNotifier {
     ]);
     bytes += generator.hr();
     bytes += generator.row([
-      PosColumn(text: 'TOTAL', width: 8, styles: const PosStyles(align: PosAlign.left, bold: true)),
-      PosColumn(text: printTransactionModel.purchaseTransitionModel?.totalAmount.toString() ?? '', width: 4, styles: const PosStyles(align: PosAlign.right, bold: true)),
+      PosColumn(
+          text: 'TOTAL',
+          width: 8,
+          styles: const PosStyles(align: PosAlign.left, bold: true)),
+      PosColumn(
+          text:
+              '\$${TypesHelper.roundNum(printTransactionModel.purchaseTransitionModel!.totalAmount!)}' ??
+                  '',
+          width: 4,
+          styles: const PosStyles(align: PosAlign.right, bold: true)),
     ]);
 
     // bytes += generator.hr(ch: '=', linesAfter: 1);
@@ -198,7 +250,8 @@ class PrinterPurchase extends ChangeNotifier {
             align: PosAlign.left,
           )),
       PosColumn(
-          text: printTransactionModel.purchaseTransitionModel?.paymentType ?? 'Cash',
+          text: printTransactionModel.purchaseTransitionModel?.paymentType ??
+              'Cash',
           width: 4,
           styles: const PosStyles(
             align: PosAlign.right,
@@ -212,7 +265,8 @@ class PrinterPurchase extends ChangeNotifier {
             align: PosAlign.left,
           )),
       PosColumn(
-          text: '${printTransactionModel.purchaseTransitionModel!.totalAmount!.toDouble() - printTransactionModel.purchaseTransitionModel!.dueAmount!.toDouble()}',
+          text:
+              '\$${TypesHelper.roundNum(printTransactionModel.purchaseTransitionModel!.totalAmount!.toDouble() - printTransactionModel.purchaseTransitionModel!.dueAmount!.toDouble())}',
           width: 4,
           styles: const PosStyles(
             align: PosAlign.right,
@@ -226,7 +280,8 @@ class PrinterPurchase extends ChangeNotifier {
             align: PosAlign.left,
           )),
       PosColumn(
-          text: printTransactionModel.purchaseTransitionModel!.returnAmount.toString(),
+          text:
+              '\$${TypesHelper.roundNum(printTransactionModel.purchaseTransitionModel!.returnAmount!)}',
           width: 4,
           styles: const PosStyles(
             align: PosAlign.right,
@@ -240,7 +295,8 @@ class PrinterPurchase extends ChangeNotifier {
             align: PosAlign.left,
           )),
       PosColumn(
-          text: printTransactionModel.purchaseTransitionModel!.dueAmount.toString(),
+          text:
+              '\$${TypesHelper.roundNum(printTransactionModel.purchaseTransitionModel!.dueAmount!)}',
           width: 4,
           styles: const PosStyles(
             align: PosAlign.right,
@@ -249,14 +305,23 @@ class PrinterPurchase extends ChangeNotifier {
     bytes += generator.hr(ch: '=', linesAfter: 1);
 
     // ticket.feed(2);
-    bytes += generator.text('Thank you!', styles: const PosStyles(align: PosAlign.center, bold: true));
+    bytes += generator.text('Thank you!',
+        styles: const PosStyles(align: PosAlign.center, bold: true));
 
-    bytes += generator.text(printTransactionModel.purchaseTransitionModel!.purchaseDate, styles: const PosStyles(align: PosAlign.center), linesAfter: 1);
+    bytes += generator.text(
+        printTransactionModel.purchaseTransitionModel!.purchaseDate
+            .substring(0, 19),
+        styles: const PosStyles(align: PosAlign.center),
+        linesAfter: 1);
 
-    bytes += generator.text('Note: Goods once sold will not be taken back or exchanged.', styles: const PosStyles(align: PosAlign.center, bold: false), linesAfter: 1);
+    bytes += generator.text(
+        'Note: Goods once sold will not be taken back or exchanged.',
+        styles: const PosStyles(align: PosAlign.center, bold: false),
+        linesAfter: 1);
 
-    bytes += generator.qrcode('https://maantechnology.com', size: QRSize.Size4);
-    bytes += generator.text('Developed By: Maan Technology', styles: const PosStyles(align: PosAlign.center), linesAfter: 1);
+    bytes += generator.qrcode('https://piikmall.com/mall/', size: QRSize.Size4);
+    bytes += generator.text('PPIK MALL Cambodia',
+        styles: const PosStyles(align: PosAlign.center), linesAfter: 1);
     bytes += generator.cut();
     return bytes;
   }

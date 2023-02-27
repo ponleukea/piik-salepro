@@ -27,14 +27,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Image.asset('images/logoandname.png'),
+                Image.asset('images/logoandname.png',width: 120,height: 120,),
                 const SizedBox(height: 25),
                 Text(
                   'Forgot password',
                   style: GoogleFonts.poppins(
-                    fontSize: 30.0,
+                    fontSize: 20.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: Colors.grey,
                   ),
                 ),
                 Padding(

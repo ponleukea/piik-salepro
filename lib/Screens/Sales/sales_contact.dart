@@ -5,6 +5,7 @@ import 'package:mobile_pos/Provider/add_to_cart.dart';
 import 'package:mobile_pos/Screens/Customers/Model/customer_model.dart';
 import 'package:mobile_pos/Screens/Customers/add_customer.dart';
 import 'package:mobile_pos/Screens/Sales/add_sales.dart';
+import 'package:mobile_pos/helper.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../Provider/customer_provider.dart';
@@ -77,7 +78,8 @@ class _SalesContactState extends State<SalesContact> {
                               'Guest',
                               '0',
                             );
-                            AddSalesScreen(customerModel: guestModel).launch(context);
+                            AddSalesScreen(customerModel: guestModel)
+                                .launch(context);
                             cart.clearCart();
                           },
                           child: Padding(
@@ -137,14 +139,27 @@ class _SalesContactState extends State<SalesContact> {
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: customer.length,
                             itemBuilder: (_, index) {
-                              customer[index].type == 'Retailer' ? color = const Color(0xFF56da87) : Colors.white;
-                              customer[index].type == 'Wholesaler' ? color = const Color(0xFF25a9e0) : Colors.white;
-                              customer[index].type == 'Dealer' ? color = const Color(0xFFff5f00) : Colors.white;
-                              customer[index].type == 'Supplier' ? color = const Color(0xFFA569BD) : Colors.white;
-                              return customer[index].customerName.contains(searchCustomer) && !customer[index].type.contains('Supplier')
+                              customer[index].type == 'Retailer'
+                                  ? color = const Color(0xFF56da87)
+                                  : Colors.white;
+                              customer[index].type == 'Wholesaler'
+                                  ? color = const Color(0xFF25a9e0)
+                                  : Colors.white;
+                              customer[index].type == 'Customer'
+                                  ? color = const Color(0xFFff5f00)
+                                  : Colors.white;
+                              customer[index].type == 'Supplier'
+                                  ? color = const Color(0xFFA569BD)
+                                  : Colors.white;
+                              return customer[index]
+                                          .customerName
+                                          .contains(searchCustomer) &&
+                                      !customer[index].type.contains('Supplier')
                                   ? GestureDetector(
                                       onTap: () {
-                                        AddSalesScreen(customerModel: customer[index]).launch(context);
+                                        AddSalesScreen(
+                                                customerModel: customer[index])
+                                            .launch(context);
                                         cart.clearCart();
                                       },
                                       child: Padding(
@@ -160,7 +175,8 @@ class _SalesContactState extends State<SalesContact> {
                                                 radius: 70.0,
                                                 child: ClipOval(
                                                   child: Image.network(
-                                                    customer[index].profilePicture,
+                                                    customer[index]
+                                                        .profilePicture,
                                                     fit: BoxFit.cover,
                                                     width: 120.0,
                                                     height: 120.0,
@@ -170,8 +186,10 @@ class _SalesContactState extends State<SalesContact> {
                                             ),
                                             const SizedBox(width: 10.0),
                                             Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   customer[index].customerName,
@@ -191,11 +209,13 @@ class _SalesContactState extends State<SalesContact> {
                                             ),
                                             const Spacer(),
                                             Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                  '\$ ${customer[index].dueAmount}',
+                                                  '\$ ${TypesHelper.roundNum(double.parse(customer[index].dueAmount))}',
                                                   style: GoogleFonts.poppins(
                                                     color: Colors.black,
                                                     fontSize: 15.0,
@@ -204,12 +224,17 @@ class _SalesContactState extends State<SalesContact> {
                                                 Text(
                                                   'Due',
                                                   style: GoogleFonts.poppins(
-                                                    color: const Color(0xFFff5f00),
+                                                    color:
+                                                        const Color(0xFFff5f00),
                                                     fontSize: 15.0,
                                                   ),
                                                 ),
                                               ],
-                                            ).visible(customer[index].dueAmount != '' && customer[index].dueAmount != '0'),
+                                            ).visible(
+                                                customer[index].dueAmount !=
+                                                        '' &&
+                                                    customer[index].dueAmount !=
+                                                        '0'),
                                             const SizedBox(width: 20),
                                             const Icon(
                                               Icons.arrow_forward_ios,
@@ -234,7 +259,8 @@ class _SalesContactState extends State<SalesContact> {
                           'Guest',
                           '0',
                         );
-                        AddSalesScreen(customerModel: guestModel).launch(context);
+                        AddSalesScreen(customerModel: guestModel)
+                            .launch(context);
                         cart.clearCart();
                       },
                       child: Padding(
@@ -297,6 +323,7 @@ class _SalesContactState extends State<SalesContact> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
+            backgroundColor: primaryColor,
             child: const Icon(Icons.add),
             onPressed: () {
               const AddCustomer().launch(context);

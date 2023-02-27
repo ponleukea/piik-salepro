@@ -31,12 +31,19 @@ class UpdateProduct extends StatefulWidget {
 class _UpdateProductState extends State<UpdateProduct> {
   late String productKey;
   late ProductModel updatedProductModel;
-  GetCategoryAndVariationModel data = GetCategoryAndVariationModel(variations: [], categoryName: '');
+  GetCategoryAndVariationModel data =
+      GetCategoryAndVariationModel(variations: [], categoryName: '');
   bool showProgress = false;
   final ImagePicker _picker = ImagePicker();
   XFile? pickedImage;
   File imageFile = File('No File');
   String imagePath = 'No Data';
+
+  bool nameValid = false;
+  bool saleValid = false;
+  bool purchaseValid = false;
+  bool stockValdi = false;
+
 
   Future<void> uploadFile(String filePath) async {
     File file = File(filePath);
@@ -45,20 +52,28 @@ class _UpdateProductState extends State<UpdateProduct> {
         status: 'Uploading... ',
         dismissOnTap: false,
       );
-      var snapshot = await FirebaseStorage.instance.ref('Product Picture/${DateTime.now().millisecondsSinceEpoch}').putFile(file);
+      var snapshot = await FirebaseStorage.instance
+          .ref('Product Picture/${DateTime.now().millisecondsSinceEpoch}')
+          .putFile(file);
       var url = await snapshot.ref.getDownloadURL();
       setState(() {
         updatedProductModel.productPicture = url.toString();
       });
     } on firebase_core.FirebaseException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.code.toString())));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.code.toString())));
     }
   }
 
   void getProductKey(String code) async {
     // ignore: unused_local_variable
     List<ProductModel> productList = [];
-    await FirebaseDatabase.instance.ref(constUserId).child('Products').orderByKey().get().then((value) {
+    await FirebaseDatabase.instance
+        .ref(constUserId)
+        .child('Products')
+        .orderByKey()
+        .get()
+        .then((value) {
       for (var element in value.children) {
         var data = jsonDecode(jsonEncode(element.value));
         if (data['productCode'].toString() == code) {
@@ -116,12 +131,23 @@ class _UpdateProductState extends State<UpdateProduct> {
                         updatedProductModel.productName = value;
                       });
                     },
-                    decoration: const InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      labelText: 'Product name',
-                      hintText: 'Smart Watch',
-                      border: OutlineInputBorder(),
-                    ),
+                    decoration: InputDecoration(
+                        label: Container(
+                          width: 110,
+                          child: Row(
+                            children: [
+                              Text("Product name"),
+                              const Text('*',
+                                  style: TextStyle(
+                                      color: Colors.red, fontSize: 22))
+                            ],
+                          ),
+                        ),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        hintText: 'Enter product name',
+                        border: OutlineInputBorder(),
+                        errorText:
+                            nameValid ? 'Please input product name' : null),
                   ),
                 ),
                 Padding(
@@ -288,6 +314,8 @@ class _UpdateProductState extends State<UpdateProduct> {
                           readOnly: true,
                           textFieldType: TextFieldType.NAME,
                           decoration: InputDecoration(
+                            fillColor: greyColor,
+                            filled: true,
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             labelText: 'Product Code',
                             hintText: widget.productModel!.productCode,
@@ -324,13 +352,31 @@ class _UpdateProductState extends State<UpdateProduct> {
                         child: AppTextField(
                           initialValue: widget.productModel!.productStock,
                           textFieldType: TextFieldType.NAME,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            labelText: 'Stock',
-                            hintText: '20',
-                            border: OutlineInputBorder(),
-                          ),
+                          //readOnly: true,
+                          onChanged: (value) {
+                            setState(() {
+                              updatedProductModel.productStock = value;
+                            });
+                          },
+                          decoration: InputDecoration(
+                              label: Container(
+                                width: 55,
+                                child: Row(
+                                  children: [
+                                    Text("Stock"),
+                                    const Text('*',
+                                        style: TextStyle(
+                                            color: Colors.red, fontSize: 22))
+                                  ],
+                                ),
+                              ),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              hintText: 'Enter stock',
+                              border: OutlineInputBorder(),
+                              errorText: stockValdi
+                                  ? 'Please enter stock qty!'
+                                  : null),
                         ),
                       ),
                     ),
@@ -368,18 +414,32 @@ class _UpdateProductState extends State<UpdateProduct> {
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: AppTextField(
-                          initialValue: widget.productModel!.productPurchasePrice,
+                          initialValue:
+                              widget.productModel!.productPurchasePrice,
                           textFieldType: TextFieldType.PHONE,
                           onChanged: (value) {
                             setState(() {
                               updatedProductModel.productPurchasePrice = value;
                             });
                           },
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
+                            label: Container(
+                              width: 140,
+                              child: Row(
+                                children: [
+                                  Text("Purchase Price(\$)"),
+                                  const Text('*',
+                                      style: TextStyle(
+                                          color: Colors.red, fontSize: 22))
+                                ],
+                              ),
+                            ),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
-                            labelText: 'Purchase Price',
-                            hintText: '\$300.90',
+                            hintText: 'Enter price',
                             border: OutlineInputBorder(),
+                            errorText: purchaseValid
+                                ? 'Please enter Purchase price!'
+                                : null,
                           ),
                         ),
                       ),
@@ -395,61 +455,73 @@ class _UpdateProductState extends State<UpdateProduct> {
                               updatedProductModel.productSalePrice = value;
                             });
                           },
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
+                            label: Container(
+                              width: 105,
+                              child: Row(
+                                children: [
+                                  Text("Sale Price(\$)"),
+                                  const Text('*',
+                                      style: TextStyle(
+                                          color: Colors.red, fontSize: 22))
+                                ],
+                              ),
+                            ),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
-                            labelText: 'Sale Price',
-                            hintText: '\$234.09',
+                            hintText: 'Enter price',
                             border: OutlineInputBorder(),
+                            errorText:
+                                saleValid ? 'Please enter Sale price!' : null,
                           ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: AppTextField(
-                          initialValue: widget.productModel!.productWholeSalePrice,
-                          textFieldType: TextFieldType.PHONE,
-                          onChanged: (value) {
-                            setState(() {
-                              updatedProductModel.productWholeSalePrice = value;
-                            });
-                          },
-                          decoration: const InputDecoration(
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            labelText: 'WholeSale Price',
-                            hintText: '\$155',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: AppTextField(
-                          initialValue: widget.productModel!.productDealerPrice,
-                          textFieldType: TextFieldType.PHONE,
-                          onChanged: (value) {
-                            setState(() {
-                              updatedProductModel.productDealerPrice = value;
-                            });
-                          },
-                          decoration: const InputDecoration(
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            labelText: 'Dealer price',
-                            hintText: '\$130',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: Padding(
+                //         padding: const EdgeInsets.all(10.0),
+                //         child: AppTextField(
+                //           initialValue: widget.productModel!.productWholeSalePrice,
+                //           textFieldType: TextFieldType.PHONE,
+                //           onChanged: (value) {
+                //             setState(() {
+                //               updatedProductModel.productWholeSalePrice = value;
+                //             });
+                //           },
+                //           decoration: const InputDecoration(
+                //             floatingLabelBehavior: FloatingLabelBehavior.always,
+                //             labelText: 'WholeSale Price',
+                //             hintText: '\$155',
+                //             border: OutlineInputBorder(),
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //     Expanded(
+                //       child: Padding(
+                //         padding: const EdgeInsets.all(10.0),
+                //         child: AppTextField(
+                //           initialValue: widget.productModel!.productDealerPrice,
+                //           textFieldType: TextFieldType.PHONE,
+                //           onChanged: (value) {
+                //             setState(() {
+                //               updatedProductModel.productDealerPrice = value;
+                //             });
+                //           },
+                //           decoration: const InputDecoration(
+                //             floatingLabelBehavior: FloatingLabelBehavior.always,
+                //             labelText: 'Dealer price',
+                //             hintText: '\$130',
+                //             border: OutlineInputBorder(),
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 // Row(
                 //   children: [
                 //     Expanded(
@@ -513,17 +585,21 @@ class _UpdateProductState extends State<UpdateProduct> {
                                   children: [
                                     GestureDetector(
                                       onTap: () async {
-                                        pickedImage = await _picker.pickImage(source: ImageSource.gallery);
+                                        pickedImage = await _picker.pickImage(
+                                            source: ImageSource.gallery);
                                         setState(() {
                                           imageFile = File(pickedImage!.path);
                                           imagePath = pickedImage!.path;
                                         });
-                                        Future.delayed(const Duration(milliseconds: 100), () {
+                                        Future.delayed(
+                                            const Duration(milliseconds: 100),
+                                            () {
                                           Navigator.pop(context);
                                         });
                                       },
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           const Icon(
                                             Icons.photo_library_rounded,
@@ -545,17 +621,21 @@ class _UpdateProductState extends State<UpdateProduct> {
                                     ),
                                     GestureDetector(
                                       onTap: () async {
-                                        pickedImage = await _picker.pickImage(source: ImageSource.camera);
+                                        pickedImage = await _picker.pickImage(
+                                            source: ImageSource.camera);
                                         setState(() {
                                           imageFile = File(pickedImage!.path);
                                           imagePath = pickedImage!.path;
                                         });
-                                        Future.delayed(const Duration(milliseconds: 100), () {
+                                        Future.delayed(
+                                            const Duration(milliseconds: 100),
+                                            () {
                                           Navigator.pop(context);
                                         });
                                       },
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           const Icon(
                                             Icons.camera,
@@ -586,10 +666,12 @@ class _UpdateProductState extends State<UpdateProduct> {
                         width: 120,
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.black54, width: 1),
-                          borderRadius: const BorderRadius.all(Radius.circular(120)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(120)),
                           image: imagePath == 'No Data'
                               ? DecorationImage(
-                                  image: NetworkImage(widget.productModel!.productPicture),
+                                  image: NetworkImage(
+                                      widget.productModel!.productPicture),
                                   fit: BoxFit.cover,
                                 )
                               : DecorationImage(
@@ -606,7 +688,8 @@ class _UpdateProductState extends State<UpdateProduct> {
                           width: 35,
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.white, width: 2),
-                            borderRadius: const BorderRadius.all(Radius.circular(120)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(120)),
                             color: kMainColor,
                           ),
                           child: const Icon(
@@ -622,40 +705,78 @@ class _UpdateProductState extends State<UpdateProduct> {
                 const SizedBox(height: 20),
                 ButtonGlobalWithoutIcon(
                   buttontext: 'Save and Publish',
-                  buttonDecoration: kButtonDecoration.copyWith(color: kMainColor),
+                  buttonDecoration:
+                      kButtonDecoration.copyWith(color: kMainColor),
                   onPressed: () async {
-                    try {
-                      imagePath == 'No Data' ? null : await uploadFile(imagePath);
-                      EasyLoading.show(status: 'Loading...', dismissOnTap: false);
-                      DatabaseReference ref = FirebaseDatabase.instance.ref("$constUserId/Products/$productKey");
-                      await ref.update({
-                        'productName': updatedProductModel.productName,
-                        'productCategory': updatedProductModel.productCategory,
-                        'size': updatedProductModel.size,
-                        'color': updatedProductModel.color,
-                        'weight': updatedProductModel.weight,
-                        'capacity': updatedProductModel.capacity,
-                        'type': updatedProductModel.type,
-                        'brandName': updatedProductModel.brandName,
-                        'productCode': updatedProductModel.productCode,
-                        'productStock': updatedProductModel.productStock,
-                        'productUnit': updatedProductModel.productUnit,
-                        'productSalePrice': updatedProductModel.productSalePrice,
-                        'productPurchasePrice': updatedProductModel.productPurchasePrice,
-                        'productDiscount': updatedProductModel.productDiscount,
-                        'productWholeSalePrice': updatedProductModel.productWholeSalePrice,
-                        'productDealerPrice': updatedProductModel.productDealerPrice,
-                        'productManufacturer': updatedProductModel.productManufacturer,
-                        'productPicture': updatedProductModel.productPicture,
+                    if (updatedProductModel.productName == '') {
+                      setState(() {
+                        nameValid = true;
                       });
-                      EasyLoading.showSuccess('Added Successfully', duration: const Duration(milliseconds: 500));
-                      //ref.refresh(productProvider);
-                      Future.delayed(const Duration(milliseconds: 100), () {
-                        const HomeScreen().launch(context, isNewTask: true);
+                    } else if (updatedProductModel.productStock == '') {
+                      setState(() {
+                        nameValid = false;
+                        stockValdi = true;
                       });
-                    } catch (e) {
-                      EasyLoading.dismiss();
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                    } else if (updatedProductModel.productPurchasePrice == '') {
+                      setState(() {
+                        nameValid = false;
+                        stockValdi = false;
+                        purchaseValid = true;
+                      });
+                    } else if (updatedProductModel.productSalePrice == '') {
+                      setState(() {
+                        nameValid = false;
+                        stockValdi = false;
+                        purchaseValid = false;
+                        saleValid = true;
+                      });
+                    } else {
+                      try {
+                        imagePath == 'No Data'
+                            ? null
+                            : await uploadFile(imagePath);
+                        EasyLoading.show(
+                            status: 'Loading...', dismissOnTap: false);
+                        DatabaseReference ref = FirebaseDatabase.instance
+                            .ref("$constUserId/Products/$productKey");
+                        await ref.update({
+                          'productName': updatedProductModel.productName,
+                          'productCategory':
+                              updatedProductModel.productCategory,
+                          'size': updatedProductModel.size,
+                          'color': updatedProductModel.color,
+                          'weight': updatedProductModel.weight,
+                          'capacity': updatedProductModel.capacity,
+                          'type': updatedProductModel.type,
+                          'brandName': updatedProductModel.brandName,
+                          'productCode': updatedProductModel.productCode,
+                          'productStock': updatedProductModel.productStock,
+                          'productUnit': updatedProductModel.productUnit,
+                          'productSalePrice':
+                              updatedProductModel.productSalePrice,
+                          'productPurchasePrice':
+                              updatedProductModel.productPurchasePrice,
+                          'productDiscount':
+                              updatedProductModel.productDiscount,
+                          'productWholeSalePrice':
+                              updatedProductModel.productWholeSalePrice,
+                          'productDealerPrice':
+                              updatedProductModel.productDealerPrice,
+                          'productManufacturer':
+                              updatedProductModel.productManufacturer,
+                          'productPicture': updatedProductModel.productPicture,
+                        });
+                        EasyLoading.showSuccess('Added Successfully',
+                            duration: const Duration(milliseconds: 500));
+                        //ref.refresh(productProvider);
+                        Future.delayed(const Duration(milliseconds: 100), () {
+                          const HomeScreen().launch(context, isNewTask: true);
+                        });
+                      } catch (e) {
+                        EasyLoading.dismiss();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(e.toString())));
+                      }
                     }
                   },
                   buttonTextColor: Colors.white,

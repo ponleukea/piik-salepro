@@ -8,7 +8,7 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../constant.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+  const SignInScreen({Key? key}) : super(key: key); 
 
   @override
   // ignore: library_private_types_in_public_api
@@ -25,9 +25,7 @@ class _SignInScreenState extends State<SignInScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Image(
-              image: AssetImage('images/logoandname.png'),
-            ),
+            Image.asset('images/logoandname.png',width: 120,height: 120),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Center(
@@ -40,7 +38,7 @@ class _SignInScreenState extends State<SignInScreen> {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Center(
-                child: ButtonGlobalWithoutIcon(
+                child: ButtonGlobalWithoutIcon( 
                   buttontext: 'Login',
                   buttonTextColor: Colors.white,
                   buttonDecoration: kButtonDecoration.copyWith(

@@ -13,6 +13,7 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../../Provider/profile_provider.dart';
 import '../../../constant.dart';
 import '../../GlobalComponents/generate_pdf.dart';
+import '../../helper.dart';
 import '../Home/home.dart';
 import '../invoice_details/sales_invoice_details_screen.dart';
 
@@ -111,19 +112,19 @@ class _SalesListScreenState extends State<SalesListScreen> {
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      'Total : \$ ${reTransaction[index].totalAmount.toString()}',
+                                      'Total : \$ ${ TypesHelper.roundNum(reTransaction[index].totalAmount!) }',
                                       style: const TextStyle(color: Colors.grey),
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      'Paid : \$ ${reTransaction[index].totalAmount!.toDouble() - reTransaction[index].dueAmount!.toDouble()}',
+                                      'Paid : \$ ${ TypesHelper.roundNum(reTransaction[index].totalAmount!.toDouble() - reTransaction[index].dueAmount!.toDouble()) }',
                                       style: const TextStyle(color: Colors.grey),
                                     ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'Due: \$ ${reTransaction[index].dueAmount.toString()}',
+                                          'Due: \$ ${TypesHelper.roundNum(reTransaction[index].dueAmount!)}',
                                           style: const TextStyle(fontSize: 16),
                                         ).visible(reTransaction[index].dueAmount!.toInt() != 0),
                                         personalData.when(data: (data) {

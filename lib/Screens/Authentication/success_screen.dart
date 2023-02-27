@@ -29,44 +29,54 @@ class SuccessScreen extends StatelessWidget {
       ref.refresh(productProvider);
       return userRoleData.when(data: (data) {
         if (email == 'phone') {
-          currentUserData.putUserData(userId: FirebaseAuth.instance.currentUser!.uid, isSubUser: false, title: '', email: '');
+          currentUserData.putUserData(
+              userId: FirebaseAuth.instance.currentUser!.uid,
+              isSubUser: false,
+              title: '',
+              email: '');
         } else {
           for (var element in data) {
             if (element.email == email) {
-              currentUserData.putUserData(userId: element.databaseId, isSubUser: true, title: element.userTitle, email: element.email);
+              currentUserData.putUserData(
+                  userId: element.databaseId,
+                  isSubUser: true,
+                  title: element.userTitle,
+                  email: element.email);
               subUserTitle = element.userTitle;
             }
           }
         }
         return Scaffold(
-          resizeToAvoidBottomInset: true,
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Image(image: AssetImage('images/success.png')),
-              const SizedBox(height: 40.0),
-              Text(
-                'Congratulations',
-                style: GoogleFonts.poppins(
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Text(
-                  "You have logIn successfully!",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Image(image: AssetImage('images/success.png')),
+                const SizedBox(height: 40.0),
+                Text(
+                  'Congratulations',
                   style: GoogleFonts.poppins(
-                    color: kGreyTextColor,
-                    fontSize: 20.0,
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(
+                    "You have logIn successfully!",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                      color: kGreyTextColor,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           bottomNavigationBar: ButtonGlobalWithoutIcon(
             buttontext: 'Continue',

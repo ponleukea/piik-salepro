@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_pos/helper.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../Provider/print_purchase_provider.dart';
@@ -313,7 +314,7 @@ class _PurchaseInvoiceDetailsState extends State<PurchaseInvoiceDetails> {
                       SizedBox(
                         width: 120,
                         child: Text(
-                          '\$ ${widget.transitionModel.totalAmount! - widget.transitionModel.dueAmount!.toDouble()}',
+                          '\$ ${ TypesHelper.roundNum(widget.transitionModel.totalAmount! - widget.transitionModel.dueAmount!.toDouble()) }',
                           maxLines: 2,
                           style: kTextStyle.copyWith(color: kTitleColor, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.end,

@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:mobile_pos/Provider/printer_provider.dart';
 import 'package:mobile_pos/Provider/transactions_provider.dart';
 import 'package:mobile_pos/Screens/Loss_Profit/single_loss_profit_screen.dart';
+import 'package:mobile_pos/helper.dart';
 import 'package:mobile_pos/model/print_transaction_model.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -157,7 +158,7 @@ class _LossProfitScreenState extends State<LossProfitScreen> {
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Text(
-                                                totalProfit.toString(),
+                                               '\$'+ TypesHelper.roundNum(totalProfit),
                                                 style: const TextStyle(
                                                   color: Colors.green,
                                                   fontSize: 20,
@@ -183,7 +184,7 @@ class _LossProfitScreenState extends State<LossProfitScreen> {
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Text(
-                                                totalLoss.toString(),
+                                          '\$'+TypesHelper.roundNum(totalLoss),
                                                 style: const TextStyle(
                                                   color: Colors.orange,
                                                   fontSize: 20,
@@ -282,16 +283,16 @@ class _LossProfitScreenState extends State<LossProfitScreen> {
                                                           children: [
                                                             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                                                               Text(
-                                                                'Total : \$ ${reTransaction[index].totalAmount.toString()}',
+                                                                'Total : \$ ${TypesHelper.roundNum(reTransaction[index].totalAmount!)}',
                                                                 style: const TextStyle(color: Colors.grey),
                                                               ),
                                                               const SizedBox(height: 5),
                                                               Text(
-                                                                'Profit : \$ ${reTransaction[index].lossProfit}',
+                                                                'Profit : \$ ${TypesHelper.roundNum(reTransaction[index].lossProfit!)}',
                                                                 style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
                                                               ).visible(!reTransaction[index].lossProfit!.isNegative),
                                                               Text(
-                                                                'Loss: \$ ${reTransaction[index].lossProfit!.abs()}',
+                                                                'Loss: \$ ${TypesHelper.roundNum(reTransaction[index].lossProfit!.abs())}',
                                                                 style: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
                                                               ).visible(reTransaction[index].lossProfit!.isNegative),
                                                             ]),
