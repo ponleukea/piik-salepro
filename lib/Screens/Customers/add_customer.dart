@@ -103,16 +103,17 @@ class _AddCustomerState extends State<AddCustomer> {
                       });
                     },
                     decoration: InputDecoration(
-                        label: Container(
-                          width: 120,
-                          child: Row(
-                            children: [
-                              Text("Phone Number"),
-                              const Text('*',
+                        label: new Stack(
+                          children: [
+                            Text("Phone Number  "),
+                            new Positioned(
+                                right: 0.0,
+                                child: Text(
+                                  '*',
                                   style: TextStyle(
-                                      color: Colors.red, fontSize: 22))
-                            ],
-                          ),
+                                      color: Colors.red, fontSize: 22),
+                                ))
+                          ],
                         ),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         hintText: 'Enter Phone Number',
@@ -145,99 +146,56 @@ class _AddCustomerState extends State<AddCustomer> {
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         hintText: 'Enter Full Name',
                         border: OutlineInputBorder(),
-                        errorText: nameValid ? 'Please enter full name!' : null),
+                        errorText:
+                            nameValid ? 'Please enter full name!' : null),
                   ),
                 ),
-                // Row(
-                //   children: [
-                //     Expanded(
-                //       child: RadioListTile(
-                //         contentPadding: EdgeInsets.zero,
-                //         groupValue: groupValue,
-                //         title: Text(
-                //           'Retailer',
-                //           maxLines: 1,
-                //           style: GoogleFonts.poppins(
-                //             fontSize: 12.0,
-                //           ),
-                //         ),
-                //         value: 'Retailer',
-                //         onChanged: (value) {
-                //           setState(() {
-                //             groupValue = value.toString();
-                //             radioItem = value.toString();
-                //           });
-                //         },
-                //       ),
-                //     ),
-                //     Expanded(
-                //       child: RadioListTile(
-                //         contentPadding: EdgeInsets.zero,
-                //         groupValue: groupValue,
-                //         title: Text(
-                //           'Dealer',
-                //           maxLines: 1,
-                //           style: GoogleFonts.poppins(
-                //             fontSize: 12.0,
-                //           ),
-                //         ),
-                //         value: 'Dealer',
-                //         onChanged: (value) {
-                //           setState(() {
-                //             groupValue = value.toString();
-                //             radioItem = value.toString();
-                //           });
-                //         },
-                //       ),
-                //     ),
-                //   ],
-                // ),
-                // Row(
-                //   children: [
-                //     Expanded(
-                //       child: RadioListTile(
-                //         contentPadding: EdgeInsets.zero,
-                //         activeColor: kMainColor,
-                //         groupValue: groupValue,
-                //         title: Text(
-                //           'Wholesaler',
-                //           maxLines: 1,
-                //           style: GoogleFonts.poppins(
-                //             fontSize: 12.0,
-                //           ),
-                //         ),
-                //         value: 'Wholesaler',
-                //         onChanged: (value) {
-                //           setState(() {
-                //             groupValue = value.toString();
-                //             radioItem = value.toString();
-                //           });
-                //         },
-                //       ),
-                //     ),
-                //     Expanded(
-                //       child: RadioListTile(
-                //         contentPadding: EdgeInsets.zero,
-                //         activeColor: kMainColor,
-                //         groupValue: groupValue,
-                //         title: Text(
-                //           'Supplier',
-                //           maxLines: 1,
-                //           style: GoogleFonts.poppins(
-                //             fontSize: 12.0,
-                //           ),
-                //         ),
-                //         value: 'Supplier',
-                //         onChanged: (value) {
-                //           setState(() {
-                //             groupValue = value.toString();
-                //             radioItem = value.toString();
-                //           });
-                //         },
-                //       ),
-                //     ),
-                //   ],
-                // ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: RadioListTile(
+                        contentPadding: EdgeInsets.zero,
+                        activeColor: kMainColor,
+                        groupValue: groupValue,
+                        title: Text(
+                          'Customer',
+                          maxLines: 1,
+                          style: GoogleFonts.poppins(
+                            fontSize: 12.0,
+                          ),
+                        ),
+                        value: 'Customer',
+                        onChanged: (value) {
+                          setState(() {
+                            groupValue = value.toString();
+                            radioItem = value.toString();
+                          });
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: RadioListTile(
+                        contentPadding: EdgeInsets.zero,
+                        activeColor: kMainColor,
+                        groupValue: groupValue,
+                        title: Text(
+                          'Supplier',
+                          maxLines: 1,
+                          style: GoogleFonts.poppins(
+                            fontSize: 12.0,
+                          ),
+                        ),
+                        value: 'Supplier',
+                        onChanged: (value) {
+                          setState(() {
+                            groupValue = value.toString();
+                            radioItem = value.toString();
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
                 Visibility(
                   visible: showProgress,
                   child: const CircularProgressIndicator(

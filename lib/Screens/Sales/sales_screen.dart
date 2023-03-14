@@ -15,7 +15,8 @@ import '../../model/add_to_cart_model.dart';
 
 // ignore: must_be_immutable
 class SaleProducts extends StatefulWidget {
-  SaleProducts({Key? key, @required this.catName, this.customerModel}) : super(key: key);
+  SaleProducts({Key? key, @required this.catName, this.customerModel})
+      : super(key: key);
 
   // ignore: prefer_typing_uninitialized_variables
   var catName;
@@ -36,14 +37,17 @@ class _SaleProductsState extends State<SaleProducts> {
 
   @override
   void initState() {
-    widget.catName == null ? dropdownValue = 'Fashion' : dropdownValue = widget.catName;
+    widget.catName == null
+        ? dropdownValue = 'Fashion'
+        : dropdownValue = widget.catName;
     super.initState();
   }
 
   Future<void> scanBarcodeNormal() async {
     String barcodeScanRes;
     try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode('#ff6666', 'Cancel', true, ScanMode.BARCODE);
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
@@ -158,9 +162,7 @@ class _SaleProductsState extends State<SaleProducts> {
                 //     ),
                 //   ),
                 // ),
-                const SizedBox(
-                  height: 20.0
-                ),
+                const SizedBox(height: 20.0),
                 Row(
                   children: [
                     Expanded(
@@ -178,7 +180,9 @@ class _SaleProductsState extends State<SaleProducts> {
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             labelText: 'Product Code',
                             hintText:
-                                productCode == '0000' || productCode == '-1' ? 'Scan product QR code' : productCode,
+                                productCode == '0000' || productCode == '-1'
+                                    ? 'Scan product QR code'
+                                    : productCode,
                             border: const OutlineInputBorder(),
                           ),
                         ),
@@ -213,40 +217,51 @@ class _SaleProductsState extends State<SaleProducts> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: products.length,
                       itemBuilder: (_, i) {
-                        if (widget.customerModel!.type.contains('Retailer')) {
-                          productPrice = products[i].productSalePrice;
-                        } else if (widget.customerModel!.type.contains('Dealer')) {
-                          productPrice = products[i].productDealerPrice;
-                        } else if (widget.customerModel!.type.contains('Wholesaler')) {
-                          productPrice = products[i].productWholeSalePrice;
-                        } else if (widget.customerModel!.type.contains('Supplier')) {
-                          productPrice = products[i].productPurchasePrice;
-                        } else if (widget.customerModel!.type.contains('Guest')) {
-                          productPrice = products[i].productSalePrice;
-                        }
+                        // if (widget.customerModel!.type.contains('Retailer')) {
+                        //   productPrice = products[i].productSalePrice;
+                        // } else if (widget.customerModel!.type.contains('Dealer')) {
+                        //   productPrice = products[i].productDealerPrice;
+                        // } else if (widget.customerModel!.type.contains('Wholesaler')) {
+                        //   productPrice = products[i].productWholeSalePrice;
+                        // } else if (widget.customerModel!.type.contains('Supplier')) {
+                        //   productPrice = products[i].productPurchasePrice;
+                        // } else if (widget.customerModel!.type.contains('Guest')) {
+                        //   productPrice = products[i].productSalePrice;
+                        // }
+                        productPrice = products[i].productSalePrice;
                         return GestureDetector(
                           onTap: () async {
                             if (products[i].productStock.toInt() <= 0) {
                               EasyLoading.showError('Out of stock');
                             } else {
-                              if (widget.customerModel!.type.contains('Retailer')) {
-                                sentProductPrice = products[i].productSalePrice;
-                              } else if (widget.customerModel!.type.contains('Dealer')) {
-                                sentProductPrice = products[i].productDealerPrice;
-                              } else if (widget.customerModel!.type.contains('Wholesaler')) {
-                                sentProductPrice = products[i].productWholeSalePrice;
-                              } else if (widget.customerModel!.type.contains('Supplier')) {
-                                sentProductPrice = products[i].productPurchasePrice;
-                              } else if (widget.customerModel!.type.contains('Guest')) {
-                                sentProductPrice = products[i].productSalePrice;
-                              }
+                              // if (widget.customerModel!.type
+                              //     .contains('Retailer')) {
+                              //   sentProductPrice = products[i].productSalePrice;
+                              // } else if (widget.customerModel!.type
+                              //     .contains('Dealer')) {
+                              //   sentProductPrice =
+                              //       products[i].productDealerPrice;
+                              // } else if (widget.customerModel!.type
+                              //     .contains('Wholesaler')) {
+                              //   sentProductPrice =
+                              //       products[i].productWholeSalePrice;
+                              // } else if (widget.customerModel!.type
+                              //     .contains('Supplier')) {
+                              //   sentProductPrice =
+                              //       products[i].productPurchasePrice;
+                              // } else if (widget.customerModel!.type
+                              //     .contains('Guest')) {
+                              //   sentProductPrice = products[i].productSalePrice;
+                              // }
+                              sentProductPrice = products[i].productSalePrice;
 
                               AddToCartModel cartItem = AddToCartModel(
                                 productName: products[i].productName,
                                 subTotal: sentProductPrice,
                                 productId: products[i].productCode,
                                 productBrandName: products[i].brandName,
-                                productPurchasePrice: products[i].productPurchasePrice,
+                                productPurchasePrice:
+                                    products[i].productPurchasePrice,
                                 stock: int.parse(products[i].productStock),
                                 uuid: products[i].productCode,
                               );
@@ -333,13 +348,15 @@ class _ProductCardState extends State<ProductCard> {
                 height: 50,
                 width: 50,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: NetworkImage(widget.productImage), fit: BoxFit.cover),
+                  image: DecorationImage(
+                      image: NetworkImage(widget.productImage),
+                      fit: BoxFit.cover),
                   borderRadius: BorderRadius.circular(90.0),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 10.0), 
+              padding: const EdgeInsets.only(left: 10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,

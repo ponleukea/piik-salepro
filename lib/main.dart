@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_pos/Screens/Authentication/forgot_password.dart';
 import 'package:mobile_pos/Screens/Authentication/login_form.dart';
@@ -23,7 +26,6 @@ import 'package:mobile_pos/Screens/Sales/sales_contact.dart';
 import 'package:mobile_pos/Screens/Sales/sales_details.dart';
 import 'package:mobile_pos/Screens/Sales/sales_list.dart';
 import 'package:mobile_pos/Screens/stock_list/stock_list.dart';
-import 'package:mobile_pos/Screens/SplashScreen/on_board.dart';
 import 'package:mobile_pos/Screens/SplashScreen/splash_screen.dart';
 
 import 'Screens/Due Calculation/due_calculation_contact_screen.dart';
@@ -37,13 +39,13 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    name: 'Piik SalePro',
-    options: DefaultFirebaseOptions.android,
+    name: 'Piik-POS',
+    options: Platform.operatingSystem == 'android'
+        ? DefaultFirebaseOptions.android
+        : DefaultFirebaseOptions.ios,
   );
   runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
+    ProviderScope(child: Phoenix(child: const MyApp())),
   );
 }
 

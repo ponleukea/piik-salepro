@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mobile_pos/Screens/Authentication/phone.dart';
 import 'package:mobile_pos/Screens/Authentication/profile_setup.dart';
 import 'package:mobile_pos/Screens/Authentication/success_screen.dart';
+import 'package:mobile_pos/Screens/Home/home.dart';
 import 'package:mobile_pos/constant.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:pinput/pinput.dart';
@@ -46,7 +47,11 @@ class _OTPVerifyState extends State<OTPVerify> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('images/logoandname.png',width: 120,height: 120,),
+              Image.asset(
+                'images/logoandname.png',
+                width: 120,
+                height: 120,
+              ),
               const SizedBox(height: 25),
               const Text(
                 "OTP Verification",
@@ -94,9 +99,10 @@ class _OTPVerifyState extends State<OTPVerify> {
                             ).launch(context);
                           } else {
                             EasyLoading.dismiss();
-                            SuccessScreen(
-                              email: 'phone',
-                            ).launch(context);
+                            const Home().launch(context);
+                            // SuccessScreen(
+                            //   email: 'phone',
+                            // ).launch(context);
                           }
                         });
                       } catch (e) {

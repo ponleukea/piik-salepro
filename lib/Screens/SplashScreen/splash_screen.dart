@@ -211,8 +211,8 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             const Image(
               image: AssetImage('images/logoandname.png'),
-              width: 120,
-              height: 120,
+              width: 170,
+              height: 170,
             ),
             const Spacer(),
             Column(

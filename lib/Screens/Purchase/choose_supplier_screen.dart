@@ -69,9 +69,9 @@ class _PurchaseContactsState extends State<PurchaseContacts> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: customer.length,
                     itemBuilder: (_, index) {
-                      customer[index].type == 'Customer' ? color = const Color(0xFFA569BD) : Colors.white;
+                      customer[index].type == 'Supplier'  ? color = const Color(0xFF56da87) : Colors.white;
                       return customer[index].customerName.contains(searchCustomer) &&
-                              customer[index].type.contains('Customer')
+                              customer[index].type.contains('Supplier')
                           ? GestureDetector(
                               onTap: () {
                                 AddPurchaseScreen(customerModel: customer[index]).launch(context);

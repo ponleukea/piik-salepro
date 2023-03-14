@@ -63,12 +63,13 @@ class DefaultFirebaseOptions {
       databaseURL: 'https://piik-seller-default-rtdb.asia-southeast1.firebasedatabase.app/');
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC2DS3REO61nzIYOijW4GOHmyemlQrr4QI',
+    apiKey: 'AIzaSyCpb8iSLDO_I_5pvVn9Qy57bR2GW_7shVs',
     appId: '1:453829112125:ios:a65a63d927a1f664e6d554',
-    messagingSenderId: '453829112125',
-    projectId: 'salespro-19e86',
-    storageBucket: 'salespro-19e86.appspot.com',
-    iosClientId: '453829112125-s8knjn86uhrqbp426m4vge5tj545mlc4.apps.googleusercontent.com',
-    iosBundleId: 'com.maantheme.mobilepos.mobilePos',
+    messagingSenderId: '264423022274',
+    projectId: 'piik-seller',
+    storageBucket: 'piik-seller.appspot.com',
+    iosClientId: '264423022274-kkfkl2skvd1p7v8tol780ja9dlmmuul9.apps.googleusercontent.com',
+    iosBundleId: 'com.piik.pos',
+    databaseURL: 'https://piik-seller-default-rtdb.asia-southeast1.firebasedatabase.app/'
   );
 }

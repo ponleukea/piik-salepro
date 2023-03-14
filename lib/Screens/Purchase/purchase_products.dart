@@ -135,7 +135,7 @@ class _PurchaseProductsState extends State<PurchaseProducts> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: products.length,
                       itemBuilder: (_, i) {
-                        if (widget.customerModel!.type.contains('Retailer')) {
+                        if (widget.customerModel!.type.contains('Customer')) {
                           productPrice = products[i].productSalePrice;
                         } else if (widget.customerModel!.type.contains('Dealer')) {
                           productPrice = products[i].productDealerPrice;
@@ -280,42 +280,42 @@ class _PurchaseProductsState extends State<PurchaseProducts> {
                                             ],
                                           ),
                                           const SizedBox(height: 20),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Expanded(
-                                                child: AppTextField(
-                                                  initialValue: products[i].productWholeSalePrice,
-                                                  keyboardType: TextInputType.number,
-                                                  textFieldType: TextFieldType.NAME,
-                                                  onChanged: (value) {
-                                                    tempProductModel.productWholeSalePrice = value;
-                                                  },
-                                                  decoration: const InputDecoration(
-                                                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                    labelText: 'WholeSale Price',
-                                                    border: OutlineInputBorder(),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(width: 10),
-                                              Expanded(
-                                                child: AppTextField(
-                                                  initialValue: products[i].productDealerPrice,
-                                                  keyboardType: TextInputType.number,
-                                                  textFieldType: TextFieldType.NAME,
-                                                  onChanged: (value) {
-                                                    tempProductModel.productDealerPrice = value;
-                                                  },
-                                                  decoration: const InputDecoration(
-                                                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                                                    labelText: 'Dealer Price',
-                                                    border: OutlineInputBorder(),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                          // Row(
+                                          //   mainAxisSize: MainAxisSize.min,
+                                          //   children: [
+                                          //     Expanded(
+                                          //       child: AppTextField(
+                                          //         initialValue: products[i].productWholeSalePrice,
+                                          //         keyboardType: TextInputType.number,
+                                          //         textFieldType: TextFieldType.NAME,
+                                          //         onChanged: (value) {
+                                          //           tempProductModel.productWholeSalePrice = value;
+                                          //         },
+                                          //         decoration: const InputDecoration(
+                                          //           floatingLabelBehavior: FloatingLabelBehavior.always,
+                                          //           labelText: 'WholeSale Price',
+                                          //           border: OutlineInputBorder(),
+                                          //         ),
+                                          //       ),
+                                          //     ),
+                                          //     const SizedBox(width: 10),
+                                          //     Expanded(
+                                          //       child: AppTextField(
+                                          //         initialValue: products[i].productDealerPrice,
+                                          //         keyboardType: TextInputType.number,
+                                          //         textFieldType: TextFieldType.NAME,
+                                          //         onChanged: (value) {
+                                          //           tempProductModel.productDealerPrice = value;
+                                          //         },
+                                          //         decoration: const InputDecoration(
+                                          //           floatingLabelBehavior: FloatingLabelBehavior.always,
+                                          //           labelText: 'Dealer Price',
+                                          //           border: OutlineInputBorder(),
+                                          //         ),
+                                          //       ),
+                                          //     ),
+                                          //   ],
+                                          // ),
                                           const SizedBox(height: 20),
                                           GestureDetector(
                                             onTap: () {

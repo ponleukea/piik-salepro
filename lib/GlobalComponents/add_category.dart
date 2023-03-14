@@ -73,22 +73,24 @@ class _AddCategoryState extends State<AddCategory> {
                     });
                   },
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Fashion',
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    errorText:
-                        categoryValidate ? 'Please enter Category name!' : null,
-                    label: Container(
-                      width: 130,
-                      child: Row(
+                      border: OutlineInputBorder(),
+                      hintText: 'Fashion',
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      errorText: categoryValidate
+                          ? 'Please enter Category name!'
+                          : null,
+                      label: new Stack(
                         children: [
-                          Text("Category name"),
-                          const Text(' *',
-                              style: TextStyle(color: Colors.red, fontSize: 22))
+                          Text("Category name  "),
+                          new Positioned(
+                              right: 0.0,
+                              child: Text(
+                                '*',
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 22),
+                              ))
                         ],
-                      ),
-                    ),
-                  ),
+                      )),
                 ),
                 const SizedBox(height: 20),
                 const Text('Select variations : '),

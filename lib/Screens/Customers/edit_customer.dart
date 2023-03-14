@@ -128,17 +128,29 @@ class _EditCustomerState extends State<EditCustomer> {
                         filled: true,
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         border: OutlineInputBorder(),
-                        label: Container(
-                          width: 120,
-                          child: Row(
-                            children: [
-                              Text("Phone Number"),
-                              const Text('*',
+                        label: new Stack(
+                          children: [
+                            Text("Phone Number  "),
+                            new Positioned(
+                                right: 0.0,
+                                child: Text(
+                                  '*',
                                   style: TextStyle(
-                                      color: Colors.red, fontSize: 22))
-                            ],
-                          ),
+                                      color: Colors.red, fontSize: 22),
+                                ))
+                          ],
                         ),
+                        // Container(
+                        //   width: 120,
+                        //   child: Row(
+                        //     children: [
+                        //       Text("Phone Number"),
+                        //       const Text('*',
+                        //           style: TextStyle(
+                        //               color: Colors.red, fontSize: 22))
+                        //     ],
+                        //   ),
+                        // ),
                       ),
                     ),
                   ),
@@ -153,16 +165,17 @@ class _EditCustomerState extends State<EditCustomer> {
                         });
                       },
                       decoration: InputDecoration(
-                          label: Container(
-                            width: 60,
-                            child: Row(
-                              children: [
-                                Text("Name"),
-                                const Text('*',
+                          label: new Stack(
+                            children: [
+                              Text("Name  "),
+                              new Positioned(
+                                  right: 0.0,
+                                  child: Text(
+                                    '*',
                                     style: TextStyle(
-                                        color: Colors.red, fontSize: 22))
-                              ],
-                            ),
+                                        color: Colors.red, fontSize: 22),
+                                  ))
+                            ],
                           ),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           hintText: 'Enter full name',
@@ -171,96 +184,52 @@ class _EditCustomerState extends State<EditCustomer> {
                               nameValid ? 'Please enter full name!' : null),
                     ),
                   ),
-                  // Row(
-                  //   children: [
-                  //     Expanded(
-                  //       child: RadioListTile(
-                  //         contentPadding: EdgeInsets.zero,
-                  //         groupValue: groupValue,
-                  //         title: Text(
-                  //           'Retailer',
-                  //           maxLines: 1,
-                  //           style: GoogleFonts.poppins(
-                  //             fontSize: 12.0,
-                  //           ),
-                  //         ),
-                  //         value: 'Retailer',
-                  //         onChanged: (value) {
-                  //           setState(() {
-                  //             groupValue = value.toString();
-                  //             updatedCustomerModel.type = value.toString();
-                  //           });
-                  //         },
-                  //       ),
-                  //     ),
-                  //     Expanded(
-                  //       child: RadioListTile(
-                  //         contentPadding: EdgeInsets.zero,
-                  //         groupValue: groupValue,
-                  //         title: Text(
-                  //           'Dealer',
-                  //           maxLines: 1,
-                  //           style: GoogleFonts.poppins(
-                  //             fontSize: 12.0,
-                  //           ),
-                  //         ),
-                  //         value: 'Dealer',
-                  //         onChanged: (value) {
-                  //           setState(() {
-                  //             groupValue = value.toString();
-                  //             updatedCustomerModel.type = value.toString();
-                  //           });
-                  //         },
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // Row(
-                  //   children: [
-                  //     Expanded(
-                  //       child: RadioListTile(
-                  //         contentPadding: EdgeInsets.zero,
-                  //         activeColor: kMainColor,
-                  //         groupValue: groupValue,
-                  //         title: Text(
-                  //           'Wholesaler',
-                  //           maxLines: 1,
-                  //           style: GoogleFonts.poppins(
-                  //             fontSize: 12.0,
-                  //           ),
-                  //         ),
-                  //         value: 'Wholesaler',
-                  //         onChanged: (value) {
-                  //           setState(() {
-                  //             groupValue = value.toString();
-                  //             updatedCustomerModel.type = value.toString();
-                  //           });
-                  //         },
-                  //       ),
-                  //     ),
-                  //     Expanded(
-                  //       child: RadioListTile(
-                  //         contentPadding: EdgeInsets.zero,
-                  //         activeColor: kMainColor,
-                  //         groupValue: groupValue,
-                  //         title: Text(
-                  //           'Supplier',
-                  //           maxLines: 1,
-                  //           style: GoogleFonts.poppins(
-                  //             fontSize: 12.0,
-                  //           ),
-                  //         ),
-                  //         value: 'Supplier',
-                  //         onChanged: (value) {
-                  //           setState(() {
-                  //             groupValue = value.toString();
-                  //             updatedCustomerModel.type = value.toString();
-                  //           });
-                  //         },
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: RadioListTile(
+                          contentPadding: EdgeInsets.zero,
+                          activeColor: kMainColor,
+                          groupValue: groupValue,
+                          title: Text(
+                            'Customer',
+                            maxLines: 1,
+                            style: GoogleFonts.poppins(
+                              fontSize: 12.0,
+                            ),
+                          ),
+                          value: 'Customer',
+                          onChanged: (value) {
+                            setState(() {
+                              groupValue = value.toString();
+                              updatedCustomerModel.type = value.toString();
+                            });
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile(
+                          contentPadding: EdgeInsets.zero,
+                          activeColor: kMainColor,
+                          groupValue: groupValue,
+                          title: Text(
+                            'Supplier',
+                            maxLines: 1,
+                            style: GoogleFonts.poppins(
+                              fontSize: 12.0,
+                            ),
+                          ),
+                          value: 'Supplier',
+                          onChanged: (value) {
+                            setState(() {
+                              groupValue = value.toString();
+                              updatedCustomerModel.type = value.toString();
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                   Visibility(
                     visible: showProgress,
                     child: const CircularProgressIndicator(

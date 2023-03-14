@@ -12,7 +12,7 @@ import 'package:nb_utils/nb_utils.dart';
 
 import '../../Provider/profile_provider.dart';
 import '../../constant.dart';
-import '../../model/personal_information_model.dart';
+import '../../model/personal_information_model.dart'; 
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -112,7 +112,7 @@ class _EditProfileState extends State<EditProfile> {
             color: Colors.black,
           ),
         ),
-        centerTitle: true,
+        centerTitle: true, 
         backgroundColor: Colors.white,
         elevation: 0.0,
       ),

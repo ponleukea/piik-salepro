@@ -65,7 +65,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('images/logoandname.png',width: 120,height: 120),
+              Image.asset('images/logoandname.png', width: 120, height: 120),
               const SizedBox(height: 25),
               const Text(
                 "Phone number log in",
@@ -90,6 +90,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
                     SizedBox(
                       width: 40,
                       child: TextField(
+                        readOnly: true,
                         controller: countryController,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
@@ -127,32 +128,44 @@ class _PhoneAuthState extends State<PhoneAuth> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     onPressed: () async {
-                      EasyLoading.show(status: 'Loading', dismissOnTap: false);
-                      try {
-                        await FirebaseAuth.instance.verifyPhoneNumber(
-                          phoneNumber: countryController.text + phoneNumber,
-                          verificationCompleted:
-                              (PhoneAuthCredential credential) {},
-                          verificationFailed: (FirebaseAuthException e) {},
-                          codeSent: (String verificationId, int? resendToken) {
-                            EasyLoading.dismiss();
-                            PhoneAuth.verify = verificationId;
-                            const OTPVerify().launch(context);
-                          },
-                          codeAutoRetrievalTimeout: (String verificationId) {},
-                        );
-                      } catch (e) {
-                        log('data: $e');
-                        EasyLoading.dismiss();
-                        const AlertDialog(
-                          title: Text(
-                              'Message'), // To display the title it is optional
-                          content: Text(
-                              'GeeksforGeeks'), // Message which will be pop up on the screen
-                          // Action widget which will provide the user to acknowledge the choice
-                          actions: [],
-                        );
-                        // EasyLoading.showError('Error');
+                      if (phoneNumber == '') {
+                        EasyLoading.showError('Please input phone number!');
+                      } else {
+                        EasyLoading.show(
+                            status: 'Loading', dismissOnTap: false);
+                        try {
+                          await FirebaseAuth.instance.verifyPhoneNumber(
+                            phoneNumber: countryController.text + phoneNumber,
+                            verificationCompleted:
+                                (PhoneAuthCredential credential) {},
+                            verificationFailed: (FirebaseAuthException e) {
+                              EasyLoading.dismiss();
+                              log('verificationFailed: $e');
+                            },
+                            codeSent:
+                                (String verificationId, int? resendToken) {
+                              EasyLoading.dismiss();
+                              PhoneAuth.verify = verificationId;
+                              const OTPVerify().launch(context);
+                            },
+                            codeAutoRetrievalTimeout: (String verificationId) {
+                              EasyLoading.dismiss();
+                              log('Time OUt');
+                            },
+                          );
+                        } catch (e) {
+                          log('data: $e');
+                          EasyLoading.dismiss();
+                          const AlertDialog(
+                            title: Text(
+                                'Message'), // To display the title it is optional
+                            content: Text(
+                                'GeeksforGeeks'), // Message which will be pop up on the screen
+                            // Action widget which will provide the user to acknowledge the choice
+                            actions: [],
+                          );
+                          // EasyLoading.showError('Error');
+                        }
                       }
                     },
                     child: const Text("Send the code")),

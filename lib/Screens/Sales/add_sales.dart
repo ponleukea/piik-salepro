@@ -466,7 +466,7 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                                 width: context.width() / 4,
                                 child: TextField(
                                   maxLength: 7,
-                                  keyboardType: TextInputType.number,
+                                  keyboardType: TextInputType.text,
                                   onChanged: (value) {
                                     if (value == '') {
                                       setState(() {
@@ -630,7 +630,8 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                         onTap: () async {
                           if (providerData.cartItemList.isNotEmpty) {
                             if (widget.customerModel.type == 'Guest' &&
-                                dueAmount > 0) {
+                                double.parse(TypesHelper.roundNum(dueAmount)) >
+                                    0) {
                               EasyLoading.showError(
                                   'Due is not available for guest');
                             } else {
@@ -914,7 +915,9 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                           onTap: () async {
                             if (providerData.cartItemList.isNotEmpty) {
                               if (widget.customerModel.type == 'Guest' &&
-                                  dueAmount > 0) {
+                                  double.parse(
+                                          TypesHelper.roundNum(dueAmount)) >
+                                      0) {
                                 EasyLoading.showError(
                                     'Due is not available for guest');
                               } else {

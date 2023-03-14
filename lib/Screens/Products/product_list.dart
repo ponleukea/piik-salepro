@@ -87,8 +87,8 @@ class _ProductListState extends State<ProductList> {
           }),
         ),
         bottomNavigationBar: ButtonGlobal(
-            iconWidget: Icons.add,
-            buttontext: 'Add New Product',
+            iconWidget: null,
+            buttontext: 'Add Product',
             iconColor: Colors.white,
             buttonDecoration: kButtonDecoration.copyWith(color: primaryColor),
             onPressed: () {

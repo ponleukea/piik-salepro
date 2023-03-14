@@ -196,16 +196,17 @@ class _AddProductState extends State<AddProduct> {
                       });
                     },
                     decoration: InputDecoration(
-                        label: Container(
-                          width: 130,
-                          child: Row(
-                            children: [
-                              Text("Product name"),
-                              const Text(' *',
+                        label: new Stack(
+                          children: [
+                            Text("Product name  "),
+                            new Positioned(
+                                right: 0.0,
+                                child: Text(
+                                  '*',
                                   style: TextStyle(
-                                      color: Colors.red, fontSize: 22))
-                            ],
-                          ),
+                                      color: Colors.red, fontSize: 22),
+                                ))
+                          ],
                         ),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         hintText: 'Enter product name',
@@ -505,16 +506,17 @@ class _AddProductState extends State<AddProduct> {
                             });
                           },
                           decoration: InputDecoration(
-                            label: Container(
-                              width: 140,
-                              child: Row(
-                                children: [
-                                  Text("Purchase Price(\$)"),
-                                  const Text('*',
+                            label: new Stack(
+                              children: [
+                                Text("Purchase Price(\$)  "),
+                                Positioned(
+                                    right: 00.0,
+                                    child: Text(
+                                      '*',
                                       style: TextStyle(
-                                          color: Colors.red, fontSize: 22))
-                                ],
-                              ),
+                                          color: Colors.red, fontSize: 22),
+                                    ))
+                              ],
                             ),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             hintText: 'Enter price',
@@ -537,16 +539,17 @@ class _AddProductState extends State<AddProduct> {
                             });
                           },
                           decoration: InputDecoration(
-                            label: Container(
-                              width: 105,
-                              child: Row(
-                                children: [
-                                  Text("Sale Price(\$)"),
-                                  const Text('*',
+                            label: new Stack(
+                              children: [
+                                Text("Sale Price(\$)  "),
+                                Positioned(
+                                    right: 00.0,
+                                    child: Text(
+                                      '*',
                                       style: TextStyle(
-                                          color: Colors.red, fontSize: 22))
-                                ],
-                              ),
+                                          color: Colors.red, fontSize: 22),
+                                    ))
+                              ],
                             ),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             hintText: 'Enter price',

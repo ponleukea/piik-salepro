@@ -4,7 +4,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_pos/Screens/Profile%20Screen/profile_details.dart';
-import 'package:mobile_pos/Screens/User%20Roles/user_role_screen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:restart_app/restart_app.dart';
 import '../../Provider/profile_provider.dart';
@@ -12,6 +11,8 @@ import '../../constant.dart';
 import '../../model/personal_information_model.dart';
 import '../Shimmers/home_screen_appbar_shimmer.dart';
 import '../subscription/package_screen.dart';
+import "package:phoenix_native/phoenix_native.dart";
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class _SettingScreenState extends State<SettingScreen> {
   bool expandedHelp = false;
   bool expandedAbout = false;
   bool selected = false;
-  
+
   Future<void> _signOut() async {
     await FirebaseAuth.instance.signOut();
     EasyLoading.showSuccess('Successfully Logged Out');
@@ -64,11 +65,14 @@ class _SettingScreenState extends State<SettingScreen> {
               onPressed: () async {
                 EasyLoading.show(status: 'Log Out');
                 await _signOut();
+
                 ///________subUser_logout___________________________________________________
                 final prefs = await SharedPreferences.getInstance();
                 await prefs.setBool('isSubUser', false);
                 Future.delayed(const Duration(milliseconds: 1000), () {
-                  Restart.restartApp();
+                   Phoenix.rebirth(context);
+                  //_restartApp();
+                  // Restart.restartApp();
                   // const SignInScreen().launch(context);
                 });
               },
@@ -254,7 +258,10 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                   ),
                   onTap: () async {
-                    showCustomDialog(context);
+                    // PhoenixNative.restartApp();
+                   // Phoenix.rebirth(context);
+                    // Restart.restartApp();
+                     showCustomDialog(context);
                   },
                   leading: const Icon(
                     Icons.logout,

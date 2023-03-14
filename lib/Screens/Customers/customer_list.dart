@@ -45,7 +45,7 @@ class _CustomerListState extends State<CustomerList> {
                 ? ListView.builder(
                     itemCount: customer.length,
                     itemBuilder: (_, index) {
-                      customer[index].type == 'Retailer' ? color = const Color(0xFF56da87) : Colors.white;
+                      customer[index].type == 'Supplier' ? color = const Color(0xFF56da87) : Colors.white;
                       customer[index].type == 'Wholesaler' ? color = const Color(0xFF25a9e0) : Colors.white;
                       customer[index].type == 'Customer' ? color = const Color(0xFFff5f00) : Colors.white;
                       customer[index].type == 'Dealer' ? color = const Color(0xFFA569BD) : Colors.white;

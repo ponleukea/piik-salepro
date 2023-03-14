@@ -20,7 +20,7 @@
     </queries>
 
    <application
-        android:label="Piik POS"
+        android:label="Seller Pro"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

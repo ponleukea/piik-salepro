@@ -44,7 +44,6 @@ class _UpdateProductState extends State<UpdateProduct> {
   bool purchaseValid = false;
   bool stockValdi = false;
 
-
   Future<void> uploadFile(String filePath) async {
     File file = File(filePath);
     try {
@@ -132,17 +131,16 @@ class _UpdateProductState extends State<UpdateProduct> {
                       });
                     },
                     decoration: InputDecoration(
-                        label: Container(
-                          width: 110,
-                          child: Row(
-                            children: [
-                              Text("Product name"),
-                              const Text('*',
-                                  style: TextStyle(
-                                      color: Colors.red, fontSize: 22))
-                            ],
-                          ),
-                        ),
+                        label: new Stack(children: [
+                          Text("Product name  "),
+                          new Positioned(
+                              right: 0.0,
+                              child: Text(
+                                '*',
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 22),
+                              ))
+                        ]),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         hintText: 'Enter product name',
                         border: OutlineInputBorder(),
@@ -359,16 +357,17 @@ class _UpdateProductState extends State<UpdateProduct> {
                             });
                           },
                           decoration: InputDecoration(
-                              label: Container(
-                                width: 55,
-                                child: Row(
-                                  children: [
-                                    Text("Stock"),
-                                    const Text('*',
+                              label: new Stack(
+                                children: [
+                                  Text("Stock  "),
+                                  new Positioned(
+                                      right: 0.0,
+                                      child: Text(
+                                        '*',
                                         style: TextStyle(
-                                            color: Colors.red, fontSize: 22))
-                                  ],
-                                ),
+                                            color: Colors.red, fontSize: 22),
+                                      ))
+                                ],
                               ),
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.always,
@@ -423,16 +422,17 @@ class _UpdateProductState extends State<UpdateProduct> {
                             });
                           },
                           decoration: InputDecoration(
-                            label: Container(
-                              width: 140,
-                              child: Row(
-                                children: [
-                                  Text("Purchase Price(\$)"),
-                                  const Text('*',
+                            label: new Stack(
+                              children: [
+                                Text("Purchase Price(\$)  "),
+                                new Positioned(
+                                    right: 0.0,
+                                    child: Text(
+                                      '*',
                                       style: TextStyle(
-                                          color: Colors.red, fontSize: 22))
-                                ],
-                              ),
+                                          color: Colors.red, fontSize: 22),
+                                    ))
+                              ],
                             ),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             hintText: 'Enter price',
@@ -456,17 +456,29 @@ class _UpdateProductState extends State<UpdateProduct> {
                             });
                           },
                           decoration: InputDecoration(
-                            label: Container(
-                              width: 105,
-                              child: Row(
-                                children: [
-                                  Text("Sale Price(\$)"),
-                                  const Text('*',
+                            label: new Stack(
+                              children: [
+                                Text("Sale Price(\$)  "),
+                                new Positioned(
+                                    right: 0.0,
+                                    child: Text(
+                                      '*',
                                       style: TextStyle(
-                                          color: Colors.red, fontSize: 22))
-                                ],
-                              ),
+                                          color: Colors.red, fontSize: 22),
+                                    ))
+                              ],
                             ),
+                            // Container(
+                            //   width: 105,
+                            //   child: Row(
+                            //     children: [
+                            //       Text("Sale Price(\$)"),
+                            //       const Text('*',
+                            //           style: TextStyle(
+                            //               color: Colors.red, fontSize: 22))
+                            //     ],
+                            //   ),
+                            // ),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             hintText: 'Enter price',
                             border: OutlineInputBorder(),

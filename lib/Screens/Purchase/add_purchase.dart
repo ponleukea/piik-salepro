@@ -414,7 +414,7 @@ class _AddPurchaseScreenState extends State<AddPurchaseScreen> {
                               SizedBox(
                                 width: context.width() / 4,
                                 child: TextField(
-                                  keyboardType: TextInputType.number,
+                                  keyboardType: TextInputType.numberWithOptions(decimal: true,signed: true),
                                   onChanged: (value) {
                                     if (value == '') {
                                       setState(() {
