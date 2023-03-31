@@ -24,7 +24,6 @@ class _StockListState extends State<StockList> {
   @override
   void initState() {
     getAllTotal();
-
     super.initState();
   }
 

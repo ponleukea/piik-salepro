@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,6 +21,13 @@ class ProductList extends StatefulWidget {
 class _ProductListState extends State<ProductList> {
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, __) {
       final providerData = ref.watch(productProvider);
@@ -30,13 +39,15 @@ class _ProductListState extends State<ProductList> {
           title: Text(
             'Product List',
             style: GoogleFonts.poppins(
-              color: Colors.black,
+              color: Colors.black, 
             ),
           ),
           centerTitle: true,
         ),
         body: SingleChildScrollView(
-          child: providerData.when(data: (products) {
+          child: providerData.when(data: (products) { 
+            String encoded = jsonEncode(products);
+            log('product:$encoded');
             return products.isNotEmpty
                 ? ListView.builder(
                     shrinkWrap: true,

@@ -25,7 +25,7 @@ import '../Home/home.dart';
 
 // ignore: must_be_immutable
 class AddSalesScreen extends StatefulWidget {
-  AddSalesScreen({Key? key, required this.customerModel}) : super(key: key);
+  AddSalesScreen({Key? key, required this.customerModel}) : super(key: key); 
 
   CustomerModel customerModel;
 
@@ -34,6 +34,7 @@ class AddSalesScreen extends StatefulWidget {
 }
 
 class _AddSalesScreenState extends State<AddSalesScreen> {
+
   TextEditingController paidText = TextEditingController();
   int invoice = 0;
   double paidAmount = 0;
@@ -86,7 +87,7 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
             backgroundColor: Colors.white,
             title: Text(
               'Add Sales',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.poppins( 
                 color: Colors.black,
               ),
             ),
@@ -1171,7 +1172,7 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                                             );
                                           });
                                     }
-                                  } else {
+                                  } else { 
                                     providerData.clearCart();
                                     consumerRef.refresh(customerProvider);
                                     consumerRef.refresh(productProvider);

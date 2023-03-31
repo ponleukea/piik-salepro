@@ -92,6 +92,7 @@ UserRoleModel finalUserRoleModel = UserRoleModel(
 );
 
 class CurrentUserData {
+  
   void getUserData() async {
     final prefs = await SharedPreferences.getInstance();
     constUserId = prefs.getString('userId') ?? '';

@@ -8,15 +8,21 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_pos/Screens/Home/components/grid_items.dart';
 import 'package:mobile_pos/Screens/Profile%20Screen/profile_details.dart';
 import 'package:mobile_pos/constant.dart';
+import 'package:mobile_pos/model/product_model.dart';
 import 'package:mobile_pos/model/subscription_model.dart';
 import 'package:mobile_pos/model/subscription_plan_model.dart';
+// ignore: depend_on_referenced_packages
+import 'package:collection/collection.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../Provider/homepage_image_provider.dart';
+import '../../Provider/product_provider.dart';
 import '../../Provider/profile_provider.dart';
 import '../../model/paypal_info_model.dart';
+import '../../model/personal_information_model.dart';
 import '../../subscription.dart';
+import '../POS/add_items.dart';
 import '../Shimmers/home_screen_appbar_shimmer.dart';
 import '../subscription/package_screen.dart';
 
@@ -198,6 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     //subscriptionRemainder();
     //getPaypalInfo();
     //getAllSubscriptionPlan();
@@ -301,7 +308,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                   padding: const EdgeInsets.all(1.3),
                   child: GridView.count(
-                    physics: const NeverScrollableScrollPhysics(), 
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     childAspectRatio: 1.1,
                     crossAxisSpacing: 4,
@@ -351,24 +358,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                 },
                               ),
                               Container(
-                                
                                 padding: const EdgeInsets.all(10),
                                 height: 180,
-                                width: MediaQuery.of(context).size.width-50,
+                                width: MediaQuery.of(context).size.width - 50,
                                 child: PageView.builder(
                                   pageSnapping: true,
                                   itemCount: images.length,
                                   controller: pageController,
                                   itemBuilder: (_, index) {
-                
                                     if (images[index].imageUrl.contains(
                                         'https://firebasestorage.googleapis.com')) {
-                                      return GestureDetector(  
+                                      return GestureDetector(
                                         onTap: () {
                                           const PackageScreen().launch(context);
                                         },
                                         child: Image(
-                                          
                                           image: NetworkImage(
                                             images[index].imageUrl,
                                           ),
@@ -437,6 +441,12 @@ class _HomeScreenState extends State<HomeScreen> {
       }),
     );
   }
+}
+
+class ProductList {
+  String? title;
+  List? list;
+  ProductList({this.title, this.list});
 }
 
 class HomeGridCards extends StatefulWidget {
@@ -518,10 +528,22 @@ class _HomeGridCardsState extends State<HomeGridCards> {
   //   return false;
   // }
 
+  List<Object> getNewProductList(List<ProductModel> productList) {
+    var groups =
+        groupBy(productList, (ProductModel product) => product.productCategory);
+    return groups.entries.map((entry) {
+      return {
+        'title': entry.key,
+        'list': entry.value.map((product) => product.toJson()).toList(),
+      };
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     // ignore: avoid_unnecessary_containers
     return Consumer(builder: (context, ref, __) {
+      final providerData = ref.watch(productProvider);
       return Card(
         elevation: 2,
         color: Colors.white,
@@ -531,7 +553,28 @@ class _HomeGridCardsState extends State<HomeGridCards> {
             TextButton(
               onPressed: () async {
                 setState(() {});
-                Navigator.of(context).pushNamed('/${widget.gridItems.title}');
+                if (widget.gridItems.title == 'POS') {
+                  List<ProductModel> productList = [];
+                  providerData.when(data: (products) {
+                    productList = products;
+                  }, error: (e, stack) {
+                    return Text(e.toString());
+                  }, loading: () {
+                    return null;
+                  });
+
+                  List<Object> newData = getNewProductList(productList);
+                  newData.insert(0, {
+                    'title': 'All Products',
+                    'list': jsonDecode(jsonEncode(productList))
+                  });
+                  //print(newData);
+                  AddItem(listProduct: newData).launch(context);
+                  // Navigator.pushNamed(context, '/POS',
+                  //     arguments: {'tabs': newData});
+                } else {
+                  Navigator.of(context).pushNamed('/${widget.gridItems.title}');
+                }
                 // isSubUser
                 //     ? checkPermission(item: widget.gridItems.title)
                 //         ? await subscriptionChecker(item: widget.gridItems.title)

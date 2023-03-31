@@ -6,7 +6,7 @@ class GridItems {
 
 List<GridItems> freeIcons = [
   GridItems(
-    title: 'Sale',
+    title: 'POS',
     icon: 'images/sales.png',
   ),
   GridItems(
@@ -18,7 +18,7 @@ List<GridItems> freeIcons = [
     icon: 'images/purchase1.png',
   ),
   GridItems(
-    title: 'Sales List',
+    title: 'Sales List', 
     icon: 'images/saleslist.png',
   ),
   GridItems(

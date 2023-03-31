@@ -12,6 +12,8 @@ import '../../Provider/customer_provider.dart';
 import '../../constant.dart';
 
 class SalesContact extends StatefulWidget {
+ 
+
   const SalesContact({Key? key}) : super(key: key);
 
   @override
@@ -22,6 +24,7 @@ class SalesContact extends StatefulWidget {
 class _SalesContactState extends State<SalesContact> {
   Color color = Colors.black26;
   String searchCustomer = '';
+
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, __) {

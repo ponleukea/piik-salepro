@@ -14,6 +14,7 @@ import 'package:mobile_pos/Screens/Customers/customer_list.dart';
 import 'package:mobile_pos/Screens/Delivery/delivery_address_list.dart';
 import 'package:mobile_pos/Screens/Expense/expense_list.dart';
 import 'package:mobile_pos/Screens/Home/home.dart';
+import 'package:mobile_pos/Screens/POS/main_tab.dart';
 import 'package:mobile_pos/Screens/Payment/payment_options.dart';
 import 'package:mobile_pos/Screens/Products/add_product.dart';
 import 'package:mobile_pos/Screens/Products/product_list.dart';
@@ -30,6 +31,7 @@ import 'package:mobile_pos/Screens/SplashScreen/splash_screen.dart';
 
 import 'Screens/Due Calculation/due_calculation_contact_screen.dart';
 import 'Screens/Loss_Profit/loss_profit_screen.dart';
+import 'Screens/POS/add_items.dart';
 import 'Screens/Products/update_product.dart';
 import 'Screens/Purchase List/purchase_list_screen.dart';
 import 'Screens/Purchase/choose_supplier_screen.dart';
@@ -64,6 +66,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         // '/': (context) => const ProPackagesScreen(),
         // '/onBoard': (context) => const OnBoard(),
+        '/mainTab': (context) => const MainTab(),
         '/signIn': (context) => const SignInScreen(),
         '/loginForm': (context) => const LoginForm(isEmailLogin: true),
         '/signup': (context) => const RegisterScreen(),
@@ -74,7 +77,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const Home(),
         '/profile': (context) => const ProfileScreen(),
         // ignore: missing_required_param
-
+        // '/POS': (context) => const AddItem(),
         '/AddProducts': (context) => AddProduct(),
         '/UpdateProducts': (context) => UpdateProduct(),
 

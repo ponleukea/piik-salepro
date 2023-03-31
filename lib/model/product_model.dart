@@ -1,4 +1,5 @@
 class ProductModel {
+  
   late String productName,
       productCategory,
       size,
@@ -11,7 +12,7 @@ class ProductModel {
       productStock,
       productUnit,
       productSalePrice,
-      productPurchasePrice,
+      productPurchasePrice, 
       productDiscount,
       productWholeSalePrice,
       productDealerPrice,

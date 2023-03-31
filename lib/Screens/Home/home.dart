@@ -120,7 +120,7 @@ class _HomeState extends State<Home> {
         onTap: _onItemTapped,
       ),
     );
-  }
+  } 
 
   showDialogBox() {
     showCupertinoDialog<String>(

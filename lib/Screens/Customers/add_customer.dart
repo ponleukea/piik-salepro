@@ -10,13 +10,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_pos/GlobalComponents/button_global.dart';
-import 'package:mobile_pos/Screens/Customers/Model/customer_model.dart';
+import 'package:mobile_pos/Screens/Customers/Model/customer_model.dart'; 
 import 'package:mobile_pos/constant.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../Provider/customer_provider.dart';
 
-class AddCustomer extends StatefulWidget {
+class AddCustomer extends StatefulWidget { 
   const AddCustomer({Key? key}) : super(key: key);
 
   @override
@@ -179,9 +179,55 @@ class _AddCustomerState extends State<AddCustomer> {
                         activeColor: kMainColor,
                         groupValue: groupValue,
                         title: Text(
-                          'Supplier',
+                          'Dealer',
+                          maxLines: 1,
+                          style: GoogleFonts.poppins( 
+                            fontSize: 12.0,
+                          ),
+                        ),
+                        value: 'Dealer',
+                        onChanged: (value) {
+                          setState(() {
+                            groupValue = value.toString();
+                            radioItem = value.toString();
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                 Row(
+                  children: [
+                    Expanded(
+                      child: RadioListTile(
+                        contentPadding: EdgeInsets.zero,
+                        activeColor: kMainColor,
+                        groupValue: groupValue,
+                        title: Text(
+                          'Wholesaler',
                           maxLines: 1,
                           style: GoogleFonts.poppins(
+                            fontSize: 12.0,
+                          ),
+                        ),
+                        value: 'Wholesaler',
+                        onChanged: (value) {
+                          setState(() {
+                            groupValue = value.toString();
+                            radioItem = value.toString();
+                          });
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: RadioListTile(
+                        contentPadding: EdgeInsets.zero,
+                        activeColor: kMainColor,
+                        groupValue: groupValue,
+                        title: Text(
+                          'Supplier',
+                          maxLines: 1,
+                          style: GoogleFonts.poppins( 
                             fontSize: 12.0,
                           ),
                         ),
@@ -203,220 +249,221 @@ class _AddCustomerState extends State<AddCustomer> {
                     strokeWidth: 5.0,
                   ),
                 ),
-                // ExpansionPanelList(
-                //   expansionCallback: (int index, bool isExpanded) {
-                //     setState(() {
-                //       expanded == false ? expanded = true : expanded = false;
-                //     });
-                //   },
-                //   animationDuration: const Duration(milliseconds: 500),
-                //   elevation: 0,
-                //   dividerColor: Colors.white,
-                //   children: [
-                //     ExpansionPanel(
-                //       headerBuilder: (BuildContext context, bool isExpanded) {
-                //         return Column(
-                //           mainAxisSize: MainAxisSize.min,
-                //           children: [
-                //             TextButton(
-                //               child: Text(
-                //                 'More Info',
-                //                 style: GoogleFonts.poppins(
-                //                   fontSize: 20.0,
-                //                   color: kMainColor,
-                //                 ),
-                //               ),
-                //               onPressed: () {
-                //                 setState(() {
-                //                   expanded == false ? expanded = true : expanded = false;
-                //                 });
-                //               },
-                //             ),
-                //           ],
-                //         );
-                //       },
-                //       body: Column(
-                //         children: [
-                //           GestureDetector(
-                //             onTap: () {
-                //               showDialog(
-                //                   context: context,
-                //                   builder: (BuildContext context) {
-                //                     return Dialog(
-                //                       shape: RoundedRectangleBorder(
-                //                         borderRadius: BorderRadius.circular(12.0),
-                //                       ),
-                //                       // ignore: sized_box_for_whitespace
-                //                       child: Container(
-                //                         height: 200.0,
-                //                         width: MediaQuery.of(context).size.width - 80,
-                //                         child: Center(
-                //                           child: Row(
-                //                             mainAxisAlignment: MainAxisAlignment.center,
-                //                             children: [
-                //                               GestureDetector(
-                //                                 onTap: () async {
-                //                                   pickedImage = await _picker.pickImage(source: ImageSource.gallery);
-                //                                   setState(() {
-                //                                     imageFile = File(pickedImage!.path);
-                //                                     imagePath = pickedImage!.path;
-                //                                   });
-                //                                   Future.delayed(const Duration(milliseconds: 100), () {
-                //                                     Navigator.pop(context);
-                //                                   });
-                //                                 },
-                //                                 child: Column(
-                //                                   mainAxisAlignment: MainAxisAlignment.center,
-                //                                   children: [
-                //                                     const Icon(
-                //                                       Icons.photo_library_rounded,
-                //                                       size: 60.0,
-                //                                       color: kMainColor,
-                //                                     ),
-                //                                     Text(
-                //                                       'Gallery',
-                //                                       style: GoogleFonts.poppins(
-                //                                         fontSize: 20.0,
-                //                                         color: kMainColor,
-                //                                       ),
-                //                                     ),
-                //                                   ],
-                //                                 ),
-                //                               ),
-                //                               const SizedBox(
-                //                                 width: 40.0,
-                //                               ),
-                //                               GestureDetector(
-                //                                 onTap: () async {
-                //                                   pickedImage = await _picker.pickImage(source: ImageSource.camera);
-                //                                   setState(() {
-                //                                     imageFile = File(pickedImage!.path);
-                //                                     imagePath = pickedImage!.path;
-                //                                   });
-                //                                   Future.delayed(const Duration(milliseconds: 100), () {
-                //                                     Navigator.pop(context);
-                //                                   });
-                //                                 },
-                //                                 child: Column(
-                //                                   mainAxisAlignment: MainAxisAlignment.center,
-                //                                   children: [
-                //                                     const Icon(
-                //                                       Icons.camera,
-                //                                       size: 60.0,
-                //                                       color: kGreyTextColor,
-                //                                     ),
-                //                                     Text(
-                //                                       'Camera',
-                //                                       style: GoogleFonts.poppins(
-                //                                         fontSize: 20.0,
-                //                                         color: kGreyTextColor,
-                //                                       ),
-                //                                     ),
-                //                                   ],
-                //                                 ),
-                //                               ),
-                //                             ],
-                //                           ),
-                //                         ),
-                //                       ),
-                //                     );
-                //                   });
-                //             },
-                //             child: Stack(
-                //               children: [
-                //                 Container(
-                //                   height: 120,
-                //                   width: 120,
-                //                   decoration: BoxDecoration(
-                //                     border: Border.all(color: Colors.black54, width: 1),
-                //                     borderRadius: const BorderRadius.all(Radius.circular(120)),
-                //                     image: imagePath == 'No Data'
-                //                         ? DecorationImage(
-                //                             image: NetworkImage(profilePicture),
-                //                             fit: BoxFit.cover,
-                //                           )
-                //                         : DecorationImage(
-                //                             image: FileImage(imageFile),
-                //                             fit: BoxFit.cover,
-                //                           ),
-                //                   ),
-                //                 ),
-                //                 Positioned(
-                //                   bottom: 0,
-                //                   right: 0,
-                //                   child: Container(
-                //                     height: 35,
-                //                     width: 35,
-                //                     decoration: BoxDecoration(
-                //                       border: Border.all(color: Colors.white, width: 2),
-                //                       borderRadius: const BorderRadius.all(Radius.circular(120)),
-                //                       color: kMainColor,
-                //                     ),
-                //                     child: const Icon(
-                //                       Icons.camera_alt_outlined,
-                //                       size: 20,
-                //                       color: Colors.white,
-                //                     ),
-                //                   ),
-                //                 )
-                //               ],
-                //             ),
-                //           ),
-                //           const SizedBox(height: 15),
-                //           Padding(
-                //             padding: const EdgeInsets.all(8.0),
-                //             child: AppTextField(
-                //               textFieldType: TextFieldType.EMAIL,
-                //               onChanged: (value) {
-                //                 setState(() {
-                //                   emailAddress = value;
-                //                 });
-                //               },
-                //               decoration: const InputDecoration(
-                //                 border: OutlineInputBorder(),
-                //                 floatingLabelBehavior: FloatingLabelBehavior.always,
-                //                 labelText: 'Email Address',
-                //                 hintText: 'example@example.com',
-                //               ),
-                //             ),
-                //           ),
-                //           Padding(
-                //             padding: const EdgeInsets.all(8.0),
-                //             child: AppTextField(
-                //               textFieldType: TextFieldType.NAME,
-                //               maxLines: 2,
-                //               onChanged: (value) {
-                //                 setState(() {
-                //                   customerAddress = value;
-                //                 });
-                //               },
-                //               decoration: const InputDecoration(
-                //                   border: OutlineInputBorder(),
-                //                   floatingLabelBehavior: FloatingLabelBehavior.always,
-                //                   labelText: 'Address',
-                //                   hintText: 'Placentia, California(CA), 92870'),
-                //             ),
-                //           ),
-                //           Padding(
-                //             padding: const EdgeInsets.all(8.0),
-                //             child: AppTextField(
-                //               textFieldType: TextFieldType.PHONE,
-                //               onChanged: (value) {
-                //                 setState(() {
-                //                   dueAmount = value;
-                //                 });
-                //               },
-                //               maxLines: 2,
-                //               decoration: const InputDecoration(
-                //                   border: OutlineInputBorder(), floatingLabelBehavior: FloatingLabelBehavior.always, labelText: 'Previous Due', hintText: 'Amount'),
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //       isExpanded: expanded,
-                //     ),
-                //   ],
-                // ),
+                ExpansionPanelList(
+                  expansionCallback: (int index, bool isExpanded) {
+                    setState(() {
+                      expanded == false ? expanded = true : expanded = false;
+                    });
+                  },
+                  animationDuration: const Duration(milliseconds: 500),
+                  elevation: 0,
+                  dividerColor: kMainColor,
+                  children: [
+                    ExpansionPanel(
+                      headerBuilder: (BuildContext context, bool isExpanded) {
+                        return Column(
+                          
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextButton(
+                              child: Text(
+                                'More Info',
+                                style: GoogleFonts.poppins(
+                                  fontSize: 20.0,
+                                  color: kMainColor, 
+                                ),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  expanded == false ? expanded = true : expanded = false;
+                                });
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                      body: Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Dialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12.0),
+                                      ),
+                                      // ignore: sized_box_for_whitespace
+                                      child: Container(
+                                        height: 200.0,
+                                        width: MediaQuery.of(context).size.width - 80,
+                                        child: Center(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  pickedImage = await _picker.pickImage(source: ImageSource.gallery);
+                                                  setState(() {
+                                                    imageFile = File(pickedImage!.path);
+                                                    imagePath = pickedImage!.path;
+                                                  });
+                                                  Future.delayed(const Duration(milliseconds: 100), () {
+                                                    Navigator.pop(context);
+                                                  });
+                                                },
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.photo_library_rounded,
+                                                      size: 60.0,
+                                                      color: kMainColor,
+                                                    ),
+                                                    Text(
+                                                      'Gallery',
+                                                      style: GoogleFonts.poppins(
+                                                        fontSize: 20.0,
+                                                        color: kMainColor,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 40.0,
+                                              ),
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  pickedImage = await _picker.pickImage(source: ImageSource.camera);
+                                                  setState(() {
+                                                    imageFile = File(pickedImage!.path);
+                                                    imagePath = pickedImage!.path;
+                                                  });
+                                                  Future.delayed(const Duration(milliseconds: 100), () {
+                                                    Navigator.pop(context);
+                                                  });
+                                                },
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.camera,
+                                                      size: 60.0,
+                                                      color: kGreyTextColor,
+                                                    ),
+                                                    Text(
+                                                      'Camera',
+                                                      style: GoogleFonts.poppins(
+                                                        fontSize: 20.0,
+                                                        color: kGreyTextColor,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  });
+                            },
+                            child: Stack(
+                              children: [
+                                Container(
+                                  height: 120,
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black54, width: 1),
+                                    borderRadius: const BorderRadius.all(Radius.circular(120)),
+                                    image: imagePath == 'No Data'
+                                        ? DecorationImage(
+                                            image: NetworkImage(profilePicture),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : DecorationImage(
+                                            image: FileImage(imageFile),
+                                            fit: BoxFit.cover,
+                                          ),
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    height: 35,
+                                    width: 35,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.white, width: 2),
+                                      borderRadius: const BorderRadius.all(Radius.circular(120)),
+                                      color: kMainColor,
+                                    ),
+                                    child: const Icon(
+                                      Icons.camera_alt_outlined,
+                                      size: 20,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: AppTextField(
+                              textFieldType: TextFieldType.EMAIL,
+                              onChanged: (value) {
+                                setState(() {
+                                  emailAddress = value;
+                                });
+                              },
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                floatingLabelBehavior: FloatingLabelBehavior.always,
+                                labelText: 'Email Address',
+                                hintText: 'example@example.com',
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: AppTextField(
+                              textFieldType: TextFieldType.NAME,
+                              maxLines: 2,
+                              onChanged: (value) {
+                                setState(() {
+                                  customerAddress = value;
+                                });
+                              },
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                                  labelText: 'Address',
+                                  hintText: 'Placentia, California(CA), 92870'),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: AppTextField(
+                              textFieldType: TextFieldType.PHONE,
+                              onChanged: (value) {
+                                setState(() {
+                                  dueAmount = value;
+                                });
+                              },
+                              maxLines: 2,
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(), floatingLabelBehavior: FloatingLabelBehavior.always, labelText: 'Previous Due', hintText: 'Amount'),
+                            ),
+                          ),
+                        ],
+                      ),
+                      isExpanded: expanded,
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 30),
                 ButtonGlobalWithoutIcon(
                     buttontext: 'Save',

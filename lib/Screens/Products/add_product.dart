@@ -31,7 +31,7 @@ class AddProduct extends StatefulWidget {
   var catName;
   // ignore: prefer_typing_uninitialized_variables
   var unitsName;
-  // ignore: prefer_typing_uninitialized_variables
+  // ignore: prefer_typing_uninitialized_variables 
   var brandName;
   @override
   // ignore: library_private_types_in_public_api
@@ -106,10 +106,10 @@ class _AddProductState extends State<AddProduct> {
   Future<void> scanBarcodeNormal() async {
     String barcodeScanRes;
     try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode( 
           '#ff6666', 'Cancel', true, ScanMode.BARCODE);
     } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
+      barcodeScanRes = 'Failed to get platform version.'; 
     }
     if (!mounted) return;
     if (codeList.contains(barcodeScanRes)) {
@@ -154,6 +154,7 @@ class _AddProductState extends State<AddProduct> {
           ),
         ),
         centerTitle: true,
+        elevation: 0.0,
       ),
       body: Consumer(builder: (context, ref, __) {
         return SingleChildScrollView(
@@ -169,7 +170,7 @@ class _AddProductState extends State<AddProduct> {
                       .child(constUserId)
                       .child('Products'),
                   itemBuilder: (context, snapshot, animation, index) {
-                    final json = snapshot.value as Map<dynamic, dynamic>;
+                    final json = snapshot.value as Map<dynamic, dynamic>; 
                     final product = ProductModel.fromJson(json);
                     codeList.add(product.productCode.toLowerCase());
                     productNameList.add(product.productName.toLowerCase());
@@ -181,7 +182,7 @@ class _AddProductState extends State<AddProduct> {
                 ),
                 Visibility(
                   visible: showProgress,
-                  child: const CircularProgressIndicator(
+                  child: const CircularProgressIndicator( 
                     color: primaryColor,
                     strokeWidth: 5.0,
                   ),
@@ -226,7 +227,7 @@ class _AddProductState extends State<AddProduct> {
                     ),
                     child: GestureDetector(
                       onTap: () async {
-                        data = await const CategoryList().launch(context);
+                        data = await const CategoryList().launch(context); 
                         setState(() {
                           productCategory = data.categoryName;
                         });
@@ -295,7 +296,7 @@ class _AddProductState extends State<AddProduct> {
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: AppTextField(
-                          textFieldType: TextFieldType.NAME,
+                          textFieldType: TextFieldType.NAME, 
                           onChanged: (value) {
                             setState(() {
                               weight = value;
@@ -467,7 +468,7 @@ class _AddProductState extends State<AddProduct> {
                             border: Border.all(color: kGreyTextColor),
                           ),
                           child: GestureDetector(
-                            onTap: () async {
+                            onTap: () async { 
                               String data =
                                   await const UnitList().launch(context);
                               setState(() {
