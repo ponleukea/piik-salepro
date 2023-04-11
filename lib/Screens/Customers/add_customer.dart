@@ -10,14 +10,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_pos/GlobalComponents/button_global.dart';
-import 'package:mobile_pos/Screens/Customers/Model/customer_model.dart'; 
+import 'package:mobile_pos/Screens/Customers/Model/customer_model.dart';
 import 'package:mobile_pos/constant.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../Provider/customer_provider.dart';
 
-class AddCustomer extends StatefulWidget { 
-  const AddCustomer({Key? key}) : super(key: key);
+class AddCustomer extends StatefulWidget {
+  final String from;
+  const AddCustomer({Key? key, this.from = ''}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -47,6 +48,7 @@ class _AddCustomerState extends State<AddCustomer> {
   String imagePath = 'No Data';
   bool phoneValid = false;
   bool nameValid = false;
+
   Future<void> uploadFile(String filePath) async {
     File file = File(filePath);
     try {
@@ -66,6 +68,13 @@ class _AddCustomerState extends State<AddCustomer> {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.code.toString())));
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    log(widget.from);
   }
 
   @override
@@ -181,7 +190,7 @@ class _AddCustomerState extends State<AddCustomer> {
                         title: Text(
                           'Dealer',
                           maxLines: 1,
-                          style: GoogleFonts.poppins( 
+                          style: GoogleFonts.poppins(
                             fontSize: 12.0,
                           ),
                         ),
@@ -196,7 +205,7 @@ class _AddCustomerState extends State<AddCustomer> {
                     ),
                   ],
                 ),
-                 Row(
+                Row(
                   children: [
                     Expanded(
                       child: RadioListTile(
@@ -227,7 +236,7 @@ class _AddCustomerState extends State<AddCustomer> {
                         title: Text(
                           'Supplier',
                           maxLines: 1,
-                          style: GoogleFonts.poppins( 
+                          style: GoogleFonts.poppins(
                             fontSize: 12.0,
                           ),
                         ),
@@ -262,7 +271,6 @@ class _AddCustomerState extends State<AddCustomer> {
                     ExpansionPanel(
                       headerBuilder: (BuildContext context, bool isExpanded) {
                         return Column(
-                          
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             TextButton(
@@ -270,12 +278,14 @@ class _AddCustomerState extends State<AddCustomer> {
                                 'More Info',
                                 style: GoogleFonts.poppins(
                                   fontSize: 20.0,
-                                  color: kMainColor, 
+                                  color: kMainColor,
                                 ),
                               ),
                               onPressed: () {
                                 setState(() {
-                                  expanded == false ? expanded = true : expanded = false;
+                                  expanded == false
+                                      ? expanded = true
+                                      : expanded = false;
                                 });
                               },
                             ),
@@ -291,38 +301,53 @@ class _AddCustomerState extends State<AddCustomer> {
                                   builder: (BuildContext context) {
                                     return Dialog(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12.0),
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
                                       ),
                                       // ignore: sized_box_for_whitespace
                                       child: Container(
                                         height: 200.0,
-                                        width: MediaQuery.of(context).size.width - 80,
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                80,
                                         child: Center(
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
                                               GestureDetector(
                                                 onTap: () async {
-                                                  pickedImage = await _picker.pickImage(source: ImageSource.gallery);
+                                                  pickedImage =
+                                                      await _picker.pickImage(
+                                                          source: ImageSource
+                                                              .gallery);
                                                   setState(() {
-                                                    imageFile = File(pickedImage!.path);
-                                                    imagePath = pickedImage!.path;
+                                                    imageFile =
+                                                        File(pickedImage!.path);
+                                                    imagePath =
+                                                        pickedImage!.path;
                                                   });
-                                                  Future.delayed(const Duration(milliseconds: 100), () {
+                                                  Future.delayed(
+                                                      const Duration(
+                                                          milliseconds: 100),
+                                                      () {
                                                     Navigator.pop(context);
                                                   });
                                                 },
                                                 child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
                                                   children: [
                                                     const Icon(
-                                                      Icons.photo_library_rounded,
+                                                      Icons
+                                                          .photo_library_rounded,
                                                       size: 60.0,
                                                       color: kMainColor,
                                                     ),
                                                     Text(
                                                       'Gallery',
-                                                      style: GoogleFonts.poppins(
+                                                      style:
+                                                          GoogleFonts.poppins(
                                                         fontSize: 20.0,
                                                         color: kMainColor,
                                                       ),
@@ -335,17 +360,26 @@ class _AddCustomerState extends State<AddCustomer> {
                                               ),
                                               GestureDetector(
                                                 onTap: () async {
-                                                  pickedImage = await _picker.pickImage(source: ImageSource.camera);
+                                                  pickedImage =
+                                                      await _picker.pickImage(
+                                                          source: ImageSource
+                                                              .camera);
                                                   setState(() {
-                                                    imageFile = File(pickedImage!.path);
-                                                    imagePath = pickedImage!.path;
+                                                    imageFile =
+                                                        File(pickedImage!.path);
+                                                    imagePath =
+                                                        pickedImage!.path;
                                                   });
-                                                  Future.delayed(const Duration(milliseconds: 100), () {
+                                                  Future.delayed(
+                                                      const Duration(
+                                                          milliseconds: 100),
+                                                      () {
                                                     Navigator.pop(context);
                                                   });
                                                 },
                                                 child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
                                                   children: [
                                                     const Icon(
                                                       Icons.camera,
@@ -354,7 +388,8 @@ class _AddCustomerState extends State<AddCustomer> {
                                                     ),
                                                     Text(
                                                       'Camera',
-                                                      style: GoogleFonts.poppins(
+                                                      style:
+                                                          GoogleFonts.poppins(
                                                         fontSize: 20.0,
                                                         color: kGreyTextColor,
                                                       ),
@@ -375,8 +410,10 @@ class _AddCustomerState extends State<AddCustomer> {
                                   height: 120,
                                   width: 120,
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black54, width: 1),
-                                    borderRadius: const BorderRadius.all(Radius.circular(120)),
+                                    border: Border.all(
+                                        color: Colors.black54, width: 1),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(120)),
                                     image: imagePath == 'No Data'
                                         ? DecorationImage(
                                             image: NetworkImage(profilePicture),
@@ -395,8 +432,10 @@ class _AddCustomerState extends State<AddCustomer> {
                                     height: 35,
                                     width: 35,
                                     decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.white, width: 2),
-                                      borderRadius: const BorderRadius.all(Radius.circular(120)),
+                                      border: Border.all(
+                                          color: Colors.white, width: 2),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(120)),
                                       color: kMainColor,
                                     ),
                                     child: const Icon(
@@ -421,7 +460,8 @@ class _AddCustomerState extends State<AddCustomer> {
                               },
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
-                                floatingLabelBehavior: FloatingLabelBehavior.always,
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
                                 labelText: 'Email Address',
                                 hintText: 'example@example.com',
                               ),
@@ -439,7 +479,8 @@ class _AddCustomerState extends State<AddCustomer> {
                               },
                               decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
-                                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
                                   labelText: 'Address',
                                   hintText: 'Placentia, California(CA), 92870'),
                             ),
@@ -455,7 +496,11 @@ class _AddCustomerState extends State<AddCustomer> {
                               },
                               maxLines: 2,
                               decoration: const InputDecoration(
-                                  border: OutlineInputBorder(), floatingLabelBehavior: FloatingLabelBehavior.always, labelText: 'Previous Due', hintText: 'Amount'),
+                                  border: OutlineInputBorder(),
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  labelText: 'Previous Due',
+                                  hintText: 'Amount'),
                             ),
                           ),
                         ],
@@ -524,7 +569,12 @@ class _AddCustomerState extends State<AddCustomer> {
                               ref.refresh(customerProvider);
                               Future.delayed(const Duration(milliseconds: 100),
                                   () {
-                                Navigator.pop(context);
+                                if (widget.from == 'POS') {
+                                  Navigator.pop(
+                                      context, customerModel);
+                                } else {
+                                  Navigator.pop(context);
+                                }
                               });
                             } catch (e) {
                               EasyLoading.dismiss();

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,9 +14,9 @@ import '../../Provider/customer_provider.dart';
 import '../../constant.dart';
 
 class SalesContact extends StatefulWidget {
- 
+  final String from;
 
-  const SalesContact({Key? key}) : super(key: key);
+  const SalesContact({Key? key, this.from = ''}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -160,10 +162,18 @@ class _SalesContactState extends State<SalesContact> {
                                       !customer[index].type.contains('Supplier')
                                   ? GestureDetector(
                                       onTap: () {
-                                        AddSalesScreen(
-                                                customerModel: customer[index])
-                                            .launch(context);
-                                        cart.clearCart();
+                                        if (widget.from == 'POS') {
+                                          Navigator.pop(
+                                              context, customer[index]);
+                                        } else {
+                                          AddSalesScreen(
+                                                  customerModel:
+                                                      customer[index])
+                                              .launch(context);
+                                          cart.clearCart();
+                                        }
+
+                                        //log(jsonEncode(customer[index]));
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),

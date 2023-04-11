@@ -568,10 +568,8 @@ class _HomeGridCardsState extends State<HomeGridCards> {
                     'title': 'All Products',
                     'list': jsonDecode(jsonEncode(productList))
                   });
-                  //print(newData);
+                  log(newData);
                   AddItem(listProduct: newData).launch(context);
-                  // Navigator.pushNamed(context, '/POS',
-                  //     arguments: {'tabs': newData});
                 } else {
                   Navigator.of(context).pushNamed('/${widget.gridItems.title}');
                 }

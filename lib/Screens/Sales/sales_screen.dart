@@ -15,7 +15,7 @@ import '../../model/add_to_cart_model.dart';
 
 // ignore: must_be_immutable
 class SaleProducts extends StatefulWidget {
-  SaleProducts({Key? key, @required this.catName, this.customerModel})
+  SaleProducts({Key? key, @required this.catName, this.customerModel}) 
       : super(key: key);
 
   // ignore: prefer_typing_uninitialized_variables

@@ -18,6 +18,7 @@ class ProductModel {
       productDealerPrice,
       productManufacturer,
       productPicture;
+      
 
   ProductModel(
       this.productName,
@@ -78,5 +79,6 @@ class ProductModel {
         'productDealerPrice': productDealerPrice,
         'productManufacturer': productManufacturer,
         'productPicture': productPicture,
+        'qty':0
       };
 }

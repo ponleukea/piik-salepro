@@ -48,7 +48,7 @@ class _CustomerListState extends State<CustomerList> {
                           ? color = const Color(0xFF56da87)
                           : Colors.white;
                       customer[index].type == 'Wholesaler'
-                          ? color = const Color(0xFF25a9e0)
+                          ? color = const Color(0xFF25a9e0) 
                           : Colors.white;
                       customer[index].type == 'Customer'
                           ? color = const Color(0xFFff5f00)

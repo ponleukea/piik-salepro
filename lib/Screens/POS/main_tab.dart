@@ -48,10 +48,10 @@ class MyMainTab extends State<MainTab> {
                         color:
                             selectedCard == index1 ? Colors.blue : Colors.amber,
                         child: Container(
-                            // height: 200,
+                            // height: 200, 
                             width: 200,
                             child: Column(
-                              children: [
+                              children: [ 
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(5),
                                   child: Image.network(
@@ -195,7 +195,7 @@ class CustomTabView extends StatefulWidget {
   CustomTabsState createState() => CustomTabsState();
 }
 
-class CustomTabsState extends State<CustomTabView>
+class CustomTabsState extends State<CustomTabView> 
     with TickerProviderStateMixin {
   late TabController controller;
   late int _currentCount;
@@ -210,7 +210,7 @@ class CustomTabsState extends State<CustomTabView>
       initialIndex: _currentPosition,
     );
     controller.addListener(onPositionChange);
-    controller.animation!.addListener(onScroll);
+    controller.animation!.addListener(onScroll);  
     _currentCount = widget.itemCount;
     super.initState();
   }
@@ -308,7 +308,7 @@ class CustomTabsState extends State<CustomTabView>
     if (!controller.indexIsChanging) {
       _currentPosition = controller.index;
       if (widget.onPositionChange is ValueChanged<int>) {
-        widget.onPositionChange!(_currentPosition);
+        widget.onPositionChange!(_currentPosition); 
       }
     }
   }

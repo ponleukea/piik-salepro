@@ -65,7 +65,7 @@ class _SalesListScreenState extends State<SalesListScreen> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            SalesInvoiceDetails(
+                            SalesInvoiceDetails( 
                               transitionModel: reTransaction[index],
                               personalInformationModel: profile.value!,
                             ).launch(context);
