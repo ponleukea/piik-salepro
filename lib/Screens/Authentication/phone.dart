@@ -145,6 +145,8 @@ class _PhoneAuthState extends State<PhoneAuth> {
                             codeSent:
                                 (String verificationId, int? resendToken) {
                               EasyLoading.dismiss();
+                              log(verificationId);
+                              log(countryController.text + phoneNumber);
                               PhoneAuth.verify = verificationId;
                               const OTPVerify().launch(context);
                             },

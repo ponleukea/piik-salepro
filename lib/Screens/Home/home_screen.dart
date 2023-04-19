@@ -216,6 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // print('UserId: ${FirebaseAuth.instance.currentUser!.uid}');
     return SafeArea(
       child: Consumer(builder: (_, ref, __) {
+        
         final userProfileDetails = ref.watch(profileDetailsProvider);
         final homePageImageProvider = ref.watch(homepageImageProvider);
 
@@ -562,14 +563,15 @@ class _HomeGridCardsState extends State<HomeGridCards> {
                   }, loading: () {
                     return null;
                   });
-
                   List<Object> newData = getNewProductList(productList);
                   newData.insert(0, {
                     'title': 'All Products',
                     'list': jsonDecode(jsonEncode(productList))
                   });
-                  log(newData);
-                  AddItem(listProduct: newData).launch(context);
+                 // EasyLoading.showError('Click heree');
+                  await Future.delayed(const Duration(milliseconds: 300), () {
+                    AddItem(listProduct: newData).launch(context);
+                  });
                 } else {
                   Navigator.of(context).pushNamed('/${widget.gridItems.title}');
                 }

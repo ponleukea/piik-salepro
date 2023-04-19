@@ -1,8 +1,11 @@
 // ignore_for_file: file_names
 
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_pos/Screens/Authentication/phone.dart';
 import 'package:mobile_pos/Screens/Authentication/profile_setup.dart';
 import 'package:mobile_pos/Screens/Authentication/success_screen.dart';
@@ -10,6 +13,9 @@ import 'package:mobile_pos/Screens/Home/home.dart';
 import 'package:mobile_pos/constant.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:pinput/pinput.dart';
+
+import '../../Provider/customer_provider.dart';
+import '../../Provider/profile_provider.dart';
 
 class OTPVerify extends StatefulWidget {
   const OTPVerify({Key? key}) : super(key: key);
@@ -82,18 +88,23 @@ class _OTPVerifyState extends State<OTPVerify> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     onPressed: () async {
-                      EasyLoading.show(status: 'Loading');
+                      EasyLoading.show(status: 'Loading...');
+                      log(PhoneAuth.verify);
+                      log(code);
                       try {
                         PhoneAuthCredential credential =
                             PhoneAuthProvider.credential(
                                 verificationId: PhoneAuth.verify,
                                 smsCode: code);
+                        final prefs = await SharedPreferences.getInstance();
                         await auth
                             .signInWithCredential(credential)
                             .then((value) {
+                          log(value.user!.uid);
+                          prefs.setString('userId', value.user!.uid);
+                          currentUserData.getUserData();
                           if (value.additionalUserInfo!.isNewUser) {
                             EasyLoading.dismiss();
-
                             const ProfileSetup(
                               loginWithPhone: true,
                             ).launch(context);
@@ -106,26 +117,11 @@ class _OTPVerifyState extends State<OTPVerify> {
                           }
                         });
                       } catch (e) {
-                        EasyLoading.showError('Wrong OTP');
+                        EasyLoading.showError('Wrong OTP...');
                       }
                     },
                     child: const Text("Verify now")),
-              ),
-              // Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              //   TextButton(
-              //     onPressed: () {
-              //       Navigator.pushNamedAndRemoveUntil(
-              //         context,
-              //         'phone',
-              //         (route) => false,
-              //       );
-              //     },
-              //     child: const Text(
-              //       "Edit Phone Number ?",
-              //       style: TextStyle(color: primaryColor),
-              //     ),
-              //   )
-              // ])
+              )
             ],
           ),
         ),

@@ -42,7 +42,6 @@ class _SettingScreenState extends State<SettingScreen> {
 
   void printerIsEnable() async {
     final prefs = await SharedPreferences.getInstance();
-
     isPrintEnable = prefs.getBool('isPrintEnable') ?? true;
   }
 
@@ -69,11 +68,11 @@ class _SettingScreenState extends State<SettingScreen> {
                 ///________subUser_logout___________________________________________________
                 final prefs = await SharedPreferences.getInstance();
                 await prefs.setBool('isSubUser', false);
+                await prefs.setString('userId', '');
+                await prefs.setString('subUserEmail', '');
+
                 Future.delayed(const Duration(milliseconds: 1000), () {
-                   Phoenix.rebirth(context);
-                  //_restartApp();
-                  // Restart.restartApp();
-                  // const SignInScreen().launch(context);
+                  Phoenix.rebirth(context);
                 });
               },
             )
@@ -258,10 +257,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                   ),
                   onTap: () async {
-                    // PhoenixNative.restartApp();
-                   // Phoenix.rebirth(context);
-                    // Restart.restartApp();
-                     showCustomDialog(context);
+                    showCustomDialog(context);
                   },
                   leading: const Icon(
                     Icons.logout,

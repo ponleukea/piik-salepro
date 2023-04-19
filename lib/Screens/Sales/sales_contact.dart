@@ -83,9 +83,14 @@ class _SalesContactState extends State<SalesContact> {
                               'Guest',
                               '0',
                             );
-                            AddSalesScreen(customerModel: guestModel)
-                                .launch(context);
-                            cart.clearCart();
+
+                            if (widget.from == 'POS') {
+                              Navigator.pop(context, guestModel);
+                            } else {
+                              AddSalesScreen(customerModel: guestModel)
+                                  .launch(context);
+                              cart.clearCart();
+                            }
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -172,8 +177,6 @@ class _SalesContactState extends State<SalesContact> {
                                               .launch(context);
                                           cart.clearCart();
                                         }
-
-                                        //log(jsonEncode(customer[index]));
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),

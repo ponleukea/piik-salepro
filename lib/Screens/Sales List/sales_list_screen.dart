@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,8 +28,6 @@ class SalesListScreen extends StatefulWidget {
 }
 
 class _SalesListScreenState extends State<SalesListScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -54,9 +54,13 @@ class _SalesListScreenState extends State<SalesListScreen> {
           final printerData = ref.watch(printerProviderNotifier);
           final personalData = ref.watch(profileDetailsProvider);
           final cart = ref.watch(cartNotifier);
+
+         // log(providerData.toString());
+
           return SingleChildScrollView(
             child: providerData.when(data: (transaction) {
               final reTransaction = transaction.reversed.toList();
+                log(jsonEncode(reTransaction));
               return reTransaction.isNotEmpty
                   ? ListView.builder(
                       shrinkWrap: true,
@@ -65,7 +69,7 @@ class _SalesListScreenState extends State<SalesListScreen> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            SalesInvoiceDetails( 
+                            SalesInvoiceDetails(
                               transitionModel: reTransaction[index],
                               personalInformationModel: profile.value!,
                             ).launch(context);
@@ -79,83 +83,129 @@ class _SalesListScreenState extends State<SalesListScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           reTransaction[index].customerName,
                                           style: const TextStyle(fontSize: 16),
                                         ),
-                                        Text('#${reTransaction[index].invoiceNumber}'),
+                                        Text(
+                                            '#${reTransaction[index].invoiceNumber}'),
                                       ],
                                     ),
                                     const SizedBox(height: 10),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
                                           padding: const EdgeInsets.all(8),
                                           decoration: BoxDecoration(
-                                              color: reTransaction[index].dueAmount! <= 0
-                                                  ? const Color(0xff0dbf7d).withOpacity(0.1)
-                                                  : const Color(0xFFED1A3B).withOpacity(0.1),
-                                              borderRadius: const BorderRadius.all(Radius.circular(10))),
+                                              color: reTransaction[index]
+                                                          .dueAmount! <=
+                                                      0
+                                                  ? const Color(0xff0dbf7d)
+                                                      .withOpacity(0.1)
+                                                  : const Color(0xFFED1A3B)
+                                                      .withOpacity(0.1),
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(10))),
                                           child: Text(
-                                            reTransaction[index].dueAmount! <= 0 ? 'Paid' : 'Unpaid',
-                                            style: TextStyle(color: reTransaction[index].dueAmount! <= 0 ? const Color(0xff0dbf7d) : const Color(0xFFED1A3B)),
+                                            reTransaction[index].dueAmount! <= 0
+                                                ? 'Paid'
+                                                : 'Unpaid',
+                                            style: TextStyle(
+                                                color: reTransaction[index]
+                                                            .dueAmount! <=
+                                                        0
+                                                    ? const Color(0xff0dbf7d)
+                                                    : const Color(0xFFED1A3B)),
                                           ),
                                         ),
                                         Text(
-                                          DateFormat.yMMMd().format(DateTime.parse(reTransaction[index].purchaseDate)),
-                                          style: const TextStyle(color: Colors.grey),
+                                          DateFormat.yMMMd().format(
+                                              DateTime.parse(
+                                                  reTransaction[index]
+                                                      .purchaseDate)),
+                                          style: const TextStyle(
+                                              color: Colors.grey),
                                         ),
                                       ],
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      'Total : \$ ${ TypesHelper.roundNum(reTransaction[index].totalAmount!) }',
-                                      style: const TextStyle(color: Colors.grey),
+                                      'Total : \$ ${TypesHelper.roundNum(reTransaction[index].totalAmount!)}',
+                                      style:
+                                          const TextStyle(color: Colors.grey),
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      'Paid : \$ ${ TypesHelper.roundNum(reTransaction[index].totalAmount!.toDouble() - reTransaction[index].dueAmount!.toDouble()) }',
-                                      style: const TextStyle(color: Colors.grey),
+                                      'Paid : \$ ${TypesHelper.roundNum(reTransaction[index].totalAmount!.toDouble() - reTransaction[index].dueAmount!.toDouble())}',
+                                      style:
+                                          const TextStyle(color: Colors.grey),
                                     ),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           'Due: \$ ${TypesHelper.roundNum(reTransaction[index].dueAmount!)}',
                                           style: const TextStyle(fontSize: 16),
-                                        ).visible(reTransaction[index].dueAmount!.toInt() != 0),
+                                        ).visible(reTransaction[index]
+                                                .dueAmount!
+                                                .toInt() !=
+                                            0),
                                         personalData.when(data: (data) {
                                           return Row(
                                             children: [
                                               IconButton(
                                                   onPressed: () async {
-                                                    await printerData.getBluetooth();
-                                                    PrintTransactionModel model =
-                                                        PrintTransactionModel(transitionModel: reTransaction[index], personalInformationModel: data);
+                                                    await printerData
+                                                        .getBluetooth();
+                                                    PrintTransactionModel
+                                                        model =
+                                                        PrintTransactionModel(
+                                                            transitionModel:
+                                                                reTransaction[
+                                                                    index],
+                                                            personalInformationModel:
+                                                                data);
                                                     connected
-                                                        ? printerData.printTicket(
-                                                            printTransactionModel: model,
-                                                            productList: model.transitionModel!.productList,
+                                                        ? printerData
+                                                            .printTicket(
+                                                            printTransactionModel:
+                                                                model,
+                                                            productList: model
+                                                                .transitionModel!
+                                                                .productList,
                                                           )
                                                         : showDialog(
                                                             context: context,
                                                             builder: (_) {
                                                               return WillPopScope(
-                                                                onWillPop: () async => false,
+                                                                onWillPop:
+                                                                    () async =>
+                                                                        false,
                                                                 child: Dialog(
-                                                                  child: SizedBox(
-                                                                    child: Column(
-                                                                      mainAxisSize: MainAxisSize.min,
+                                                                  child:
+                                                                      SizedBox(
+                                                                    child:
+                                                                        Column(
+                                                                      mainAxisSize:
+                                                                          MainAxisSize
+                                                                              .min,
                                                                       children: [
-                                                                        ListView.builder(
-                                                                          shrinkWrap: true,
+                                                                        ListView
+                                                                            .builder(
+                                                                          shrinkWrap:
+                                                                              true,
                                                                           itemCount: printerData.availableBluetoothDevices.isNotEmpty
                                                                               ? printerData.availableBluetoothDevices.length
                                                                               : 0,
-                                                                          itemBuilder: (context, index) {
+                                                                          itemBuilder:
+                                                                              (context, index) {
                                                                             return ListTile(
                                                                               onTap: () async {
                                                                                 String select = printerData.availableBluetoothDevices[index];
@@ -174,21 +224,35 @@ class _SalesListScreenState extends State<SalesListScreen> {
                                                                             );
                                                                           },
                                                                         ),
-                                                                        const SizedBox(height: 10),
-                                                                        Container(height: 1, width: double.infinity, color: Colors.grey),
-                                                                        const SizedBox(height: 15),
+                                                                        const SizedBox(
+                                                                            height:
+                                                                                10),
+                                                                        Container(
+                                                                            height:
+                                                                                1,
+                                                                            width:
+                                                                                double.infinity,
+                                                                            color: Colors.grey),
+                                                                        const SizedBox(
+                                                                            height:
+                                                                                15),
                                                                         GestureDetector(
-                                                                          onTap: () {
+                                                                          onTap:
+                                                                              () {
                                                                             Navigator.pop(context);
                                                                           },
-                                                                          child: const Center(
-                                                                            child: Text(
+                                                                          child:
+                                                                              const Center(
+                                                                            child:
+                                                                                Text(
                                                                               'Cancel',
                                                                               style: TextStyle(color: kMainColor),
                                                                             ),
                                                                           ),
                                                                         ),
-                                                                        const SizedBox(height: 15),
+                                                                        const SizedBox(
+                                                                            height:
+                                                                                15),
                                                                       ],
                                                                     ),
                                                                   ),
@@ -201,7 +265,10 @@ class _SalesListScreenState extends State<SalesListScreen> {
                                                     color: Colors.grey,
                                                   )),
                                               IconButton(
-                                                  onPressed: () => GeneratePdf().generateSaleDocument(reTransaction[index], data),
+                                                  onPressed: () => GeneratePdf()
+                                                      .generateSaleDocument(
+                                                          reTransaction[index],
+                                                          data),
                                                   icon: const Icon(
                                                     FeatherIcons.share,
                                                     color: Colors.grey,
@@ -210,7 +277,8 @@ class _SalesListScreenState extends State<SalesListScreen> {
                                                   onPressed: () {
                                                     cart.clearCart();
                                                     SalesReportEditScreen(
-                                                      transitionModel: reTransaction[index],
+                                                      transitionModel:
+                                                          reTransaction[index],
                                                     ).launch(context);
                                                   },
                                                   icon: const Icon(
@@ -243,7 +311,10 @@ class _SalesListScreenState extends State<SalesListScreen> {
                       child: Text(
                         'Please Add A Sale',
                         maxLines: 2,
-                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20.0),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0),
                       ),
                     );
             }, error: (e, stack) {

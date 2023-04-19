@@ -1,12 +1,17 @@
 import 'dart:convert';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_pos/Provider/add_to_cart.dart';
+import 'package:mobile_pos/Provider/customer_provider.dart';
+import 'package:mobile_pos/Provider/product_provider.dart';
 import 'package:mobile_pos/Provider/profile_provider.dart';
+import 'package:mobile_pos/Provider/seles_report_provider.dart';
+import 'package:mobile_pos/Provider/transactions_provider.dart';
 import 'package:mobile_pos/constant.dart';
 import 'package:mobile_pos/model/add_to_cart_model.dart';
 import 'package:mobile_pos/model/transition_model.dart';
@@ -47,8 +52,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
     setState(() {
       items = widget.data;
     });
-    log(widget.data);
-    log(widget.customerModel);
+    // log(widget.data);
+    // log(widget.customerModel);
   }
 
   double calculateSubtotal() {
@@ -67,7 +72,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   double calculateReturnAmount() {
     returnAmount = calculateTotal() - paidAmount;
-    return paidAmount <= 0 || paidAmount <= calculateSubtotal()
+    return paidAmount <= 0 || paidAmount <= calculateTotal()
         ? 0
         : calculateTotal() - paidAmount;
   }
@@ -78,7 +83,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
     } else {
       dueAmount = calculateSubtotal() - paidAmount;
     }
-    return returnAmount <= 0 ? 0 : calculateSubtotal() - paidAmount;
+    return returnAmount <= 0
+        ? 0
+        : calculateSubtotal() - paidAmount - discountAmount;
   }
 
   void decreaseStock(String productCode, int quantity) async {
@@ -131,12 +138,26 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, consumerRef, __) {
-      final providerData = consumerRef.watch(cartNotifier);
       final personalData = consumerRef.watch(profileDetailsProvider);
+      final providerData = consumerRef.watch(cartNotifier);
+      personalData.when(data: (data) {
+        invoice = data.invoiceCounter!.toInt();
+      }, error: (e, stack) {
+        return Text(e.toString());
+      }, loading: () {
+        return null;
+      });
+
       return Scaffold(
         appBar: AppBar(
-          title:
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
               Text('Payment', style: GoogleFonts.poppins(color: Colors.black)),
+              Text('Inv No: #' + invoice.toString(),
+                  style: TextStyle(color: Colors.black, fontSize: 17)),
+            ],
+          ),
           backgroundColor: Colors.white,
           centerTitle: true,
           elevation: 0.0,
@@ -198,8 +219,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           ),
                           Text(
                             items[i]['qty'].toString(),
-                            style: TextStyle(
-                                fontSize: 17, color: kGreyTextColor),
+                            style:
+                                TextStyle(fontSize: 17, color: kGreyTextColor),
                           ),
                           TouchableOpacity(
                             onTap: () {
@@ -257,7 +278,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       padding: const EdgeInsets.all(10),
                       decoration: const BoxDecoration(
                           color: kMainColor,
-                        
                           borderRadius: BorderRadius.only(
                               topRight: Radius.circular(7),
                               topLeft: Radius.circular(7))),
@@ -266,11 +286,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         children: [
                           const Text(
                             'Sub Total',
-                            style: TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
                           ),
                           Text(
                             '\$${TypesHelper.roundNum(calculateSubtotal())}',
-                            style: const TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.w600),
+                            style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
                           ),
                         ],
                       ),
@@ -282,7 +308,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         children: [
                           const Text(
                             'Discount',
-                            style: TextStyle(fontSize: 16,color: Colors.black),
+                            style: TextStyle(fontSize: 16, color: Colors.black),
                           ),
                           SizedBox(
                             width: context.width() / 4,
@@ -326,11 +352,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         children: [
                           const Text(
                             'Total',
-                            style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700),
+                            style: TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.w700),
                           ),
                           Text(
                             '\$${TypesHelper.roundNum(calculateTotal())}',
-                            style: const TextStyle(fontSize: 17,fontWeight: FontWeight.w700),
+                            style: const TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.w700),
                           ),
                         ],
                       ),
@@ -342,7 +370,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         children: [
                           const Text(
                             'Paid Amount',
-                            style: TextStyle(fontSize: 16,color: Colors.black),
+                            style: TextStyle(fontSize: 16, color: Colors.black),
                           ),
                           SizedBox(
                             width: context.width() / 4,
@@ -375,11 +403,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         children: [
                           const Text(
                             'Return Amount',
-                            style: TextStyle(fontSize: 16,color: Colors.black),
+                            style: TextStyle(fontSize: 16, color: Colors.black),
                           ),
                           Text(
                             '\$${TypesHelper.roundNum(calculateReturnAmount().abs())}',
-                            style: const TextStyle(fontSize: 16,color: Colors.black),
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.black),
                           ),
                         ],
                       ),
@@ -391,11 +420,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         children: [
                           const Text(
                             'Due Amount',
-                            style: TextStyle(fontSize: 16,color: Colors.black),
+                            style: TextStyle(fontSize: 16, color: Colors.black),
                           ),
                           Text(
                             '\$${TypesHelper.roundNum(calculateDueAmount())}',
-                            style: const TextStyle(fontSize: 16,color: Colors.black),
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.black),
                           ),
                         ],
                       ),
@@ -403,7 +433,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 30),
               Container(
                 height: 0.2,
                 width: double.infinity,
@@ -419,21 +449,29 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         color: primaryColor,
                       ),
                       Text(
-                        'Payment Type',
-                        style: TextStyle(fontSize: 16, color: Colors.black54),
+                        'Payment Type:',
+                        style: TextStyle(fontSize: 17, color: Colors.black54),
                       ),
-                      SizedBox(
-                        width: 5,
-                      )
+                      // SizedBox(
+                      //   width: 5,
+                      // )
                     ],
                   ),
                   DropdownButton(
+                    underline: Container(),
                     value: dropdownValue,
-                    icon: const Icon(Icons.keyboard_arrow_down,color: kMainColor,),
+                    icon: const Icon(
+                      Icons.keyboard_arrow_down,
+                      color: kMainColor,
+                      size: 30,
+                    ),
                     items: paymentsTypeList.map((String items) {
                       return DropdownMenuItem(
                         value: items,
-                        child: Text(items,style: const TextStyle(color: Colors.black),),
+                        child: Text(
+                          items,
+                          style: const TextStyle(color: Colors.black),
+                        ),
                       );
                     }).toList(),
                     onChanged: (newValue) {
@@ -460,6 +498,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             iconColor: Colors.white,
             buttonDecoration: kButtonDecoration.copyWith(color: primaryColor),
             onPressed: () async {
+              EasyLoading.show(status: 'Loading...', dismissOnTap: false);
               List<dynamic> productList = [];
               for (int i = 0; i < items.length; i++) {
                 var item = {
@@ -468,55 +507,38 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   "product_name": items[i]['productName'],
                   "product_brand_name": items[i]['brandName'],
                   "unit_price": null,
-                  "sub_total": "100",
+                  "sub_total": double.parse(items[i]['productSalePrice']) *
+                      items[i]['qty'],
                   "unique_check": null,
                   "quantity": items[i]['qty'],
                   "item_cart_index": -1,
-                  "stock": items[i]['productStock'],
+                  "stock": int.parse(items[i]['productStock']),
                   "productPurchasePrice": items[i]['productPurchasePrice'],
                   "product_details": null
                 };
-                productList.add(item);
+                productList.add(jsonEncode(item));
               }
               DatabaseReference ref = FirebaseDatabase.instance
                   .ref("$constUserId/Sales Transition");
-              // dueAmount <= 0
-              //     ? transitionModel.isPaid = true
-              //     : transitionModel.isPaid = false;
-              // dueAmount <= 0
-              //     ? transitionModel.dueAmount = 0
-              //     : transitionModel.dueAmount = dueAmount;
-              // returnAmount < 0
-              //     ? transitionModel.returnAmount = returnAmount.abs()
-              //     : transitionModel.returnAmount = 0;
-              //transitionModel.discountAmount = discountAmount;
-              //transitionModel.totalAmount = subTotal;
-              //transitionModel.productList = providerData.cartItemList;
-              //transitionModel.paymentType = dropdownValue;
-              //isSubUser ? transitionModel.sellerName = subUserTitle : null;
-              //transitionModel.invoiceNumber = invoice.toString();
 
               num totalQuantity = 0;
               double lossProfit = 0;
               double totalPurchasePrice = 0;
               double totalSalePrice = 0;
 
-              for (int j = 0; j < productList.length; j++) {
+              for (int j = 0; j < items.length; j++) {
                 totalPurchasePrice +=
-                    double.parse(productList[j]['productPurchasePrice']) *
-                        productList[j]['quantity'];
-                totalSalePrice += double.parse(productList[j]['sub_total']) *
-                    productList[j]['quantity'];
-                totalQuantity += productList[j]['quantity'];
+                    double.parse(items[j]['productPurchasePrice']) *
+                        items[j]['qty'];
+                totalSalePrice += double.parse(items[j]['productSalePrice']) *
+                    items[j]['qty'];
+                totalQuantity += items[j]['qty'];
               }
 
               lossProfit = ((totalSalePrice - totalPurchasePrice.toDouble()) -
                   double.parse(discountAmount.toString()));
 
-              // transitionModel.totalQuantity = totalQuantity;
-              // transitionModel.lossProfit = lossProfit;
-
-              var dataToSubmit = {
+              Object dataToSubmit = {
                 "customerName": widget.customerModel.customerName,
                 "customerPhone": widget.customerModel.phoneNumber,
                 "customerType": widget.customerModel.type,
@@ -525,21 +547,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 "totalQuantity": totalQuantity,
                 "lossProfit": lossProfit,
                 "discountAmount": discountAmount,
-                "totalAmount": subTotal,
+                "totalAmount": calculateTotal(),
                 "dueAmount": dueAmount <= 0 ? 0 : dueAmount,
                 "returnAmount": returnAmount < 0 ? returnAmount.abs() : 0,
                 "sellerName": isSubUser ? subUserTitle : null,
                 "isPaid": dueAmount <= 0 ? true : false,
                 "paymentType": dropdownValue,
-                "productList": productList
+                "productList": productList,
               };
               await ref.push().set(dataToSubmit);
 
               log(dataToSubmit);
 
-              for (int k = 0; k < productList.length; k++) {
-                decreaseStock(
-                    productList[k]['product_id'], productList[k]['quantity']);
+              for (int k = 0; k < items.length; k++) {
+                decreaseStock(items[k]['productCode'], items[k]['qty']);
               }
 
               ///_______invoice_Update_____________________________________________
@@ -557,6 +578,53 @@ class _PaymentScreenState extends State<PaymentScreen> {
               getSpecificCustomers(
                   phoneNumber: widget.customerModel.phoneNumber,
                   due: dueAmount.toInt());
+              EasyLoading.dismiss();
+              Future.delayed(const Duration(milliseconds: 800), () {
+                AwesomeDialog(
+                  btnOk: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      color: darkGray,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 10),
+                      child: const Text(
+                        'OK',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                    ),
+                  ),
+                  customHeader: Column(
+                    children: [Image.asset('images/success_icon.png')],
+                  ),
+                  context: context,
+                  animType: AnimType.leftSlide,
+                  headerAnimationLoop: false,
+                  //dialogType: DialogType.SUCCES,
+                  showCloseIcon: false,
+                  title: '',
+                  descTextStyle: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF49C856)),
+                  desc: 'Order Complete',
+                  btnOkOnPress: () {
+                    Navigator.pop(context);
+                  },
+                  dismissOnTouchOutside: true,
+                  btnOkIcon: Icons.check_circle,
+                  onDismissCallback: (type) {
+                    consumerRef.refresh(customerProvider);
+                    consumerRef.refresh(productProvider);
+                    consumerRef.refresh(salesReportProvider);
+                    consumerRef.refresh(transitionProvider);
+                    consumerRef.refresh(profileDetailsProvider);
+                    Navigator.pop(context);
+                    debugPrint('Dialog Dissmiss from callback $type');
+                  },
+                ).show();
+              });
             }),
       );
     });

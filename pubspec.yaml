@@ -78,6 +78,7 @@ dependencies:
   phoenix_native: ^0.0.2
   flutter_phoenix: ^1.1.0
   touchable_opacity: ^1.2.0
+  awesome_dialog: ^3.0.2
 
 
 dev_dependencies:

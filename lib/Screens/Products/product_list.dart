@@ -46,8 +46,6 @@ class _ProductListState extends State<ProductList> {
         ),
         body: SingleChildScrollView(
           child: providerData.when(data: (products) { 
-            String encoded = jsonEncode(products);
-            log('product:$encoded');
             return products.isNotEmpty
                 ? ListView.builder(
                     shrinkWrap: true,

@@ -23,7 +23,7 @@ class _SalesScreenState extends State<SalesScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'Sales List',
+            'Sales List', 
             style: GoogleFonts.poppins(
               color: Colors.black,
               fontSize: 20.0,

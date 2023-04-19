@@ -13,9 +13,10 @@ const kPremiumPlanColor = Color(0xFF8752EE);
 const kPremiumPlanColor2 = Color(0xFFFF5F00);
 const primaryColor = Color(0xFF2980B9);
 const greyColor = Color(0xFFEEEEEE);
+const greenColor = Color(0xFF49C856);
 bool connected = false;
 bool isPrintEnable = true;
-List<String> paymentsTypeList = ['Cash','Due'];
+List<String> paymentsTypeList = ['Cash'];
 
 bool isExpiringInFiveDays = false;
 bool isExpiringInOneDays = false;

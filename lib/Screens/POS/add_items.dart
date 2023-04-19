@@ -18,6 +18,7 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../GlobalComponents/button_global.dart';
 import '../../constant.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class AddItem extends StatefulWidget {
   final List listProduct;
@@ -38,11 +39,18 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
   List<dynamic> newProduct = [];
   List<dynamic> originalProduct = [];
   int tabIndex = 0;
-  CustomerModel customerModel =
-      CustomerModel('Select Customer Name', '', '', '', '', '', '');
+
+  CustomerModel customerModel = CustomerModel(
+    'Guest',
+    'Guest',
+    'Guest',
+    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
+    'Guest',
+    'Guest',
+    '0',
+  );
 
   List<dynamic> mainCheck = [];
-
   String userName = 'Select Customer Name';
 
   @override
@@ -58,6 +66,7 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
       newProduct = widget.listProduct;
       originalProduct = widget.listProduct;
     });
+    //log(widget.listProduct);
   }
 
   void onPositionChange() {
@@ -191,7 +200,7 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Container(
-                        height: 50.0,
+                        height: 45.0,
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5.0),
@@ -205,20 +214,18 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                                   builder: (context) =>
                                       const SalesContact(from: 'POS'),
                                 ));
-
-                            //log(result.customerName.toString());
                             setState(() {
-                              //userName = result.customerName.toString();
                               customerModel = result;
                             });
-                            //log(customerModel.customerName);
                           },
                           child: Row(
                             children: [
                               SizedBox(
                                 width: 10.0,
                               ),
-                              Text(customerModel.customerName),
+                              Text(customerModel?.customerName != null
+                                  ? customerModel.customerName
+                                  : userName),
                               Spacer(),
                               Icon(Icons.keyboard_arrow_down),
                               SizedBox(
@@ -248,7 +255,7 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                           log(result);
                         },
                         child: Container(
-                          height: 55.0,
+                          height: 45.0,
                           width: 100.0,
                           padding: const EdgeInsets.all(5.0),
                           decoration: BoxDecoration(
@@ -273,7 +280,7 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: SizedBox(
-                            height: 55,
+                            height: 45,
                             child: TextField(
                               onChanged: (txt) {
                                 List<dynamic> newProductList =
@@ -301,7 +308,7 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                       child: GestureDetector(
                         onTap: () => scanBarcodeNormal(),
                         child: Container(
-                          height: 55.0,
+                          height: 45.0,
                           width: 100.0,
                           padding: const EdgeInsets.all(5.0),
                           decoration: BoxDecoration(
@@ -319,28 +326,46 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                   ),
                 ],
               ),
-              Container(
-                padding: const EdgeInsets.all(10),
-                alignment: Alignment.center,
-                child: TabBar(
-                  isScrollable: true,
-                  controller: controller,
-                  labelColor: Theme.of(context).primaryColor,
-                  unselectedLabelColor: Theme.of(context).hintColor,
-                  indicator: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Theme.of(context).primaryColor,
-                        width: 2,
+              newProduct[0]['list'].isNotEmpty
+                  ? Container(
+                      padding: const EdgeInsets.all(10),
+                      alignment: Alignment.center,
+                      child: TabBar(
+                        isScrollable: true,
+                        controller: controller,
+                        labelColor: Theme.of(context).primaryColor,
+                        unselectedLabelColor: Theme.of(context).hintColor,
+                        indicator: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Theme.of(context).primaryColor,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                        tabs: List.generate(
+                          newProduct.length,
+                          (index) => Tab(text: newProduct[index]['title']),
+                        ),
+                      ),
+                    )
+                  : Center(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/AddProducts');
+                        },
+                        child: Container(
+                          color: kMainColor,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
+                          child: const Text(
+                            'Add Product',
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 13.0),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  tabs: List.generate(
-                    newProduct.length,
-                    (index) => Tab(text: newProduct[index]['title']),
-                  ),
-                ),
-              ),
               Expanded(
                   child: Padding(
                 padding: const EdgeInsets.all(10),
@@ -353,10 +378,12 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                         scrollDirection: Axis.vertical,
                         itemCount: newProduct[index]["list"].length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: MediaQuery.of(context).size.width /
-                              (MediaQuery.of(context).size.height / 2),
-                        ),
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 2.0,
+                            mainAxisSpacing: 2.0
+                            // childAspectRatio: MediaQuery.of(context).size.width /
+                            //     (MediaQuery.of(context).size.height / 1.9),
+                            ),
                         itemBuilder: (BuildContext context, int index1) {
                           return GestureDetector(
                             onTap: () {
@@ -366,26 +393,18 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                                     ['list'][index1]['productCode']);
                                 if (myIndex > -1) {
                                   newMainCheck.removeAt(myIndex);
-                                  log(myIndex);
-                                } else {
-                                  // newMainCheck
-                                  //     .add(newProduct[index]['list'][index1]);
                                 }
-                              } else {
-                                // newMainCheck
-                                //     .add(newProduct[index]['list'][index1]);
                               }
                               setState(() {
                                 mainCheck = newMainCheck;
                               });
-                              log(mainCheck);
                             },
                             child: Card(
                                 color: Colors.white,
                                 semanticContainer: true,
                                 clipBehavior: Clip.antiAliasWithSaveLayer,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0),
+                                  borderRadius: BorderRadius.circular(7.0),
                                 ),
                                 elevation: 5,
                                 child: Stack(
@@ -394,7 +413,7 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                                       newProduct[index]['list'][index1]
                                           ['productPicture'],
                                       fit: BoxFit.fill,
-                                      width: 180,
+                                     // width: 180,
                                     ),
                                     Positioned(
                                       right: 0,
@@ -421,7 +440,7 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                                     ),
                                     Positioned(
                                         bottom: 0,
-                                        top: 120,
+                                        top: 100,
                                         left: 0,
                                         right: 0,
                                         child: Container(
@@ -440,7 +459,9 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                                                   textAlign: TextAlign.start,
                                                   style: const TextStyle(
                                                       fontSize: 16,
-                                                      color: Colors.white)),
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w600)),
                                               Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -552,13 +573,13 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                         }),
                   ),
                 ),
-              )),
+              ))
             ],
           ),
         ),
         bottomNavigationBar: ButtonGlobal(
             iconWidget: null,
-            buttontext: 'Continue(\$${calculatePrice().toString()})',
+            buttontext: 'Continue(\$${calculatePrice().toStringAsFixed(2)})',
             iconColor: Colors.white,
             buttonDecoration: kButtonDecoration.copyWith(color: primaryColor),
             onPressed: () {

@@ -254,7 +254,6 @@ class _SaleProductsState extends State<SaleProducts> {
                               //   sentProductPrice = products[i].productSalePrice;
                               // }
                               sentProductPrice = products[i].productSalePrice;
-
                               AddToCartModel cartItem = AddToCartModel(
                                 productName: products[i].productName,
                                 subTotal: sentProductPrice,
