@@ -9,7 +9,7 @@ import '../../invoice_constant.dart';
 // ignore: library_prefixes
 import '../../constant.dart' as mainConstant;
 import '../../model/personal_information_model.dart';
-import '../../model/print_transaction_model.dart';
+import '../../model/print_transaction_model.dart'; 
 import '../../model/transition_model.dart';
 
 class PurchaseInvoiceDetails extends StatefulWidget {
@@ -22,7 +22,7 @@ class PurchaseInvoiceDetails extends StatefulWidget {
   State<PurchaseInvoiceDetails> createState() => _PurchaseInvoiceDetailsState();
 }
 
-class _PurchaseInvoiceDetailsState extends State<PurchaseInvoiceDetails> {
+class _PurchaseInvoiceDetailsState extends State<PurchaseInvoiceDetails> { 
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, __) {
@@ -43,7 +43,7 @@ class _PurchaseInvoiceDetailsState extends State<PurchaseInvoiceDetails> {
                       width: 50.0,
                       decoration: const BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage('images/logoPos.png'),
+                          image: AssetImage('images/logoandname.png'),
                         ),
                       ),
                     ),

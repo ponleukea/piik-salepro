@@ -657,7 +657,7 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                                         returnAmount.abs()
                                     : transitionModel.returnAmount = 0;
                                 transitionModel.discountAmount = discountAmount;
-                                transitionModel.totalAmount = subTotal;
+                                transitionModel.totalAmount = subTotal; 
                                 transitionModel.productList =
                                     providerData.cartItemList;
                                 transitionModel.paymentType = dropdownValue;
@@ -682,7 +682,7 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                                           element.quantity);
 
                                   totalQuantity =
-                                      totalQuantity + element.quantity;
+                                      totalQuantity + element.quantity; 
                                 }
                                 lossProfit = ((totalSalePrice -
                                         totalPurchasePrice.toDouble()) -
@@ -960,11 +960,11 @@ class _AddSalesScreenState extends State<AddSalesScreen> {
                                       invoice.toString();
 
                                   ///__________total LossProfit & quantity________________________________________________________________
-
                                   int totalQuantity = 0;
                                   double lossProfit = 0;
                                   double totalPurchasePrice = 0;
                                   double totalSalePrice = 0;
+                                   
                                   for (var element
                                       in transitionModel.productList!) {
                                     totalPurchasePrice = totalPurchasePrice +

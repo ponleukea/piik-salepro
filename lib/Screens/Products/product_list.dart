@@ -30,7 +30,7 @@ class _ProductListState extends State<ProductList> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, __) {
-      final providerData = ref.watch(productProvider);
+      final providerData = ref.watch(productProvider); 
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -38,7 +38,7 @@ class _ProductListState extends State<ProductList> {
           iconTheme: const IconThemeData(color: Colors.black),
           title: Text(
             'Product List',
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.poppins( 
               color: Colors.black, 
             ),
           ),
@@ -74,7 +74,7 @@ class _ProductListState extends State<ProductList> {
                           //   fit: BoxFit.cover,
                           // ),
                         ),
-                        title: Text(products[i].productName),
+                        title: Text(products[i].productName,maxLines: 2,), 
                         subtitle: Text("Stock : ${products[i].productStock}"),
                         trailing: Text(
                           "\$ ${products[i].productSalePrice}",

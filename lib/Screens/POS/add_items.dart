@@ -66,7 +66,7 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
       newProduct = widget.listProduct;
       originalProduct = widget.listProduct;
     });
-    //log(widget.listProduct);
+    log(widget.listProduct);
   }
 
   void onPositionChange() {
@@ -377,7 +377,7 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                         shrinkWrap: false,
                         scrollDirection: Axis.vertical,
                         itemCount: newProduct[index]["list"].length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 2.0,
                             mainAxisSpacing: 2.0
@@ -413,7 +413,8 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                                       newProduct[index]['list'][index1]
                                           ['productPicture'],
                                       fit: BoxFit.fill,
-                                     // width: 180,
+                                      height: 200,
+                                      width: 200,
                                     ),
                                     Positioned(
                                       right: 0,
@@ -439,8 +440,8 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                                           : const Text(''),
                                     ),
                                     Positioned(
-                                        bottom: 0,
-                                        top: 100,
+                                        bottom: 00,
+                                        top: 80,
                                         left: 0,
                                         right: 0,
                                         child: Container(
@@ -450,13 +451,14 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                                               ? const Color.fromRGBO(
                                                   41, 128, 185, 0.8)
                                               : Colors.grey.withOpacity(0.5),
-                                          height: 60,
+                                          //height: 60,
                                           child: Column(
                                             children: [
                                               Text(
                                                   newProduct[index]['list']
                                                       [index1]['productName'],
                                                   textAlign: TextAlign.start,
+                                                  maxLines: 2,
                                                   style: const TextStyle(
                                                       fontSize: 16,
                                                       color: Colors.white,
@@ -481,7 +483,7 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                                                                           index]
                                                                       ['list']
                                                                   [index1][
-                                                              'productStock']) <
+                                                              'productStock']) <=
                                                           0) {
                                                         EasyLoading.showError(
                                                             'Product Out of Stock');
@@ -549,10 +551,6 @@ class _AddItme extends State<AddItem> with SingleTickerProviderStateMixin {
                                                           mainCheck =
                                                               newMainCheck;
                                                         });
-                                                        log(mainCheck);
-                                                        log(newProduct[index]
-                                                                ['list'][index1]
-                                                            ['productStock']);
                                                       }
                                                     },
                                                     activeOpacity: 0.4,

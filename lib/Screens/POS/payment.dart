@@ -52,7 +52,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     setState(() {
       items = widget.data;
     });
-    // log(widget.data);
+    log(widget.data);
     // log(widget.customerModel);
   }
 
@@ -498,133 +498,141 @@ class _PaymentScreenState extends State<PaymentScreen> {
             iconColor: Colors.white,
             buttonDecoration: kButtonDecoration.copyWith(color: primaryColor),
             onPressed: () async {
-              EasyLoading.show(status: 'Loading...', dismissOnTap: false);
-              List<dynamic> productList = [];
-              for (int i = 0; i < items.length; i++) {
-                var item = {
-                  "uuid": items[i]['productCode'],
-                  "product_id": items[i]['productCode'],
-                  "product_name": items[i]['productName'],
-                  "product_brand_name": items[i]['brandName'],
-                  "unit_price": null,
-                  "sub_total": double.parse(items[i]['productSalePrice']) *
-                      items[i]['qty'],
-                  "unique_check": null,
-                  "quantity": items[i]['qty'],
-                  "item_cart_index": -1,
-                  "stock": int.parse(items[i]['productStock']),
-                  "productPurchasePrice": items[i]['productPurchasePrice'],
-                  "product_details": null
+              if (dueAmount > 0 &&
+                  widget.customerModel.customerName == 'Guest') {
+                EasyLoading.showError('Due amount is allow for Guest user.');
+              } else {
+                EasyLoading.show(status: 'Loading...', dismissOnTap: false);
+                List<dynamic> productList = [];
+                for (int i = 0; i < items.length; i++) {
+                  var item = {
+                    "uuid": items[i]['productCode'],
+                    "product_id": items[i]['productCode'],
+                    "product_name": items[i]['productName'],
+                    "product_brand_name": items[i]['brandName'],
+                    "unit_price": null,
+                    "sub_total": items[i]['productSalePrice'],
+                    "unique_check": null,
+                    "quantity": items[i]['qty'],
+                    "item_cart_index": -1,
+                    "stock": int.parse(items[i]['productStock']),
+                    "productPurchasePrice": items[i]['productPurchasePrice'],
+                    "product_details": null
+                  };
+                  productList.add(jsonEncode(item));
+                }
+                DatabaseReference ref = FirebaseDatabase.instance
+                    .ref("$constUserId/Sales Transition");
+
+                num totalQuantity = 0;
+                double lossProfit = 0;
+                double totalPurchasePrice = 0;
+                double totalSalePrice = 0;
+
+                for (int j = 0; j < items.length; j++) {
+                  totalPurchasePrice +=
+                      double.parse(items[j]['productPurchasePrice']) *
+                          items[j]['qty'];
+                  totalSalePrice += double.parse(items[j]['productSalePrice']) *
+                      items[j]['qty'];
+
+                  totalQuantity += items[j]['qty'];
+                }
+
+                lossProfit =
+                    (totalSalePrice - totalPurchasePrice) - discountAmount;
+                log(lossProfit);
+
+                Object dataToSubmit = {
+                  "customerName": widget.customerModel.customerName,
+                  "customerPhone": widget.customerModel.phoneNumber,
+                  "customerType": widget.customerModel.type,
+                  "invoiceNumber": invoice.toString(),
+                  "purchaseDate": DateTime.now().toString(),
+                  "totalQuantity": totalQuantity,
+                  "discountAmount": discountAmount,
+                  "lossProfit": lossProfit,
+                  "totalAmount": calculateTotal(),
+                  "dueAmount":
+                      calculateDueAmount() <= 0 ? 0 : calculateDueAmount(),
+                  "returnAmount": returnAmount < 0 ? returnAmount.abs() : 0,
+                  "sellerName": isSubUser ? subUserTitle : null,
+                  "isPaid": dueAmount <= 0 ? true : false,
+                  "paymentType": dropdownValue,
+                  "productList": productList,
                 };
-                productList.add(jsonEncode(item));
-              }
-              DatabaseReference ref = FirebaseDatabase.instance
-                  .ref("$constUserId/Sales Transition");
 
-              num totalQuantity = 0;
-              double lossProfit = 0;
-              double totalPurchasePrice = 0;
-              double totalSalePrice = 0;
+                await ref.push().set(dataToSubmit);
 
-              for (int j = 0; j < items.length; j++) {
-                totalPurchasePrice +=
-                    double.parse(items[j]['productPurchasePrice']) *
-                        items[j]['qty'];
-                totalSalePrice += double.parse(items[j]['productSalePrice']) *
-                    items[j]['qty'];
-                totalQuantity += items[j]['qty'];
-              }
+                log(dataToSubmit);
 
-              lossProfit = ((totalSalePrice - totalPurchasePrice.toDouble()) -
-                  double.parse(discountAmount.toString()));
+                for (int k = 0; k < items.length; k++) {
+                  decreaseStock(items[k]['productCode'], items[k]['qty']);
+                }
 
-              Object dataToSubmit = {
-                "customerName": widget.customerModel.customerName,
-                "customerPhone": widget.customerModel.phoneNumber,
-                "customerType": widget.customerModel.type,
-                "invoiceNumber": invoice.toString(),
-                "purchaseDate": DateTime.now().toString(),
-                "totalQuantity": totalQuantity,
-                "lossProfit": lossProfit,
-                "discountAmount": discountAmount,
-                "totalAmount": calculateTotal(),
-                "dueAmount": dueAmount <= 0 ? 0 : dueAmount,
-                "returnAmount": returnAmount < 0 ? returnAmount.abs() : 0,
-                "sellerName": isSubUser ? subUserTitle : null,
-                "isPaid": dueAmount <= 0 ? true : false,
-                "paymentType": dropdownValue,
-                "productList": productList,
-              };
-              await ref.push().set(dataToSubmit);
+                ///_______invoice_Update_____________________________________________
+                final DatabaseReference personalInformationRef =
+                    // ignore: deprecated_member_use
+                    FirebaseDatabase.instance
+                        .ref()
+                        .child(constUserId)
+                        .child('Personal Information');
 
-              log(dataToSubmit);
+                await personalInformationRef
+                    .update({'invoiceCounter': invoice + 1});
 
-              for (int k = 0; k < items.length; k++) {
-                decreaseStock(items[k]['productCode'], items[k]['qty']);
-              }
-
-              ///_______invoice_Update_____________________________________________
-              final DatabaseReference personalInformationRef =
-                  // ignore: deprecated_member_use
-                  FirebaseDatabase.instance
-                      .ref()
-                      .child(constUserId)
-                      .child('Personal Information');
-
-              await personalInformationRef
-                  .update({'invoiceCounter': invoice + 1});
-
-              ///_________DueUpdate______________________________________________________
-              getSpecificCustomers(
-                  phoneNumber: widget.customerModel.phoneNumber,
-                  due: dueAmount.toInt());
-              EasyLoading.dismiss();
-              Future.delayed(const Duration(milliseconds: 800), () {
-                AwesomeDialog(
-                  btnOk: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      color: darkGray,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 10),
-                      child: const Text(
-                        'OK',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                ///_________DueUpdate______________________________________________________
+                getSpecificCustomers(
+                    phoneNumber: widget.customerModel.phoneNumber,
+                    due: dueAmount.toInt());
+                EasyLoading.dismiss();
+                Future.delayed(const Duration(milliseconds: 800), () {
+                  AwesomeDialog(
+                    btnOk: TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        color: darkGray,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 10),
+                        child: const Text(
+                          'OK',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
                       ),
                     ),
-                  ),
-                  customHeader: Column(
-                    children: [Image.asset('images/success_icon.png')],
-                  ),
-                  context: context,
-                  animType: AnimType.leftSlide,
-                  headerAnimationLoop: false,
-                  //dialogType: DialogType.SUCCES,
-                  showCloseIcon: false,
-                  title: '',
-                  descTextStyle: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF49C856)),
-                  desc: 'Order Complete',
-                  btnOkOnPress: () {
-                    Navigator.pop(context);
-                  },
-                  dismissOnTouchOutside: true,
-                  btnOkIcon: Icons.check_circle,
-                  onDismissCallback: (type) {
-                    consumerRef.refresh(customerProvider);
-                    consumerRef.refresh(productProvider);
-                    consumerRef.refresh(salesReportProvider);
-                    consumerRef.refresh(transitionProvider);
-                    consumerRef.refresh(profileDetailsProvider);
-                    Navigator.pop(context);
-                    debugPrint('Dialog Dissmiss from callback $type');
-                  },
-                ).show();
-              });
+                    customHeader: Column(
+                      children: [Image.asset('images/success_icon.png')],
+                    ),
+                    context: context,
+                    animType: AnimType.leftSlide,
+                    headerAnimationLoop: false,
+                    //dialogType: DialogType.SUCCES,
+                    showCloseIcon: false,
+                    title: '',
+                    descTextStyle: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF49C856)),
+                    desc: 'Order Complete',
+                    btnOkOnPress: () {
+                      Navigator.pop(context);
+                    },
+                    dismissOnTouchOutside: true,
+                    btnOkIcon: Icons.check_circle,
+                    onDismissCallback: (type) {
+                      consumerRef.refresh(customerProvider);
+                      consumerRef.refresh(productProvider);
+                      consumerRef.refresh(salesReportProvider);
+                      consumerRef.refresh(transitionProvider);
+                      consumerRef.refresh(profileDetailsProvider);
+                      Navigator.pop(context);
+                      debugPrint('Dialog Dissmiss from callback $type');
+                    },
+                  ).show();
+                });
+              }
             }),
       );
     });

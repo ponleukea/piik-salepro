@@ -204,7 +204,7 @@ class _SalesInvoiceDetailsState extends State<SalesInvoiceDetails> {
                                     width:
                                         MediaQuery.of(context).size.width / 12),
                                 Text(
-                                  '\$ ${TypesHelper.roundNum(double.parse(widget.transitionModel.productList![i].subTotal))}',
+                                  '\$ ${TypesHelper.roundNum(double.parse(widget.transitionModel.productList![i].subTotal.toString()))}',
                                   maxLines: 2,
                                   style: kTextStyle.copyWith(
                                       color: kGreyTextColor),
@@ -220,7 +220,7 @@ class _SalesInvoiceDetailsState extends State<SalesInvoiceDetails> {
                                 ),
                                 const Spacer(),
                                 Text(
-                                  '\$ ${TypesHelper.roundNum(double.parse(widget.transitionModel.productList![i].subTotal) * widget.transitionModel.productList![i].quantity)}',
+                                  '\$ ${TypesHelper.roundNum(double.parse(widget.transitionModel.productList![i].subTotal.toString()) * widget.transitionModel.productList![i].quantity)}',
                                   maxLines: 2,
                                   style:
                                       kTextStyle.copyWith(color: kTitleColor),

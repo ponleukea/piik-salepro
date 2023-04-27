@@ -244,13 +244,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image:
-                                        NetworkImage(details.pictureUrl ?? ''),
+                                        NetworkImage(details.pictureUrl ?? 'https://firebasestorage.googleapis.com/v0/b/maanpos.appspot.com/o/Customer%20Picture%2FNo_Image_Available.jpeg?alt=media&token=3de0d45e-0e4a-4a7b-b115-9d6722d5031f%20%20%20%20a'),
                                     fit: BoxFit.cover),
                                 borderRadius: BorderRadius.circular(50),
                               ),
                             ),
                           ),
                           const SizedBox(
+                
                             width: 15.0,
                           ),
                           Column(
@@ -260,7 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text(
                                 isSubUser
                                     ? '${details.companyName ?? ''} [$subUserTitle]'
-                                    : details.companyName ?? '',
+                                    : details.companyName ?? 'PIIK Mall',
                                 style: GoogleFonts.poppins(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.w600,

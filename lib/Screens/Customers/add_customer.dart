@@ -535,6 +535,7 @@ class _AddCustomerState extends State<AddCustomer> {
                         Future.delayed(const Duration(milliseconds: 500),
                             () async {
                           if (isPhoneAlready) {
+                            EasyLoading.showError('Phone number already exist');
                           } else {
                             try {
                               EasyLoading.show(
@@ -570,8 +571,7 @@ class _AddCustomerState extends State<AddCustomer> {
                               Future.delayed(const Duration(milliseconds: 100),
                                   () {
                                 if (widget.from == 'POS') {
-                                  Navigator.pop(
-                                      context, customerModel);
+                                  Navigator.pop(context, customerModel);
                                 } else {
                                   Navigator.pop(context);
                                 }

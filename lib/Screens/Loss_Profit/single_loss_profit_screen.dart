@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 import '../../constant.dart';
 import '../../model/transition_model.dart';
@@ -18,11 +21,21 @@ class SingleLossProfitScreen extends StatefulWidget {
 }
 
 class _SingleLossProfitScreenState extends State<SingleLossProfitScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    log(jsonEncode(widget.transactionModel));
+  }
+
   double getTotalProfit() {
     double totalProfit = 0;
     for (var element in widget.transactionModel.productList!) {
-      double purchasePrice = double.parse(element.productPurchasePrice.toString()) * double.parse(element.quantity.toString());
-      double salePrice = double.parse(element.subTotal.toString()) * double.parse(element.quantity.toString());
+      double purchasePrice =
+          double.parse(element.productPurchasePrice.toString()) *
+              double.parse(element.quantity.toString());
+      double salePrice = double.parse(element.subTotal.toString()) *
+          double.parse(element.quantity.toString());
 
       double profit = salePrice - purchasePrice;
 
@@ -37,8 +50,11 @@ class _SingleLossProfitScreenState extends State<SingleLossProfitScreen> {
   double getTotalLoss() {
     double totalLoss = 0;
     for (var element in widget.transactionModel.productList!) {
-      double purchasePrice = double.parse(element.productPurchasePrice.toString()) * double.parse(element.quantity.toString());
-      double salePrice = double.parse(element.subTotal.toString()) * double.parse(element.quantity.toString());
+      double purchasePrice =
+          double.parse(element.productPurchasePrice.toString()) *
+              double.parse(element.quantity.toString());
+      double salePrice = double.parse(element.subTotal.toString()) *
+          double.parse(element.quantity.toString());
 
       double profit = salePrice - purchasePrice;
 
@@ -51,7 +67,7 @@ class _SingleLossProfitScreenState extends State<SingleLossProfitScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -74,7 +90,7 @@ class _SingleLossProfitScreenState extends State<SingleLossProfitScreen> {
               Text('Invoice # ${widget.transactionModel.invoiceNumber}'),
               const SizedBox(height: 10),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, 
                 children: [
                   Text(widget.transactionModel.customerName),
                   Text(
@@ -91,7 +107,8 @@ class _SingleLossProfitScreenState extends State<SingleLossProfitScreen> {
                     style: const TextStyle(color: Colors.grey),
                   ),
                   Text(
-                    DateFormat.jm().format(DateTime.parse(widget.transactionModel.purchaseDate)),
+                    DateFormat.jm().format(
+                        DateTime.parse(widget.transactionModel.purchaseDate)),
                     style: const TextStyle(color: Colors.grey),
                   ),
                 ],
@@ -135,10 +152,18 @@ class _SingleLossProfitScreenState extends State<SingleLossProfitScreen> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                    double purchasePrice = double.parse(widget.transactionModel.productList![index].productPurchasePrice.toString()) *
-                        double.parse(widget.transactionModel.productList![index].quantity.toString());
-                    double salePrice = double.parse(widget.transactionModel.productList![index].subTotal.toString()) *
-                        double.parse(widget.transactionModel.productList![index].quantity.toString());
+                    double purchasePrice = double.parse(widget.transactionModel
+                            .productList![index].productPurchasePrice
+                            .toString()) *
+                        double.parse(widget
+                            .transactionModel.productList![index].quantity
+                            .toString());
+                    double salePrice = double.parse(widget
+                            .transactionModel.productList![index].subTotal
+                            .toString()) *
+                        double.parse(widget
+                            .transactionModel.productList![index].quantity
+                            .toString());
 
                     double profit = salePrice - purchasePrice;
 
@@ -149,7 +174,9 @@ class _SingleLossProfitScreenState extends State<SingleLossProfitScreen> {
                           Expanded(
                             flex: 2,
                             child: Text(
-                              widget.transactionModel.productList![index].productName.toString(),
+                              widget.transactionModel.productList![index]
+                                  .productName
+                                  .toString(),
                               textAlign: TextAlign.start,
                             ),
                           ),
@@ -157,7 +184,9 @@ class _SingleLossProfitScreenState extends State<SingleLossProfitScreen> {
                             flex: 2,
                             child: Center(
                               child: Text(
-                                widget.transactionModel.productList![index].quantity.toString(),
+                                widget.transactionModel.productList![index]
+                                    .quantity
+                                    .toString(),
                                 style: GoogleFonts.poppins(),
                               ),
                             ),
@@ -166,14 +195,18 @@ class _SingleLossProfitScreenState extends State<SingleLossProfitScreen> {
                               flex: 2,
                               child: Center(
                                 child: Text(
-                                  !profit.isNegative ? "\$${profit.abs().toInt().toString()}" : '0',
+                                  !profit.isNegative
+                                      ? "\$${profit.abs().toInt().toString()}"
+                                      : '0',
                                   style: GoogleFonts.poppins(),
                                 ),
                               )),
                           Expanded(
                             child: Center(
                               child: Text(
-                                profit.isNegative ? "\$${profit.abs().toInt().toString()}" : '0',
+                                profit.isNegative
+                                    ? "\$${profit.abs().toInt().toString()}"
+                                    : '0',
                                 style: GoogleFonts.poppins(),
                               ),
                             ),
@@ -192,7 +225,10 @@ class _SingleLossProfitScreenState extends State<SingleLossProfitScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              decoration: BoxDecoration(color: kMainColor.withOpacity(0.2), border: const Border(bottom: BorderSide(width: 1, color: Colors.grey))),
+              decoration: BoxDecoration(
+                  color: kMainColor.withOpacity(0.2),
+                  border: const Border(
+                      bottom: BorderSide(width: 1, color: Colors.grey))),
               padding: const EdgeInsets.all(10),
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15),
@@ -205,7 +241,10 @@ class _SingleLossProfitScreenState extends State<SingleLossProfitScreen> {
                           child: Text(
                             'Total',
                             textAlign: TextAlign.start,
-                            style: GoogleFonts.poppins(color: Colors.black, fontSize: 14.0, fontWeight: FontWeight.w500),
+                            style: GoogleFonts.poppins(
+                                color: Colors.black,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w500),
                           ),
                         ),
                         Expanded(
@@ -240,7 +279,10 @@ class _SingleLossProfitScreenState extends State<SingleLossProfitScreen> {
             ),
             Container(
               padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(color: kMainColor.withOpacity(0.2), border: const Border(bottom: BorderSide(width: 1, color: Colors.grey))),
+              decoration: BoxDecoration(
+                  color: kMainColor.withOpacity(0.2),
+                  border: const Border(
+                      bottom: BorderSide(width: 1, color: Colors.grey))),
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15),
                 child: Column(
@@ -252,7 +294,10 @@ class _SingleLossProfitScreenState extends State<SingleLossProfitScreen> {
                           child: Text(
                             'Discount',
                             textAlign: TextAlign.start,
-                            style: GoogleFonts.poppins(color: Colors.black, fontSize: 14.0, fontWeight: FontWeight.w500),
+                            style: GoogleFonts.poppins(
+                                color: Colors.black,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w500),
                           ),
                         ),
                         Text(
@@ -282,9 +327,14 @@ class _SingleLossProfitScreenState extends State<SingleLossProfitScreen> {
                         Expanded(
                           flex: 3,
                           child: Text(
-                            widget.transactionModel.lossProfit!.isNegative ? 'Total Loss' : 'Total Profit',
+                            widget.transactionModel.lossProfit!.isNegative
+                                ? 'Total Loss'
+                                : 'Total Profit',
                             textAlign: TextAlign.start,
-                            style: GoogleFonts.poppins(color: Colors.black, fontSize: 14.0, fontWeight: FontWeight.w500),
+                            style: GoogleFonts.poppins(
+                                color: Colors.black,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w500),
                           ),
                         ),
                         Text(

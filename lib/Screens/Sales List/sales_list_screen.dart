@@ -55,12 +55,11 @@ class _SalesListScreenState extends State<SalesListScreen> {
           final personalData = ref.watch(profileDetailsProvider);
           final cart = ref.watch(cartNotifier);
 
-         // log(providerData.toString());
-
+        
           return SingleChildScrollView(
             child: providerData.when(data: (transaction) {
+             
               final reTransaction = transaction.reversed.toList();
-                log(jsonEncode(reTransaction));
               return reTransaction.isNotEmpty
                   ? ListView.builder(
                       shrinkWrap: true,
@@ -69,6 +68,7 @@ class _SalesListScreenState extends State<SalesListScreen> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
+                            //log(jsonEncode(reTransaction[index]));
                             SalesInvoiceDetails(
                               transitionModel: reTransaction[index],
                               personalInformationModel: profile.value!,

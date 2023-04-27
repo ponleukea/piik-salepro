@@ -37,7 +37,7 @@ class _LossProfitScreenState extends State<LossProfitScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.white, 
           title: Text(
             'Loss/Profit',
             style: GoogleFonts.poppins(
@@ -62,7 +62,7 @@ class _LossProfitScreenState extends State<LossProfitScreen> {
                       Padding(
                         padding: const EdgeInsets.only(right: 20.0, left: 20.0, top: 20, bottom: 10),
                         child: Row(
-                          children: [
+                          children: [ 
                             Expanded(
                               child: AppTextField(
                                 textFieldType: TextFieldType.NAME,
